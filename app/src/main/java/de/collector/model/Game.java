@@ -26,7 +26,6 @@ public class Game {
     private String publisher;
 
     public Game(int id, @NonNull String imagePath, @NonNull String title, @NonNull String publisher) {
-        this.id = id;
         this.imagePath = imagePath;
         this.title = title;
         this.publisher = publisher;
