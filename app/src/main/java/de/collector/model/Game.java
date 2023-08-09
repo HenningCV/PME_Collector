@@ -25,7 +25,7 @@ public class Game {
     @ColumnInfo(name = "publisher")
     private String publisher;
 
-    public Game(int id, @NonNull String imagePath, @NonNull String title, @NonNull String publisher) {
+    public Game(@NonNull String imagePath, @NonNull String title, @NonNull String publisher) {
         this.imagePath = imagePath;
         this.title = title;
         this.publisher = publisher;
