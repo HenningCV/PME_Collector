@@ -1,13 +1,13 @@
-package de.collector.storage;
+package com.example.collector.storage;
 
 import android.content.Context;
+
+import com.example.collector.model.Game;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-
-import de.collector.model.Game;
 
 public class GameRepository {
 

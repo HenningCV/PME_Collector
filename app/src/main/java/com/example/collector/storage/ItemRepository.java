@@ -1,4 +1,4 @@
-package de.collector.storage;
+package com.example.collector.storage;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
-import de.collector.model.Item;
+import com.example.collector.model.Item;
 
 public class ItemRepository {
 

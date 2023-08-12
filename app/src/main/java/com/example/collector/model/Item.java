@@ -1,4 +1,4 @@
-package de.collector.model;
+package com.example.collector.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

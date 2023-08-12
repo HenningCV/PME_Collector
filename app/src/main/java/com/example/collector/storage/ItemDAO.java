@@ -1,4 +1,4 @@
-package de.collector.storage;
+package com.example.collector.storage;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -8,7 +8,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import de.collector.model.Item;
+import com.example.collector.model.Item;
 
 
 @Dao
