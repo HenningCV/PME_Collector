@@ -1,4 +1,4 @@
-package com.example.collector;
+package de.pme.collector;
 
 import org.junit.Test;
 

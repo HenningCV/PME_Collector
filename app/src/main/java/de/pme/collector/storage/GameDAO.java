@@ -1,4 +1,4 @@
-package com.example.collector.storage;
+package de.pme.collector.storage;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -8,7 +8,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import com.example.collector.model.Game;
+import de.pme.collector.model.Game;
 
 
 @Dao

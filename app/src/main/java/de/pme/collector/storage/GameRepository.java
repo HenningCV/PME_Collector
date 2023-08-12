@@ -1,8 +1,8 @@
-package com.example.collector.storage;
+package de.pme.collector.storage;
 
 import android.content.Context;
 
-import com.example.collector.model.Game;
+import de.pme.collector.model.Game;
 
 import java.util.ArrayList;
 import java.util.List;

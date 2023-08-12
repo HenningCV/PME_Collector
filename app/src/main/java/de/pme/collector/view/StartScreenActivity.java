@@ -1,4 +1,4 @@
-package com.example.collector.view;
+package de.pme.collector.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

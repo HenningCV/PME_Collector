@@ -1,4 +1,4 @@
-package com.example.collector.view;
+package de.pme.collector.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;

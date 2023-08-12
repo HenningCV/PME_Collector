@@ -1,4 +1,4 @@
-package com.example.collector.view.fragments;
+package de.pme.collector.view.fragments;
 
 import androidx.fragment.app.Fragment;
 
