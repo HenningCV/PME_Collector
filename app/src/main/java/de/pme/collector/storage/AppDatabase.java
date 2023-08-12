@@ -1,4 +1,4 @@
-package de.collector.storage;
+package de.pme.collector.storage;
 
 import android.content.Context;
 
@@ -12,8 +12,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.collector.model.Game;
-import de.collector.model.Item;
+import de.pme.collector.model.Game;
+import de.pme.collector.model.Item;
 
 @Database(entities = {Game.class, Item.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
