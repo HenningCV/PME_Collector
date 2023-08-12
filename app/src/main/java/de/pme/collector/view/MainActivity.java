@@ -7,7 +7,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
-import com.example.collector.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import de.pme.collector.R;
+import de.pme.collector.view.fragments.HomeFragment;
+import de.pme.collector.view.fragments.SettingsFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,25 +22,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // show HomeFragment at start
-        //replaceFragment(new HomeFragment());
+        replaceFragment(new HomeFragment());
 
-        //BottomNavigationView navigationView = findViewById(R.id.bottomNavigationView);
+        BottomNavigationView navigationView = findViewById(R.id.bottomNavigationView);
 
-        /*navigationView.setOnItemSelectedListener(item -> {
-
-            switch (item.getItemId()) {
-                case R.id.home:
-                    replaceFragment(new HomeFragment());
-                    break;
-                case R.id.settings:
-                    replaceFragment(new SettingsFragment());
-                    break;
-                default:
-                    break;
+        navigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.home) {
+                replaceFragment(new HomeFragment());
             }
-
+            else if (item.getItemId() == R.id.settings) {
+                replaceFragment(new SettingsFragment());
+            }
             return true;
-        });*/
+        });
     }
 
 

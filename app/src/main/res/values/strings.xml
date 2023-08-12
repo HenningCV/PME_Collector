@@ -6,4 +6,5 @@
 
     <string name="fragment_settings_title">Settings</string>
     <string name="fragment_home_title">Games</string>
+    <string name="start_screen_label">Start Screen</string>
 </resources>
