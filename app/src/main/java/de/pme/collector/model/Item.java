@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(foreignKeys = @ForeignKey(
         entity = Game.class,
-        parentColumns = "gameId",
+        parentColumns = "id",
         childColumns = "gameId",
         onDelete = ForeignKey.CASCADE
 )
@@ -55,6 +55,18 @@ public class Item {
         this.prerequisites = prerequisites;
         this.location = location;
         this.acquired = false;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 
     public int getGameId() {
