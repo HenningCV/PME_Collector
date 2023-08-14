@@ -7,4 +7,30 @@
     <string name="fragment_settings_title">Settings</string>
     <string name="fragment_home_title">Games</string>
     <string name="start_screen_label">Start Screen</string>
+    <string name="recycler_view_game_image_content">Game Image</string>
+    <string name="recycler_view_game_title_placeholder">Game Title</string>
+    <string name="recycler_view_game_publisher_placeholder">Publisher</string>
+
+
+    <string-array name="games_txt">
+        <item>Warframe</item>
+        <item>Destiny 2</item>
+        <item>League of Legends</item>
+        <item>Minecraft</item>
+        <item>Fortnite</item>
+        <item>Dark Souls III</item>
+        <item>Deep Rock Galactic</item>
+        <item>Call of Duty</item>
+    </string-array>
+    <string-array name="publishers_txt">
+        <item>Publisher Warframe</item>
+        <item>Publisher Destiny 2</item>
+        <item>Publisher League of Legends</item>
+        <item>Publisher Minecraft</item>
+        <item>Publisher Fortnite</item>
+        <item>Publisher Dark Souls III</item>
+        <item>Publisher Deep Rock Galactic</item>
+        <item>Publisher Call of Duty</item>
+    </string-array>
+
 </resources>
