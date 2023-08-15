@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GameRepository {
 
-    private GameDAO gameDAO;
+    private final GameDAO gameDAO;
 
     public GameRepository( Context context ) {
         AppDatabase db = AppDatabase.getDatabase( context );
@@ -20,7 +20,7 @@ public class GameRepository {
 
     public List<Game> getGames()
     {
-        return this.query( () -> this.gameDAO.getGames() );
+        return this.query(this.gameDAO::getGames);
     }
     public List<Game> getGamesForTitle(String search )
     {
@@ -29,7 +29,7 @@ public class GameRepository {
 
     public List<Game> getGamesSortedByTitle()
     {
-        return this.query( () -> this.gameDAO.getGamesSortedByTitle());
+        return this.query(this.gameDAO::getGamesSortedByTitle);
     }
 
     private List<Game> query( Callable<List<Game>> query )
