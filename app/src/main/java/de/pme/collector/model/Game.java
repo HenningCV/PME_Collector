@@ -25,11 +25,13 @@ public class Game {
     @ColumnInfo(name = "publisher")
     private String publisher;
 
-    public Game(@NonNull String imagePath, @NonNull String title, @NonNull String publisher) {
-        this.imagePath = imagePath;
+
+    public Game(@NonNull String title, @NonNull String publisher, @NonNull String imagePath) {
         this.title = title;
         this.publisher = publisher;
+        this.imagePath = imagePath;
     }
+
 
     public int getId() {
         return id;
@@ -38,6 +40,7 @@ public class Game {
     public void setId(int id) {
         this.id = id;
     }
+
 
     @NonNull
     public String getImagePath() {
@@ -48,6 +51,7 @@ public class Game {
         this.imagePath = imagePath;
     }
 
+
     @NonNull
     public String getTitle() {
         return title;
@@ -56,6 +60,7 @@ public class Game {
     public void setTitle(@NonNull String title) {
         this.title = title;
     }
+
 
     @NonNull
     public String getPublisher() {

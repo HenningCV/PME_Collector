@@ -1,68 +1,96 @@
 package de.pme.collector.storage;
 
+import android.app.Application;
 import android.content.Context;
 
-import de.pme.collector.model.Game;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+
+import de.pme.collector.model.Game;
+
 
 public class GameRepository {
 
     private final GameDAO gameDAO;
 
+    private LiveData<List<Game>> allGames;
+
+    // singleton
+    private static GameRepository instance;
+
+
+    // constructor
     public GameRepository( Context context ) {
         AppDatabase db = AppDatabase.getDatabase( context );
         this.gameDAO = db.gameDAO();
     }
 
-    public List<Game> getGames()
-    {
-        return this.query(this.gameDAO::getGames);
-    }
-    public List<Game> getGamesForTitle(String search )
-    {
-        return this.query( () -> this.gameDAO.getGamesForTitle( search ));
-    }
 
-    public List<Game> getGamesSortedByTitle()
-    {
-        return this.query(this.gameDAO::getGamesSortedByTitle);
-    }
-
-    private List<Game> query( Callable<List<Game>> query )
-    {
-        try {
-            return AppDatabase.query( query );
+    // singleton
+    public static GameRepository getRepository(Application application) {
+        if (instance == null) {
+            synchronized(GameRepository.class) {
+                if (instance == null) {
+                    instance = new GameRepository(application);
+                }
+            }
         }
-        catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+        return instance;
+    }
+
+
+    // getter
+    public LiveData<List<Game>> getGamesLiveData() {
+        if (this.allGames == null) {
+            this.allGames = (this.queryLiveData(this.gameDAO::getGames));
         }
 
-        return new ArrayList<>();
+        return this.allGames;
+    }
+
+
+    public LiveData<List<Game>> getGamesForTitle(String search) {
+        return this.queryLiveData(() -> this.gameDAO.getGamesForTitle(search));
+    }
+
+    public LiveData<List<Game>> getGamesSortedByTitle() {
+        return this.queryLiveData(this.gameDAO::getGamesSortedByTitle);
     }
 
     public Game getLastGame() {
         try {
-            return AppDatabase.query( this.gameDAO::getLastEntry );
+            return AppDatabase.query(this.gameDAO::getLastEntry);
         }
-        catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+        catch (ExecutionException | InterruptedException exception) {
+            exception.printStackTrace();
         }
 
         return new Game("", "", "");
     }
 
-    public void update(Game game) {
 
-        AppDatabase.execute( () -> gameDAO.update( game ) );
+    // CRUD
+    private LiveData<List<Game>> queryLiveData(Callable<LiveData<List<Game>>> query) {
+        try {
+            return AppDatabase.query(query);
+        }
+        catch (ExecutionException | InterruptedException exception) {
+            exception.printStackTrace();
+        }
+
+        return new MutableLiveData<>();
+    }
+
+
+    public void update(Game game) {
+        AppDatabase.execute(() -> gameDAO.update(game));
     }
 
     public void insert(Game game) {
-        AppDatabase.execute( () -> gameDAO.insert( game ) );
+        AppDatabase.execute(() -> gameDAO.insert(game));
     }
-
-
 }
