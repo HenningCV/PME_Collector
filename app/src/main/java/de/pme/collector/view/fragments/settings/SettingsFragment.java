@@ -1,4 +1,4 @@
-package de.pme.collector.view.fragments;
+package de.pme.collector.view.fragments.settings;
 
 import android.os.Bundle;
 

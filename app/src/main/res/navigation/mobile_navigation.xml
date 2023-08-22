@@ -8,7 +8,7 @@
     <!-- game list -->
     <fragment
         android:id="@+id/navigation_home"
-        android:name="de.pme.collector.view.fragments.GameListFragment"
+        android:name="de.pme.collector.view.fragments.games.GameListFragment"
         android:label="@string/fragment_game_list_title"
         tools:layout="@layout/fragment_game_list" >
         <!-- transition from game-list to item-list-->
@@ -24,7 +24,7 @@
     <!-- item list -->
     <fragment
         android:id="@+id/navigation_item_list"
-        android:name="de.pme.collector.view.fragments.ItemListFragment"
+        android:name="de.pme.collector.view.fragments.items.ItemListFragment"
         android:label="@string/fragment_item_list_title"
         tools:layout="@layout/fragment_item_list" >
         <argument
@@ -43,7 +43,7 @@
     <!-- item detail -->
     <fragment
         android:id="@+id/navigation_item_details"
-        android:name="de.pme.collector.view.fragments.ItemListFragment"
+        android:name="de.pme.collector.view.fragments.items.ItemListFragment"
         android:label="@string/fragment_item_details_title"
         tools:layout="@layout/fragment_item_detail" >
         <argument
@@ -54,7 +54,7 @@
     <!-- settings -->
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="de.pme.collector.view.fragments.SettingsFragment"
+        android:name="de.pme.collector.view.fragments.settings.SettingsFragment"
         android:label="@string/fragment_settings_title"
         tools:layout="@layout/fragment_settings" />
 

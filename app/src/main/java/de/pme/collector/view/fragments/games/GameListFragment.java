@@ -1,4 +1,4 @@
-package de.pme.collector.view.fragments;
+package de.pme.collector.view.fragments.games;
 
 import android.os.Bundle;
 
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import de.pme.collector.R;
 import de.pme.collector.adapter.GameRecyclerViewAdapter;
+import de.pme.collector.view.fragments.core.BaseFragment;
 import de.pme.collector.viewModel.GameListViewModel;
 
 
