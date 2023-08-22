@@ -1,5 +1,6 @@
 package de.pme.collector.storage;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -29,14 +30,17 @@ public interface ItemDAO {
     int count();
 
     @Query("SELECT * from Item")
-    List<Item> getItems();
+    LiveData<List<Item>> getItems();
 
     @Query("SELECT * from Item ORDER BY name ASC")
-    List<Item> getItemsSortedByName();
+    LiveData<List<Item>> getItemsSortedByName();
 
     @Query("SELECT * from Item ORDER BY id DESC LIMIT 1")
     Item getLastEntry();
 
     @Query("SELECT * FROM Item WHERE name LIKE :search")
-    List<Item> getItemsForName(String search);
+    LiveData<List<Item>> getItemsForName(String search);
+
+    @Query("SELECT * FROM Item WHERE gameId=:id")
+    LiveData<List<Item>> getItemsByGameId(int id);
 }

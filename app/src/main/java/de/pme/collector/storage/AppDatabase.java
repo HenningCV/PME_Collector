@@ -1,6 +1,7 @@
 package de.pme.collector.storage;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -70,9 +71,19 @@ public abstract class AppDatabase extends RoomDatabase {
                 GameDAO gameDAO = instance.gameDAO();
                 gameDAO.deleteAll();
 
+                ItemDAO itemDAO = instance.itemDAO();
+                itemDAO.deleteAll();
+
+                // create new dummy-games
                 for (int i = 0; i < 8; i++) {
                     Game game = new Game("Game " + i, "Publisher Game " + i, String.valueOf(i));
                     gameDAO.insert(game);
+
+                    // create dummy-items for each game
+                    for (int j = 0; j < (5+i); j++) {
+                        Item item = new Item(gameDAO.getLastEntry().getId(), "", "Item " + i, "Description of Item " + i, "Prerequisites of Item " + i, "Location of Item " + i);
+                        itemDAO.insert(item);
+                    }
                 }
             });
         }

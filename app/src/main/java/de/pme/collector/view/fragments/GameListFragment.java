@@ -18,10 +18,6 @@ import de.pme.collector.viewModel.GameListViewModel;
 
 public class GameListFragment extends BaseFragment {
 
-    GameListViewModel gameListViewModel;
-
-
-    //
     // required empty constructor
     public GameListFragment() {}
 
@@ -32,7 +28,7 @@ public class GameListFragment extends BaseFragment {
         // inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_game_list, container, false);
 
-        gameListViewModel = this.getViewModel(GameListViewModel.class);
+        GameListViewModel gameListViewModel = this.getViewModel(GameListViewModel.class);
 
         RecyclerView gameRecyclerView = root.findViewById(R.id.recycler_view_games);
 

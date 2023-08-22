@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="de.pme.collector.view.fragments.GameListFragment"
     android:orientation="vertical"
-    android:background="@color/background_black">
+    android:background="@color/background_black" >
 
     <TextView
         android:layout_width="match_parent"

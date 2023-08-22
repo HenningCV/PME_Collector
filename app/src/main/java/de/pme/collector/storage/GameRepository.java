@@ -24,8 +24,8 @@ public class GameRepository {
 
 
     // constructor
-    public GameRepository( Context context ) {
-        AppDatabase db = AppDatabase.getDatabase( context );
+    public GameRepository(Context context) {
+        AppDatabase db = AppDatabase.getDatabase(context);
         this.gameDAO = db.gameDAO();
     }
 
@@ -57,9 +57,11 @@ public class GameRepository {
         return this.queryLiveData(() -> this.gameDAO.getGamesForTitle(search));
     }
 
+
     public LiveData<List<Game>> getGamesSortedByTitle() {
         return this.queryLiveData(this.gameDAO::getGamesSortedByTitle);
     }
+
 
     public Game getLastGame() {
         try {

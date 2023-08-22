@@ -1,68 +1,95 @@
 package de.pme.collector.storage;
 
+import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
-import java.util.ArrayList;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import de.pme.collector.model.Item;
 
+
 public class ItemRepository {
 
-    private ItemDAO itemDAO;
+    private final ItemDAO itemDAO;
 
-    public ItemRepository( Context context ) {
-        AppDatabase db = AppDatabase.getDatabase( context );
+    private LiveData<List<Item>> allItems;
+
+    // singleton
+    private static ItemRepository instance;
+
+
+    // constructor
+    public ItemRepository(Context context) {
+        AppDatabase db = AppDatabase.getDatabase(context);
         this.itemDAO = db.itemDAO();
     }
 
-    public List<Item> getItems()
-    {
-        return this.query( () -> this.itemDAO.getItems() );
-    }
-    public List<Item> getItemsForName(String search )
-    {
-        return this.query( () -> this.itemDAO.getItemsForName( search ));
-    }
 
-    public List<Item> getItemsSortedByName()
-    {
-        return this.query( () -> this.itemDAO.getItemsSortedByName());
-    }
-
-    private List<Item> query( Callable<List<Item>> query )
-    {
-        try {
-            return AppDatabase.query( query );
+    // singleton
+    public static ItemRepository getRepository(Application application) {
+        if (instance == null) {
+            synchronized(ItemRepository.class) {
+                if (instance == null) {
+                    instance = new ItemRepository(application);
+                }
+            }
         }
-        catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList<>();
+        return instance;
     }
+
+
+    // getter
+    public LiveData<List<Item>> getItemsForGameLiveData(int gameId) {
+            return this.queryLiveData(() -> this.itemDAO.getItemsByGameId(gameId));
+    }
+
+
+    public LiveData<List<Item>> getItemsForName(String search) {
+        return this.queryLiveData(() -> this.itemDAO.getItemsForName(search));
+    }
+
+
+    public LiveData<List<Item>> getItemsSortedByName() {
+        return this.queryLiveData(this.itemDAO::getItemsSortedByName);
+    }
+
 
     public Item getLastItem() {
         try {
-            return AppDatabase.query( this.itemDAO::getLastEntry );
+            return AppDatabase.query(this.itemDAO::getLastEntry);
         }
-        catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+        catch (ExecutionException | InterruptedException exception) {
+            exception.printStackTrace();
         }
 
         return new Item(0, "", "", "", "", "");
     }
 
-    public void update(Item item) {
 
-        AppDatabase.execute( () -> itemDAO.update( item ) );
+    // CRUD
+    private LiveData<List<Item>> queryLiveData(Callable<LiveData<List<Item>>> query) {
+        try {
+            return AppDatabase.query(query);
+        }
+        catch (ExecutionException | InterruptedException exception) {
+            exception.printStackTrace();
+        }
+
+        return new MutableLiveData<>();
+    }
+
+
+    public void update(Item item) {
+        AppDatabase.execute(() -> itemDAO.update(item));
     }
 
     public void insert(Item item) {
-        AppDatabase.execute( () -> itemDAO.insert( item ) );
+        AppDatabase.execute(() -> itemDAO.insert(item));
     }
-
-
 }

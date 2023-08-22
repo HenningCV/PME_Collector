@@ -18,4 +18,7 @@
     <color name="navigation_active">@color/main_yellow</color>
     <color name="navigation_inactive">@color/background_item_brown</color>
 
+    <color name="item_not_found">#4E0505</color>
+    <color name="item_found">#004000</color>
+
 </resources>
