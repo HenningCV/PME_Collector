@@ -30,8 +30,28 @@
         <argument
             android:name="gameId"
             app:argType="integer" />
+        <!-- transition from item-list to item-details -->
+        <action
+            android:id="@+id/action_item_list_to_item_details"
+            app:destination="@id/navigation_item_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
 
+    <!-- item detail -->
+    <fragment
+        android:id="@+id/navigation_item_details"
+        android:name="de.pme.collector.view.fragments.ItemListFragment"
+        android:label="@string/fragment_item_details_title"
+        tools:layout="@layout/fragment_item_detail" >
+        <argument
+            android:name="itemId"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- settings -->
     <fragment
         android:id="@+id/navigation_settings"
         android:name="de.pme.collector.view.fragments.SettingsFragment"

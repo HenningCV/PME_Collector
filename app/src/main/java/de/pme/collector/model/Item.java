@@ -10,21 +10,20 @@ import androidx.room.PrimaryKey;
         entity = Game.class,
         parentColumns = "id",
         childColumns = "gameId",
-        onDelete = ForeignKey.CASCADE
-)
+        onDelete = ForeignKey.CASCADE)
 )
 public class Item {
 
-    @PrimaryKey
-    @ColumnInfo(name= "id")
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private int id;
 
     @NonNull
-    @ColumnInfo(name="gameId")
+    @ColumnInfo(name = "gameId")
     private int gameId;
 
     @NonNull
-    @ColumnInfo(name= "imagePath")
+    @ColumnInfo(name = "imagePath")
     private String imagePath;
 
     @NonNull
@@ -47,6 +46,7 @@ public class Item {
     @ColumnInfo(name = "acquired")
     private boolean acquired;
 
+
     public Item(int gameId, @NonNull String imagePath, @NonNull String name, @NonNull String description, @NonNull String prerequisites, @NonNull String location) {
         this.gameId = gameId;
         this.imagePath = imagePath;
@@ -57,6 +57,7 @@ public class Item {
         this.acquired = false;
     }
 
+
     public int getId() {
         return id;
     }
@@ -65,6 +66,7 @@ public class Item {
         this.id = id;
     }
 
+
     public void setGameId(int gameId) {
         this.gameId = gameId;
     }
@@ -72,6 +74,7 @@ public class Item {
     public int getGameId() {
         return gameId;
     }
+
 
     @NonNull
     public String getImagePath() {
@@ -82,6 +85,7 @@ public class Item {
         this.imagePath = imagePath;
     }
 
+
     @NonNull
     public String getName() {
         return name;
@@ -90,6 +94,7 @@ public class Item {
     public void setName(@NonNull String name) {
         this.name = name;
     }
+
 
     @NonNull
     public String getDescription() {
@@ -100,6 +105,7 @@ public class Item {
         this.description = description;
     }
 
+
     @NonNull
     public String getPrerequisites() {
         return prerequisites;
@@ -109,6 +115,7 @@ public class Item {
         this.prerequisites = prerequisites;
     }
 
+
     @NonNull
     public String getLocation() {
         return location;
@@ -117,6 +124,7 @@ public class Item {
     public void setLocation(@NonNull String location) {
         this.location = location;
     }
+
 
     public boolean isAcquired() {
         return acquired;

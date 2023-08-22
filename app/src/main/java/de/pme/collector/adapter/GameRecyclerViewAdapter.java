@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.pme.collector.R;
-import de.pme.collector.interfaces.GameRecyclerViewInterface;
+import de.pme.collector.interfaces.RecyclerViewClickInterface;
 import de.pme.collector.model.Game;
 
 
 public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerViewAdapter.GameViewHolder> {
 
-    private final GameRecyclerViewInterface gameRecyclerViewInterface;
+    private final RecyclerViewClickInterface recyclerViewClickInterface;
 
     private final Context context;
 
@@ -35,9 +35,9 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
     //
     // constructor
-    public GameRecyclerViewAdapter(Context context, GameRecyclerViewInterface gameRecyclerViewInterface) {
+    public GameRecyclerViewAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
-        this.gameRecyclerViewInterface = gameRecyclerViewInterface;
+        this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 
 
@@ -50,7 +50,7 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View gameView = layoutInflater.inflate(R.layout.recycler_view_row_game, parent, false);
 
-        return new GameViewHolder(gameView, this.gameRecyclerViewInterface);
+        return new GameViewHolder(gameView, this.recyclerViewClickInterface);
     }
 
 
@@ -97,7 +97,7 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
         int currentGameId = -1;
 
-        public GameViewHolder(@NonNull View gameView, GameRecyclerViewInterface gameRecyclerViewInterface) {
+        public GameViewHolder(@NonNull View gameView, RecyclerViewClickInterface recyclerViewClickInterface) {
             super(gameView);
 
             gameImage     = gameView.findViewById(R.id.recycler_view_game_image);
@@ -106,7 +106,7 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
             // handle click on a game-list element
             gameView.setOnClickListener(v ->
-                    gameRecyclerViewInterface.onGameClicked(currentGameId)
+                    recyclerViewClickInterface.onElementClicked(currentGameId)
             );
         }
     }
