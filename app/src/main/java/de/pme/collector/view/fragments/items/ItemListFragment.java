@@ -1,4 +1,4 @@
-package de.pme.collector.view.fragments;
+package de.pme.collector.view.fragments.items;
 
 import android.os.Bundle;
 
@@ -8,7 +8,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import java.util.List;
 import de.pme.collector.R;
 import de.pme.collector.adapter.ItemRecyclerViewAdapter;
 import de.pme.collector.model.Item;
+import de.pme.collector.view.fragments.core.BaseFragment;
 import de.pme.collector.viewModel.ItemListViewModel;
 
 

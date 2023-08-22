@@ -1,4 +1,4 @@
-package de.pme.collector.view.fragments;
+package de.pme.collector.view.fragments.core;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;

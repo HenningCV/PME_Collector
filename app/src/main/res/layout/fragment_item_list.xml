@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.pme.collector.view.fragments.ItemListFragment"
+    tools:context="de.pme.collector.view.fragments.items.ItemListFragment"
     android:orientation="vertical"
     android:background="@color/background_black" >
 
