@@ -1,5 +1,6 @@
 package de.pme.collector.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,17 +62,17 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             holder.itemImage.setImageResource(R.drawable.recycler_view_placeholder_item);
 
             if (currentItem.isAcquired()) {
-                holder.itemObtainedText.setText(R.string.recycler_view_item_obtained);
+                holder.itemObtainedText.setText(R.string.item_obtained);
                 holder.itemObtainedCheckbox.setChecked(true);
             }
             else {
-                holder.itemObtainedText.setText(R.string.recycler_view_item_not_obtained);
+                holder.itemObtainedText.setText(R.string.item_not_obtained);
                 holder.itemObtainedCheckbox.setChecked(false);
             }
         }
         else {
             // if data is not ready yet
-            holder.itemName.setText(R.string.fragment_item_list_empty);
+            holder.itemName.setText(R.string.item_list_empty);
         }
     }
 
@@ -87,7 +88,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
 
-    // get views from "recycler_view_row_game.xml"-layout & assign them to variables
+    // get views from "recycler_view_row_item.xml"-layout & assign them to variables
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         ImageView itemImage;
@@ -107,7 +108,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             itemObtainedText     = itemView.findViewById(R.id.recycler_view_item_obtained);
             itemObtainedCheckbox = itemView.findViewById(R.id.recycler_view_item_obtained_checkbox);
 
-            // handle click on a game-list element
+            // handle click on an item-list element
             itemView.setOnClickListener(v ->
                     recyclerViewClickInterface.onElementClicked(currentItemId)
             );
@@ -115,6 +116,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setItems(List<Item> itemList) {
         this.itemList = itemList;
 

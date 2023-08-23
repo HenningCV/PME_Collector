@@ -21,7 +21,7 @@ public class ItemRepository {
     private LiveData<List<Item>> allItems;
 
     // singleton
-    private static ItemRepository instance;
+    private static volatile ItemRepository instance;
 
 
     // constructor
@@ -50,6 +50,11 @@ public class ItemRepository {
     }
 
 
+    public  LiveData<Item> getItemByIdLiveData(int itemId) {
+        return this.queryLiveData(() -> this.itemDAO.getItemById(itemId));
+    }
+
+
     public LiveData<List<Item>> getItemsForName(String search) {
         return this.queryLiveData(() -> this.itemDAO.getItemsForName(search));
     }
@@ -73,7 +78,7 @@ public class ItemRepository {
 
 
     // CRUD
-    private LiveData<List<Item>> queryLiveData(Callable<LiveData<List<Item>>> query) {
+    private <T> LiveData<T> queryLiveData(Callable<LiveData<T>> query) {
         try {
             return AppDatabase.query(query);
         }

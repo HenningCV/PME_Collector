@@ -29,6 +29,7 @@ public interface ItemDAO {
     @Query("SELECT count(*) FROM Item")
     int count();
 
+
     @Query("SELECT * from Item")
     LiveData<List<Item>> getItems();
 
@@ -41,6 +42,9 @@ public interface ItemDAO {
     @Query("SELECT * FROM Item WHERE name LIKE :search")
     LiveData<List<Item>> getItemsForName(String search);
 
-    @Query("SELECT * FROM Item WHERE gameId=:id")
-    LiveData<List<Item>> getItemsByGameId(int id);
+    @Query("SELECT * FROM Item WHERE gameId = :gameId")
+    LiveData<List<Item>> getItemsByGameId(int gameId);
+
+    @Query("SELECT * FROM Item WHERE id = :itemId")
+    LiveData<Item> getItemById(int itemId);
 }
