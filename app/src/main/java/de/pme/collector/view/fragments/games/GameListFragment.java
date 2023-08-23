@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import de.pme.collector.R;
 import de.pme.collector.adapter.GameRecyclerViewAdapter;
@@ -48,6 +49,12 @@ public class GameListFragment extends BaseFragment {
 
         // observe live-data & update the adapter game-list when it changes
         gameListViewModel.getGames().observe(this.requireActivity(), gameAdapter::setGames);
+
+        Button addButton = root.findViewById(R.id.add_button);
+        addButton.setOnClickListener(v -> {
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_game_list_to_new_game_form);
+        });
 
         return root;
     }

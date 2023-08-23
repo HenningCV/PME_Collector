@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -59,6 +60,15 @@ public class ItemListFragment extends BaseFragment {
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireActivity()));
 
         setItemListLiveData();
+
+        Button addButton = root.findViewById(R.id.add_button);
+        addButton.setOnClickListener(v -> {
+            int gameId = getArguments().getInt("gameId");
+            Bundle arguments = new Bundle();
+            arguments.putInt("gameId", gameId);
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_item_list_to_item_details, arguments);
+        });
 
         return root;
     }

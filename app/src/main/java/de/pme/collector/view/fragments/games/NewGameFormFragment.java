@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,9 +26,10 @@ import java.io.IOException;
 
 import de.pme.collector.R;
 import de.pme.collector.model.Game;
-import de.pme.collector.storage.GameRepository;
+import de.pme.collector.view.fragments.core.BaseFragment;
+import de.pme.collector.viewModel.NewGameFormViewModel;
 
-public class NewGameFormFragment extends Fragment {
+public class NewGameFormFragment extends BaseFragment {
 
     private static final int REQUEST_PERMISSION = 2;
 
@@ -38,16 +38,16 @@ public class NewGameFormFragment extends Fragment {
     private ImageView imagePreview;
     private Bitmap selectedBitmap;
 
-    private final GameRepository gameRepository;
+    private NewGameFormViewModel newGameFormViewModel;
 
-    public NewGameFormFragment(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
+    public NewGameFormFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_game_form, container, false);
+        newGameFormViewModel = this.getViewModel(NewGameFormViewModel.class);
 
         editTextTitle = view.findViewById(R.id.editTextTitle);
         editTextPublisher = view.findViewById(R.id.editTextPublisher);
@@ -93,7 +93,7 @@ public class NewGameFormFragment extends Fragment {
 
             Game game = new Game(title, publisher, imagePath);
 
-            gameRepository.insert(game);
+            newGameFormViewModel.insertGame(game);
         }
     }
 

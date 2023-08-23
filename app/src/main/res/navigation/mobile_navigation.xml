@@ -19,6 +19,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_game_list_to_new_game_form"
+            app:destination="@id/navigation_new_game_form"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <!-- item list -->
@@ -38,6 +45,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_item_list_to_new_item_form"
+            app:destination="@id/navigation_new_item_form"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <!-- item detail -->
@@ -49,6 +63,29 @@
         <argument
             android:name="itemId"
             app:argType="integer" />
+    </fragment>
+
+    <!-- new game form -->
+    <fragment
+        android:id="@+id/navigation_new_game_form"
+        android:name="de.pme.collector.view.fragments.games.NewGameFormFragment"
+        android:label="@string/fragment_game_list_title"
+        tools:layout="@layout/fragment_new_game_form" >
+
+
+    </fragment>
+
+    <!-- new item form -->
+    <fragment
+        android:id="@+id/navigation_new_item_form"
+        android:name="de.pme.collector.view.fragments.items.NewItemFormFragment"
+        android:label="@string/fragment_game_list_title"
+        tools:layout="@layout/fragment_new_item_form" >
+        <argument
+            android:name="gameId"
+            app:argType="integer"/>
+
+
     </fragment>
 
     <!-- settings -->

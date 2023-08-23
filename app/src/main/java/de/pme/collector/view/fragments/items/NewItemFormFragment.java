@@ -27,8 +27,11 @@ import java.io.IOException;
 import de.pme.collector.R;
 import de.pme.collector.model.Item;
 import de.pme.collector.storage.ItemRepository;
+import de.pme.collector.view.fragments.core.BaseFragment;
+import de.pme.collector.viewModel.NewGameFormViewModel;
+import de.pme.collector.viewModel.NewItemFormViewModel;
 
-public class NewItemFormFragment extends Fragment {
+public class NewItemFormFragment extends BaseFragment {
 
     private static final int REQUEST_PERMISSION = 2;
 
@@ -39,17 +42,18 @@ public class NewItemFormFragment extends Fragment {
     private ImageView imagePreview;
     private Bitmap selectedBitmap;
 
-    private final ItemRepository itemRepository;
-    private final int gameId;
-    public NewItemFormFragment(ItemRepository itemRepository, int gameId){
-        this.itemRepository = itemRepository;
-        this.gameId = gameId;
+    private NewItemFormViewModel newItemFormViewModel;
+
+
+    public NewItemFormFragment(){
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_item_form, container, false);
+        newItemFormViewModel = this.getViewModel(NewItemFormViewModel.class);
+
 
         editTextName = view.findViewById(R.id.editTextName);
         editTextDescription = view.findViewById(R.id.editTextDescription);
@@ -88,7 +92,7 @@ public class NewItemFormFragment extends Fragment {
 
 
     private void saveNewEntry() {
-        int gameId = this.gameId;
+        int gameId = getArguments().getInt("gameId");
         String name = editTextName.getText().toString();
         String description = editTextDescription.getText().toString();
         String prerequisites = editTextPrerequisites.getText().toString();
@@ -98,7 +102,7 @@ public class NewItemFormFragment extends Fragment {
             String imagePath = saveImageToExternalStorage(selectedBitmap, name + ".jpg");
             Item item = new Item(gameId, imagePath, name, description, prerequisites, location);
 
-            itemRepository.insert(item);
+            newItemFormViewModel.insertItem(item);
         }
     }
 
