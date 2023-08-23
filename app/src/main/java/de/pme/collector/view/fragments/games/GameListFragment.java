@@ -46,6 +46,7 @@ public class GameListFragment extends BaseFragment {
         gameRecyclerView.setAdapter(gameAdapter);
         gameRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireActivity()));
 
+        // observe live-data & update the adapter game-list when it changes
         gameListViewModel.getGames().observe(this.requireActivity(), gameAdapter::setGames);
 
         return root;

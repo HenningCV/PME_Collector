@@ -20,7 +20,7 @@ public class GameRepository {
     private LiveData<List<Game>> allGames;
 
     // singleton
-    private static GameRepository instance;
+    private static volatile GameRepository instance;
 
 
     // constructor

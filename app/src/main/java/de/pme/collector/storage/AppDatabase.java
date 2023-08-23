@@ -81,7 +81,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
                     // create dummy-items for each game
                     for (int j = 0; j < (5+i); j++) {
-                        Item item = new Item(gameDAO.getLastEntry().getId(), "", "Item " + i, "Description of Item " + i, "Prerequisites of Item " + i, "Location of Item " + i);
+                        Item item = new Item(
+                                gameDAO.getLastEntry().getId(),
+                                "",
+                                "Item "                  + j + " of Game " + i,
+                                "Description of Item "   + j + " of Game " + i,
+                                "Prerequisites of Item " + j + " of Game " + i,
+                                "Location of Item "      + j + " of Game " + i
+                        );
                         itemDAO.insert(item);
                     }
                 }

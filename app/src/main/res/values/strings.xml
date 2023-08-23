@@ -13,16 +13,25 @@
     <string name="fragment_game_list_empty">No Games</string>
 
     <!-- item list -->
-    <string name="fragment_item_list_title">Items</string>
-    <string name="recycler_view_item_image_content">Item Image</string>
-    <string name="recycler_view_item_name_placeholder">Item Name</string>
-    <string name="recycler_view_item_location_placeholder">Item Location</string>
-    <string name="recycler_view_item_not_obtained">not found</string>
-    <string name="recycler_view_item_obtained">found</string>
-    <string name="fragment_item_list_empty">No Items</string>
+    <string name="item_list_title">Items</string>
+    <string name="item_list_empty">No Items</string>
 
-    <!-- item detail -->
-    <string name="fragment_item_details_title">Details</string>
+    <!-- item details -->
+    <string name="item_details_title">Details</string>
+    <string name="item_details_scrollview_content">Item Details</string>
+
+    <!-- item -->
+    <string name="item_image_content">Item Image</string>
+    <string name="item_name_placeholder">Item Name</string>
+    <string name="item_location_title">Location</string>
+    <string name="item_location_placeholder">Item Location</string>
+    <string name="item_description_title">Description</string>
+    <string name="item_description_placeholder">Item Description Item Description Item Description Item Description Item Description Item Description Item Description Item Description Item Description Item Description Item Description Item Description Item Description</string>
+    <string name="item_prerequisites_title">Prerequisites</string>
+    <string name="item_prerequisites_placeholder">Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites</string>
+
+    <string name="item_not_obtained">not found</string>
+    <string name="item_obtained">found</string>
 
     <!-- settings -->
     <string name="fragment_settings_title">Settings</string>

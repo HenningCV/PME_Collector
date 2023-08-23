@@ -24,6 +24,7 @@ import de.pme.collector.viewModel.ItemListViewModel;
 public class ItemListFragment extends BaseFragment {
 
     private ItemListViewModel itemListViewModel;
+
     private LiveData<List<Item>> itemLiveData;
 
     private ItemRecyclerViewAdapter itemAdapter;
@@ -56,7 +57,7 @@ public class ItemListFragment extends BaseFragment {
         itemRecyclerView.setAdapter(itemAdapter);
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireActivity()));
 
-        setLiveData();
+        setItemListLiveData();
 
         return root;
     }
@@ -66,7 +67,7 @@ public class ItemListFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
 
-        itemLiveData.removeObservers(requireActivity());
+        itemLiveData.removeObservers(this.requireActivity());
     }
 
 
@@ -74,16 +75,18 @@ public class ItemListFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        setLiveData();
+        setItemListLiveData();
     }
 
 
-    private void setLiveData() {
+    private void setItemListLiveData() {
+
         assert getArguments() != null;
         int gameId = getArguments().getInt("gameId");
 
         itemLiveData = itemListViewModel.getItemsForGame(gameId);
 
+        // observe live-data & update the adapter item-list when it changes
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 }
