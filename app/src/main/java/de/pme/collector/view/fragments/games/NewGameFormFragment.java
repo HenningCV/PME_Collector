@@ -1,12 +1,9 @@
 package de.pme.collector.view.fragments.games;
 
-import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -34,9 +31,7 @@ import de.pme.collector.storage.GameRepository;
 
 public class NewGameFormFragment extends Fragment {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_PERMISSION = 2;
-    private static final int REQUEST_IMAGE_PICK = 3;
 
     private EditText editTextTitle;
     private EditText editTextPublisher;
