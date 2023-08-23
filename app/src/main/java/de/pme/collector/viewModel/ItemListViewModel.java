@@ -1,12 +1,16 @@
 package de.pme.collector.viewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.pme.collector.model.Item;
 import de.pme.collector.storage.ItemRepository;
@@ -15,6 +19,8 @@ import de.pme.collector.storage.ItemRepository;
 public class ItemListViewModel extends AndroidViewModel {
 
     private final ItemRepository itemRepository;
+
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
     // constructor
@@ -27,5 +33,19 @@ public class ItemListViewModel extends AndroidViewModel {
 
     public LiveData<List<Item>> getItemsForGame(int gameId) {
         return this.itemRepository.getItemsForGameLiveData(gameId);
+    }
+
+
+    public void setObtainedStatus(boolean obtained, int itemId) {
+        executorService.submit(() -> this.itemRepository.setObtainedStatus(obtained, itemId));
+    }
+
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+
+        // shut down executor when ItemListViewModel is no longer needed
+        executorService.shutdown();
     }
 }

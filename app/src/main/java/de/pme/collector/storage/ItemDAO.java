@@ -47,4 +47,8 @@ public interface ItemDAO {
 
     @Query("SELECT * FROM Item WHERE id = :itemId")
     LiveData<Item> getItemById(int itemId);
+
+
+    @Query("UPDATE Item SET acquired = :obtained WHERE id = :itemId")
+    void setObtainedStatus(boolean obtained, int itemId);
 }

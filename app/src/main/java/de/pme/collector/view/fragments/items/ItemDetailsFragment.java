@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,13 @@ public class ItemDetailsFragment extends BaseFragment {
         setItemDetailsLiveData();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        itemDetailsLiveData.removeObservers(this.requireActivity());
+    }
+
 
     private void setItemDetailsLiveData() {
 
@@ -72,7 +80,10 @@ public class ItemDetailsFragment extends BaseFragment {
 
     private void updateItemDetailsView(Item item) {
 
-        assert getView() != null;
+        if (getView() == null) {
+            return;
+        }
+
         ImageView itemImage         = getView().findViewById(R.id.fragment_item_details_image);
         TextView  itemName          = getView().findViewById(R.id.fragment_item_details_name);
         TextView  itemDescription   = getView().findViewById(R.id.fragment_item_details_description);
