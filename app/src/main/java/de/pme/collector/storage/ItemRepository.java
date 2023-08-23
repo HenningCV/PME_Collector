@@ -77,6 +77,11 @@ public class ItemRepository {
     }
 
 
+    public void setObtainedStatus(boolean obtained, int itemId) {
+        this.itemDAO.setObtainedStatus(obtained, itemId);
+    }
+
+
     // CRUD
     private <T> LiveData<T> queryLiveData(Callable<LiveData<T>> query) {
         try {

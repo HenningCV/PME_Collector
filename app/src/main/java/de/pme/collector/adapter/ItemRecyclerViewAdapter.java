@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
 import de.pme.collector.R;
 import de.pme.collector.interfaces.RecyclerViewClickInterface;
 import de.pme.collector.model.Item;
+import de.pme.collector.viewModel.ItemListViewModel;
 
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ItemViewHolder> {
@@ -28,11 +31,15 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     // cached copy of items
     private List<Item> itemList;
 
+    private static ItemListViewModel itemListViewModel;
+
 
     // constructor
-    public ItemRecyclerViewAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public ItemRecyclerViewAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface,
+                                   ItemListViewModel itemListViewModel) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
+        ItemRecyclerViewAdapter.itemListViewModel = itemListViewModel;
     }
 
 
@@ -44,7 +51,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View itemView = layoutInflater.inflate(R.layout.recycler_view_row_item, parent, false);
 
-        return new ItemViewHolder(itemView, recyclerViewClickInterface);
+        return new ItemViewHolder(itemView, recyclerViewClickInterface, this);
     }
 
 
@@ -64,10 +71,12 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             if (currentItem.isAcquired()) {
                 holder.itemObtainedText.setText(R.string.item_obtained);
                 holder.itemObtainedCheckbox.setChecked(true);
+                holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_found));
             }
             else {
                 holder.itemObtainedText.setText(R.string.item_not_obtained);
                 holder.itemObtainedCheckbox.setChecked(false);
+                holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_not_found));
             }
         }
         else {
@@ -96,10 +105,13 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         TextView  itemLocation;
         TextView  itemObtainedText;
         CheckBox  itemObtainedCheckbox;
+        CardView  itemCardView;
 
         int currentItemId = -1;
 
-        public ItemViewHolder(@NonNull View itemView, RecyclerViewClickInterface recyclerViewClickInterface) {
+        @SuppressLint("NotifyDataSetChanged")
+        public ItemViewHolder(@NonNull View itemView, RecyclerViewClickInterface recyclerViewClickInterface,
+                              ItemRecyclerViewAdapter itemRecyclerViewAdapter) {
             super(itemView);
 
             itemImage            = itemView.findViewById(R.id.recycler_view_item_image);
@@ -107,9 +119,16 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             itemLocation         = itemView.findViewById(R.id.recycler_view_item_location);
             itemObtainedText     = itemView.findViewById(R.id.recycler_view_item_obtained);
             itemObtainedCheckbox = itemView.findViewById(R.id.recycler_view_item_obtained_checkbox);
+            itemCardView         = itemView.findViewById(R.id.recycler_view_item_card_view);
+
+            // handle click on the checkbox
+            itemObtainedCheckbox.setOnClickListener(view -> {
+                setObtainedStatus(((CheckBox) view).isChecked(), currentItemId);
+                itemRecyclerViewAdapter.notifyDataSetChanged();
+            });
 
             // handle click on an item-list element
-            itemView.setOnClickListener(v ->
+            itemView.setOnClickListener(view ->
                     recyclerViewClickInterface.onElementClicked(currentItemId)
             );
         }
@@ -122,5 +141,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
         // notify observers
         notifyDataSetChanged();
+    }
+
+
+    private static void setObtainedStatus(boolean obtained, int itemId) {
+        itemListViewModel.setObtainedStatus(obtained, itemId);
     }
 }

@@ -51,7 +51,8 @@ public class ItemListFragment extends BaseFragment {
                     arguments.putInt("itemId", itemId);
                     NavController navController = NavHostFragment.findNavController(this);
                     navController.navigate(R.id.action_item_list_to_item_details, arguments);
-                }
+                },
+                itemListViewModel
         );
 
         itemRecyclerView.setAdapter(itemAdapter);

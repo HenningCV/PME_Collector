@@ -30,8 +30,8 @@
     <string name="item_prerequisites_title">Prerequisites</string>
     <string name="item_prerequisites_placeholder">Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites Item Prerequisites</string>
 
-    <string name="item_not_obtained">not found</string>
-    <string name="item_obtained">found</string>
+    <string name="item_not_obtained">not obtained</string>
+    <string name="item_obtained">obtained</string>
 
     <!-- settings -->
     <string name="fragment_settings_title">Settings</string>
