@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 
 import android.view.LayoutInflater;

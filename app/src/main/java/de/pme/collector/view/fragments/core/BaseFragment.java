@@ -1,9 +1,13 @@
 package de.pme.collector.view.fragments.core;
 
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 
 public class BaseFragment extends Fragment {
@@ -16,5 +20,12 @@ public class BaseFragment extends Fragment {
                         requireActivity().getApplication()
                 )
         ).get(tClass);
+    }
+
+
+    // hide keyboard
+    protected void hideKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
