@@ -111,7 +111,7 @@ public class NewItemFormFragment extends BaseFragment {
         Bitmap bitmap = drawable.getBitmap();
 
         File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
-        String filename = imageTitle + ".jpg";
+        String filename = imageTitle;
         File file = new File(directory, filename);
 
         try {
