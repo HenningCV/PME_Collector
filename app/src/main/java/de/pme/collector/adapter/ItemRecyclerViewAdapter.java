@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,6 @@ import de.pme.collector.viewModel.ItemListViewModel;
 
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ItemViewHolder> {
-
-    private static final short numberOfItemsInitialized = 50;
-    private static final short numberOfItemsImages = 7;
-
 
     private final RecyclerViewClickInterface recyclerViewClickInterface;
 
@@ -80,7 +75,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             holder.itemLocation.setText(currentItem.getLocation());
 
             // set item image
-            setItemImage(currentItem, holder, position);
+            setItemImage(currentItem, holder);
 
             // turn the item card green & check the checkbox when the item is obtained
             if (currentItem.isAcquired()) {
@@ -166,20 +161,34 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
 
-    private void setItemImage(Item currentItem, ItemViewHolder holder, int position) {
-        // load item image
-        File itemImageFile = new File(currentItem.getImagePath());
+    private void setItemImage(Item currentItem, ItemViewHolder holder) {
 
-        Log.println(Log.WARN, "test", "number: " + currentItem.getImagePath());
+        String imagePath = currentItem.getImagePath();
+
+        // load item image
+        File itemImageFile = new File(imagePath);
 
         // the if() is just to assign the initial items their images, after that images from the device are used
-        if (currentItem.getId() < numberOfItemsInitialized && position < numberOfItemsImages) {
+        if (imagePath.contains("@drawable/")) {
+
+            // split the image-path after the '@drawable/' to get the index of the image
+            String[] splitImagePath = imagePath.split("@drawable/");
+
             // load images for initial items from the drawable-folder via the values-array of those images
             TypedArray itemImagesArray = holder.itemView.getResources().obtainTypedArray(R.array.initial_item_images);
-            // get the id of the image
-            int resourceId = itemImagesArray.getResourceId(Integer.parseInt(currentItem.getImagePath()), 0);
-            // set image to the ImageView
-            holder.itemImage.setImageResource(resourceId);
+
+            // get the id for the corresponding image
+            int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
+
+            // if the resource was not found use the default image
+            if (imageResourceId == 0) {
+                setDefaultImage(holder);
+            }
+            else {
+                // set image to the ImageView
+                holder.itemImage.setImageResource(imageResourceId);
+            }
+
             // recycle itemImagesArray to avoid memory leaks
             itemImagesArray.recycle();
             return;
@@ -188,15 +197,19 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             if (itemImageFile.exists()) {
                 // load image from device
                 Bitmap myBitmap = BitmapFactory.decodeFile(itemImageFile.getAbsolutePath());
+
                 // set image to the ImageView
                 holder.itemImage.setImageBitmap(myBitmap);
                 return;
             }
         }
 
-        // set default image
-        holder.itemImage.setImageResource(R.drawable.recycler_view_placeholder_item);
-        // tint the default image white
-        holder.itemImage.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
+        // set default image if the system image doesn't exist anymore
+        setDefaultImage(holder);
+    }
+
+
+    private void setDefaultImage(ItemViewHolder holder) {
+        holder.itemImage.setImageResource(R.drawable.item_placeholder);
     }
 }

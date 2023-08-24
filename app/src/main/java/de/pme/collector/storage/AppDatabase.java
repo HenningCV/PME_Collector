@@ -79,7 +79,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Game game = new Game(
                             "Game "           + i,  // title
                             "Publisher Game " + i,  // publisher
-                            String.valueOf(i)       // image path, for initial games just an int-value to reference the image in the arrays.xml
+                            "@drawable/"      + i   // image path, for initial games just an int-value to reference the image in the arrays.xml
                     );
                     gameDAO.insert(game);
 
@@ -87,7 +87,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     for (int j = 0; j < (5+i); j++) {
                         Item item = new Item(
                                 gameDAO.getLastEntry().getId(),                  // game-id that the item belongs to
-                                String.valueOf(j),                               // image-path, for initial games just an int-value to reference the image in the arrays.xml
+                                "@drawable/"             + j,                    // image-path, for initial games just an int-value to reference the image in the arrays.xml
                                 "Item "                  + j + " of Game " + i,  // name
                                 "Description of Item "   + j + " of Game " + i,  // description
                                 "Prerequisites of Item " + j + " of Game " + i,  // prerequisites

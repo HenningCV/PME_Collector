@@ -123,17 +123,33 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
 
     private void setGameImage(Game currentGame, GameViewHolder holder) {
+
+        String imagePath = currentGame.getImagePath();
+
         // load game image
-        File gameImageFile = new File(currentGame.getImagePath());
+        File gameImageFile = new File(imagePath);
 
         // the if() is just to assign the initial games their images, after that images from the device are used
-        if (currentGame.getId() < numberOfInitialGames) {
+        if (imagePath.contains("@drawable/")) {
+
+            // split the image-path after the '@drawable/' to get the index of the image
+            String[] splitImagePath = imagePath.split("@drawable/");
+
             // load images for initial games from the drawable-folder via the values-array of those images
             TypedArray gameImagesArray = holder.itemView.getResources().obtainTypedArray(R.array.initial_game_images);
-            // get the id of the image
-            int resourceId = gameImagesArray.getResourceId(Integer.parseInt(currentGame.getImagePath()), 0);
-            // set image to the ImageView
-            holder.gameImage.setImageResource(resourceId);
+
+            // get the id for the corresponding image
+            int imageResourceId = gameImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
+
+            // if the resource was not found use the default image
+            if (imageResourceId == 0) {
+                setDefaultImage(holder);
+            }
+            else {
+                // set image to the ImageView
+                holder.gameImage.setImageResource(imageResourceId);
+            }
+
             // recycle gameImagesArray to avoid memory leaks
             gameImagesArray.recycle();
             return;
@@ -142,15 +158,19 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
             if (gameImageFile.exists()) {
                 // load image from device
                 Bitmap myBitmap = BitmapFactory.decodeFile(gameImageFile.getAbsolutePath());
+
                 // set image to the ImageView
                 holder.gameImage.setImageBitmap(myBitmap);
                 return;
             }
         }
 
-        // set default image
-        holder.gameImage.setImageResource(R.drawable.recycler_view_placeholder_game);
-        // tint the default image white
-        holder.gameImage.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
+        // set default image if the system image doesn't exist anymore
+        setDefaultImage(holder);
+    }
+
+
+    private void setDefaultImage(GameViewHolder holder) {
+        holder.gameImage.setImageResource(R.drawable.game_placeholder);
     }
 }

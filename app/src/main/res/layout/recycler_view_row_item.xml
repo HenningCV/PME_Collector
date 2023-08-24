@@ -35,7 +35,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/recycler_view_item_constraint_layout_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/recycler_view_placeholder_item" />
+                app:srcCompat="@drawable/item_placeholder" />
 
             <!-- item checkbox -->
             <CheckBox
