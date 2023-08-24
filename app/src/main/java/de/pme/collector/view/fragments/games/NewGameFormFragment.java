@@ -1,24 +1,24 @@
 package de.pme.collector.view.fragments.games;
 
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
 
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,60 +63,54 @@ public class NewGameFormFragment extends BaseFragment {
     }
 
     private void selectImage() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
-        } else {
-            ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
-                if (result != null) {
-                    try {
-                        selectedBitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), result);
-                        imagePreview.setImageBitmap(selectedBitmap);
-                        imagePreview.setVisibility(View.VISIBLE);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            galleryLauncher.launch("image/*");
-        }
+        ImagePicker.with(this)
+                .crop()	    			//Crop image(Optional), Check Customization for more option
+                .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .start();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = data.getData();
+        imagePreview.setImageURI(uri);
+        imagePreview.setVisibility(View.VISIBLE);
+    }
 
     private void saveNewEntry() {
         String title = editTextTitle.getText().toString();
         String publisher = editTextPublisher.getText().toString();
+        String imagePath = saveImageToInternalStorage(imagePreview, title);
 
-        if (selectedBitmap != null) {
-            String imagePath = saveImageToExternalStorage(selectedBitmap, title + ".jpg");
+        Log.d("SaveGame", "New Game:\n" + "Title: " + title + "\n publisher: " + publisher + "\n imagePath: " + imagePath);
 
+        Game game = new Game(title, publisher, imagePath);
 
-            Game game = new Game(title, publisher, imagePath);
-
-            newGameFormViewModel.insertGame(game);
+        newGameFormViewModel.insertGame(game);
         }
-    }
 
-    private String saveImageToExternalStorage(Bitmap imageBitmap, String fileName) {
-        String imagePath = null;
+
+    private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+
+        File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
+        String filename = imageTitle + ".jpg";
+        File file = new File(directory, filename);
 
         try {
-            File storageDir = new File(Environment.getExternalStorageDirectory(), "ImageStorage");
-            if (!storageDir.exists()) {
-                storageDir.mkdirs();
-            }
-
-            File imageFile = new File(storageDir, fileName);
-            imagePath = imageFile.getAbsolutePath();
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            outputStream.flush();
-            outputStream.close();
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        String imagePath = file.getAbsolutePath();
         return imagePath;
     }
+
+
 }

@@ -13,7 +13,6 @@ public class Game {
     @ColumnInfo(name = "id")
     private int id;
 
-    @NonNull
     @ColumnInfo(name = "imagePath")
     private String imagePath;
 
@@ -42,12 +41,11 @@ public class Game {
     }
 
 
-    @NonNull
     public String getImagePath() {
         return imagePath;
     }
 
-    public void setImagePath(@NonNull String imagePath) {
+    public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
 

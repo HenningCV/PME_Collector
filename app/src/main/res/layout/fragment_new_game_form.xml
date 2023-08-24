@@ -6,12 +6,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <Button
-        android:id="@+id/buttonSelectImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose Picture"/>
-
     <ImageView
         android:id="@+id/imagePreview"
         android:layout_width="100dp"
@@ -19,6 +13,12 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/buttonSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Picture"/>
 
     <EditText
         android:id="@+id/editTextTitle"
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Publisher"
-        android:inputType="number"
+        android:inputType="text"
         android:layout_marginBottom="16dp"/>
 
     <Button

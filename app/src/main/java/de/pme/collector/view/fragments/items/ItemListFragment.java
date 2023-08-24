@@ -67,7 +67,7 @@ public class ItemListFragment extends BaseFragment {
             Bundle arguments = new Bundle();
             arguments.putInt("gameId", gameId);
             NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_item_list_to_item_details, arguments);
+            navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
         });
 
         return root;
