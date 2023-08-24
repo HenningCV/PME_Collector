@@ -2,6 +2,10 @@ package de.pme.collector.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.List;
 
 import de.pme.collector.R;
@@ -23,6 +28,10 @@ import de.pme.collector.viewModel.ItemListViewModel;
 
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ItemViewHolder> {
+
+    private static final short numberOfItemsInitialized = 50;
+    private static final short numberOfItemsImages = 7;
+
 
     private final RecyclerViewClickInterface recyclerViewClickInterface;
 
@@ -39,16 +48,19 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                                    ItemListViewModel itemListViewModel) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
+
         ItemRecyclerViewAdapter.itemListViewModel = itemListViewModel;
     }
 
 
-    // inflate layout -> give a look to the rows
+    // inflate layout -> "give a look to the rows"
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        // create a LayoutInflater-instance from the context
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+        // inflate layout for a single item-view using the layoutInflater
         View itemView = layoutInflater.inflate(R.layout.recycler_view_row_item, parent, false);
 
         return new ItemViewHolder(itemView, recyclerViewClickInterface, this);
@@ -63,16 +75,20 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             Item currentItem = this.itemList.get(position);
             holder.currentItemId = currentItem.getId();
 
+            // set item name & location
             holder.itemName.setText(currentItem.getName());
             holder.itemLocation.setText(currentItem.getLocation());
-            // TODO: TEMP
-            holder.itemImage.setImageResource(R.drawable.recycler_view_placeholder_item);
 
+            // set item image
+            setItemImage(currentItem, holder, position);
+
+            // turn the item card green & check the checkbox when the item is obtained
             if (currentItem.isAcquired()) {
                 holder.itemObtainedText.setText(R.string.item_obtained);
                 holder.itemObtainedCheckbox.setChecked(true);
                 holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_found));
             }
+            // turn the item card red & uncheck the checkbox when the item is not obtained
             else {
                 holder.itemObtainedText.setText(R.string.item_not_obtained);
                 holder.itemObtainedCheckbox.setChecked(false);
@@ -124,6 +140,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             // handle click on the checkbox
             itemObtainedCheckbox.setOnClickListener(view -> {
                 setObtainedStatus(((CheckBox) view).isChecked(), currentItemId);
+                // notify observers
                 itemRecyclerViewAdapter.notifyDataSetChanged();
             });
 
@@ -146,5 +163,40 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
     private static void setObtainedStatus(boolean obtained, int itemId) {
         itemListViewModel.setObtainedStatus(obtained, itemId);
+    }
+
+
+    private void setItemImage(Item currentItem, ItemViewHolder holder, int position) {
+        // load item image
+        File itemImageFile = new File(currentItem.getImagePath());
+
+        Log.println(Log.WARN, "test", "number: " + currentItem.getImagePath());
+
+        // the if() is just to assign the initial items their images, after that images from the device are used
+        if (currentItem.getId() < numberOfItemsInitialized && position < numberOfItemsImages) {
+            // load images for initial items from the drawable-folder via the values-array of those images
+            TypedArray itemImagesArray = holder.itemView.getResources().obtainTypedArray(R.array.initial_item_images);
+            // get the id of the image
+            int resourceId = itemImagesArray.getResourceId(Integer.parseInt(currentItem.getImagePath()), 0);
+            // set image to the ImageView
+            holder.itemImage.setImageResource(resourceId);
+            // recycle itemImagesArray to avoid memory leaks
+            itemImagesArray.recycle();
+            return;
+        }
+        else {
+            if (itemImageFile.exists()) {
+                // load image from device
+                Bitmap myBitmap = BitmapFactory.decodeFile(itemImageFile.getAbsolutePath());
+                // set image to the ImageView
+                holder.itemImage.setImageBitmap(myBitmap);
+                return;
+            }
+        }
+
+        // set default image
+        holder.itemImage.setImageResource(R.drawable.recycler_view_placeholder_item);
+        // tint the default image white
+        holder.itemImage.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 }

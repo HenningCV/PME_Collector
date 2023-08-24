@@ -10,4 +10,16 @@
         <item>@drawable/game_5</item>
         <item>@drawable/game_6</item>
     </array>
+
+    <array name="initial_item_images">
+        <item>@drawable/item_0</item>
+        <item>@drawable/item_1</item>
+        <item>@drawable/item_2</item>
+        <item>@drawable/item_3</item>
+        <item>@drawable/item_4</item>
+        <item>@drawable/item_5</item>
+        <item>@drawable/item_6</item>
+        <item>@drawable/item_7</item>
+    </array>
+
 </resources>

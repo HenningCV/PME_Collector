@@ -1,5 +1,6 @@
 package de.pme.collector.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -49,7 +50,7 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
         // create a LayoutInflater-instance from the context
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        // inflate layout for a single item view using the layoutInflater
+        // inflate layout for a single item-view using the layoutInflater
         View gameView = layoutInflater.inflate(R.layout.recycler_view_row_game, parent, false);
 
         return new GameViewHolder(gameView, this.recyclerViewClickInterface);
@@ -67,36 +68,8 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
             // set game title & publisher
             holder.gameTitle.setText(currentGame.getTitle());
             holder.gamePublisher.setText(currentGame.getPublisher());
-
-            // load game image
-            File gameImageFile = new File(currentGame.getImagePath());
-
-            // the if() is just to assign the initial games their images, after that images from the device are used
-            if (currentGame.getId() < numberOfInitialGames) {
-                // load images for initial games from the drawable-folder via the values-array of those images
-                TypedArray gameImagesArray = holder.itemView.getResources().obtainTypedArray(R.array.initial_game_images);
-                // get the id of the image
-                int resourceId = gameImagesArray.getResourceId(Integer.parseInt(currentGame.getImagePath()), 0);
-                // set image to the ImageView
-                holder.gameImage.setImageResource(resourceId);
-                // recycle gameImagesArray to avoid memory leaks
-                gameImagesArray.recycle();
-                return;
-            }
-            else {
-                if (gameImageFile.exists()) {
-                    // load image from device
-                    Bitmap myBitmap = BitmapFactory.decodeFile(gameImageFile.getAbsolutePath());
-                    // set image to the ImageView
-                    holder.gameImage.setImageBitmap(myBitmap);
-                    return;
-                }
-            }
-
-            // set default image
-            holder.gameImage.setImageResource(R.drawable.recycler_view_placeholder_game);
-            // tint the default image white
-            holder.gameImage.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
+            // set game image
+            setGameImage(currentGame, holder);
         }
         else {
             // if data is not ready yet
@@ -140,9 +113,44 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setGames(List<Game> gameList){
         this.gameList = gameList;
+
         // notify observers
         notifyDataSetChanged();
+    }
+
+
+    private void setGameImage(Game currentGame, GameViewHolder holder) {
+        // load game image
+        File gameImageFile = new File(currentGame.getImagePath());
+
+        // the if() is just to assign the initial games their images, after that images from the device are used
+        if (currentGame.getId() < numberOfInitialGames) {
+            // load images for initial games from the drawable-folder via the values-array of those images
+            TypedArray gameImagesArray = holder.itemView.getResources().obtainTypedArray(R.array.initial_game_images);
+            // get the id of the image
+            int resourceId = gameImagesArray.getResourceId(Integer.parseInt(currentGame.getImagePath()), 0);
+            // set image to the ImageView
+            holder.gameImage.setImageResource(resourceId);
+            // recycle gameImagesArray to avoid memory leaks
+            gameImagesArray.recycle();
+            return;
+        }
+        else {
+            if (gameImageFile.exists()) {
+                // load image from device
+                Bitmap myBitmap = BitmapFactory.decodeFile(gameImageFile.getAbsolutePath());
+                // set image to the ImageView
+                holder.gameImage.setImageBitmap(myBitmap);
+                return;
+            }
+        }
+
+        // set default image
+        holder.gameImage.setImageResource(R.drawable.recycler_view_placeholder_game);
+        // tint the default image white
+        holder.gameImage.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 }
