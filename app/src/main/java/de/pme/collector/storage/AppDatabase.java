@@ -74,9 +74,13 @@ public abstract class AppDatabase extends RoomDatabase {
                 ItemDAO itemDAO = instance.itemDAO();
                 itemDAO.deleteAll();
 
-                // create new dummy-games
-                for (int i = 0; i < 8; i++) {
-                    Game game = new Game("Game " + i, "Publisher Game " + i, String.valueOf(i));
+                // create dummy-games
+                for (int i = 0; i < 7; i++) {
+                    Game game = new Game(
+                            "Game "           + i,
+                            "Publisher Game " + i,
+                            String.valueOf(i)
+                    );
                     gameDAO.insert(game);
 
                     // create dummy-items for each game

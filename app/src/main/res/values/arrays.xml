@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <array name="initial_game_images">
+        <item>@drawable/game_0</item>
+        <item>@drawable/game_1</item>
+        <item>@drawable/game_2</item>
+        <item>@drawable/game_3</item>
+        <item>@drawable/game_4</item>
+        <item>@drawable/game_5</item>
+        <item>@drawable/game_6</item>
+    </array>
+</resources>

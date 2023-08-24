@@ -24,19 +24,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!-- item image -->
             <ImageView
                 android:id="@+id/recycler_view_item_image"
-                android:contentDescription="@string/item_image_content"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:contentDescription="@string/item_image_content"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/recycler_view_item_constraint_layout_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/recycler_view_placeholder_item"
-                app:tint="#FFFFFF" />
+                app:srcCompat="@drawable/recycler_view_placeholder_item" />
 
+            <!-- item checkbox -->
             <CheckBox
                 android:id="@+id/recycler_view_item_obtained_checkbox"
                 android:layout_width="wrap_content"
@@ -62,13 +63,14 @@
                 app:layout_constraintStart_toEndOf="@+id/recycler_view_item_image"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <!-- item name -->
                 <TextView
                     android:id="@+id/recycler_view_item_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:ellipsize="end"
                     android:gravity="center"
+                    android:ellipsize="end"
                     android:maxLines="1"
                     android:scrollHorizontally="false"
                     android:text="@string/item_name_placeholder"
@@ -80,6 +82,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- item location -->
                 <TextView
                     android:id="@+id/recycler_view_item_location"
                     android:layout_width="match_parent"
@@ -97,6 +100,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recycler_view_item_name" />
 
+                <!-- item obtained -->
                 <TextView
                     android:id="@+id/recycler_view_item_obtained"
                     android:layout_width="match_parent"
@@ -109,9 +113,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recycler_view_item_location" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
