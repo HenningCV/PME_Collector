@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,35 +30,35 @@ import de.pme.collector.model.Item;
 import de.pme.collector.view.fragments.core.BaseFragment;
 import de.pme.collector.viewModel.NewItemFormViewModel;
 
-public class NewItemFormFragment extends BaseFragment {
 
-    private static final int REQUEST_PERMISSION = 2;
+public class NewItemFormFragment extends BaseFragment {
 
     private EditText editTextName;
     private EditText editTextDescription;
     private EditText editTextPrerequisites;
     private EditText editTextLocation;
     private ImageView imagePreview;
-    private Bitmap selectedBitmap;
 
     private NewItemFormViewModel newItemFormViewModel;
 
 
-    public NewItemFormFragment(){
-    }
+    // required empty constructor
+    public NewItemFormFragment() {}
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_item_form, container, false);
+
         newItemFormViewModel = this.getViewModel(NewItemFormViewModel.class);
 
-
-        editTextName = view.findViewById(R.id.editTextName);
-        editTextDescription = view.findViewById(R.id.editTextDescription);
+        editTextName          = view.findViewById(R.id.editTextName);
+        editTextDescription   = view.findViewById(R.id.editTextDescription);
         editTextPrerequisites = view.findViewById(R.id.editTextPrerequisites);
-        editTextLocation = view.findViewById(R.id.editTextLocation);
-        imagePreview = view.findViewById(R.id.imagePreview);
+        editTextLocation      = view.findViewById(R.id.editTextLocation);
+        imagePreview          = view.findViewById(R.id.imagePreview);
 
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
         buttonSelectImage.setOnClickListener(v -> selectImage());
@@ -67,17 +69,21 @@ public class NewItemFormFragment extends BaseFragment {
         return view;
     }
 
+
     private void selectImage() {
         ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop()	                    // crop image
+                .compress(1024)             // final image size will be less than 1 MB
+                .maxResultSize(1080, 1080)  // final image resolution will be less than 1080 x 1080
                 .start();
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        assert data != null;
         Uri uri = data.getData();
         imagePreview.setImageURI(uri);
         imagePreview.setVisibility(View.VISIBLE);
@@ -85,12 +91,14 @@ public class NewItemFormFragment extends BaseFragment {
 
 
     private void saveNewEntry() {
+        assert getArguments() != null;
         int gameId = getArguments().getInt("gameId");
-        String name = editTextName.getText().toString();
-        String description = editTextDescription.getText().toString();
+
+        String name          = editTextName.getText().toString();
+        String description   = editTextDescription.getText().toString();
         String prerequisites = editTextPrerequisites.getText().toString();
-        String location = editTextLocation.getText().toString();
-        String imagePath = saveImageToInternalStorage(imagePreview, name + gameId + ".jpg");
+        String location      = editTextLocation.getText().toString();
+        String imagePath     = saveImageToInternalStorage(imagePreview, name + gameId + ".jpg");
 
         Log.d("SaveItem", "saved item: \n"
                 + "\n gameId: " + gameId
@@ -104,28 +112,34 @@ public class NewItemFormFragment extends BaseFragment {
 
         newItemFormViewModel.insertItem(item);
 
+        Bundle arguments = new Bundle();
+        arguments.putInt("gameId", gameId);
+
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_new_item_form_to_item_list, arguments);
+
+        hideKeyboard(requireContext(), requireView());
     }
+
 
     private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
         File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
-        String filename = imageTitle + ".jpg";
-        File file = new File(directory, filename);
+
+        File file = new File(directory, imageTitle);
 
         try {
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
-        String imagePath = file.getAbsolutePath();
-        return imagePath;
+        return file.getAbsolutePath();
     }
-
-
 }

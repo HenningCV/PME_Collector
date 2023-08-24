@@ -1,7 +1,6 @@
 package de.pme.collector.storage;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -10,7 +9,6 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.Collections;
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -42,6 +40,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (instance == null) {
                     instance = Room.databaseBuilder(context.getApplicationContext(),
                                                     AppDatabase.class, "app_db")
+                            // initialize dummy-data
                             .addCallback(createCallback)
                             .build();
                 }
@@ -55,6 +54,7 @@ public abstract class AppDatabase extends RoomDatabase {
             throws ExecutionException, InterruptedException {
         return databaseWriteExecutor.invokeAny( Collections.singletonList(task) );
     }
+
 
     public static void execute(Runnable runnable) {
         databaseWriteExecutor.execute(runnable);
@@ -74,20 +74,24 @@ public abstract class AppDatabase extends RoomDatabase {
                 ItemDAO itemDAO = instance.itemDAO();
                 itemDAO.deleteAll();
 
-                // create new dummy-games
-                for (int i = 0; i < 8; i++) {
-                    Game game = new Game("Game " + i, "Publisher Game " + i, String.valueOf(i));
+                // create dummy-games
+                for (int i = 0; i < 7; i++) {
+                    Game game = new Game(
+                            "Game "           + i,  // title
+                            "Publisher Game " + i,  // publisher
+                            "@drawable/"      + i   // image path, for initial games just an int-value to reference the image in the arrays.xml
+                    );
                     gameDAO.insert(game);
 
                     // create dummy-items for each game
                     for (int j = 0; j < (5+i); j++) {
                         Item item = new Item(
-                                gameDAO.getLastEntry().getId(),
-                                "",
-                                "Item "                  + j + " of Game " + i,
-                                "Description of Item "   + j + " of Game " + i,
-                                "Prerequisites of Item " + j + " of Game " + i,
-                                "Location of Item "      + j + " of Game " + i
+                                gameDAO.getLastEntry().getId(),                  // game-id that the item belongs to
+                                "@drawable/"             + j,                    // image-path, for initial games just an int-value to reference the image in the arrays.xml
+                                "Item "                  + j + " of Game " + i,  // name
+                                "Description of Item "   + j + " of Game " + i,  // description
+                                "Prerequisites of Item " + j + " of Game " + i,  // prerequisites
+                                "Location of Item "      + j + " of Game " + i   // location
                         );
                         itemDAO.insert(item);
                     }

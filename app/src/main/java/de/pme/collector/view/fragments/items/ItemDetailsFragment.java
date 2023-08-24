@@ -1,15 +1,19 @@
 package de.pme.collector.view.fragments.items;
 
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
 
 import de.pme.collector.R;
 import de.pme.collector.model.Item;
@@ -18,7 +22,6 @@ import de.pme.collector.viewModel.ItemDetailsViewModel;
 
 
 public class ItemDetailsFragment extends BaseFragment {
-
 
     private ItemDetailsViewModel itemDetailsViewModel;
 
@@ -69,8 +72,10 @@ public class ItemDetailsFragment extends BaseFragment {
     private void setItemDetailsLiveData() {
 
         assert getArguments() != null;
+        // get the gameId that is passed in by the ItemListRecyclerView that the item belongs to
         int itemId = getArguments().getInt("itemId");
 
+        // get the database-data for that item
         itemDetailsLiveData = itemDetailsViewModel.getItemsForGame(itemId);
 
         // observe live-data & update the adapter item-list when it changes
@@ -90,12 +95,64 @@ public class ItemDetailsFragment extends BaseFragment {
         TextView  itemLocation      = getView().findViewById(R.id.fragment_item_details_location);
         TextView  itemPrerequisites = getView().findViewById(R.id.fragment_item_details_prerequisites);
 
-        // TODO: TEMP
-        itemImage.setImageResource(R.drawable.recycler_view_placeholder_item);
+        setItemImage(item, itemImage);
 
         itemName.setText(item.getName());
         itemDescription.setText(item.getDescription());
         itemLocation.setText(item.getLocation());
         itemPrerequisites.setText(item.getPrerequisites());
+    }
+
+
+    private void setItemImage(Item item, ImageView itemImage) {
+
+        String imagePath = item.getImagePath();
+
+        // load item image
+        File itemImageFile = new File(imagePath);
+
+        // the if() is just to assign the initial items their images, after that images from the device are used
+        if (imagePath.contains("@drawable/")) {
+
+            // split the image-path after the '@drawable/' to get the index of the image
+            String[] splitImagePath = imagePath.split("@drawable/");
+
+            // load images for initial items from the drawable-folder via the values-array of those images
+            TypedArray itemImagesArray = getResources().obtainTypedArray(R.array.initial_item_images);
+
+            // get the id for the corresponding image
+            int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
+
+            // if the resource was not found use the default image
+            if (imageResourceId == 0) {
+                setDefaultImage(itemImage);
+            }
+            else {
+                // set image to the ImageView
+                itemImage.setImageResource(imageResourceId);
+            }
+
+            // recycle itemImagesArray to avoid memory leaks
+            itemImagesArray.recycle();
+            return;
+        }
+        else {
+            if (itemImageFile.exists()) {
+                // load image from device
+                Bitmap myBitmap = BitmapFactory.decodeFile(itemImageFile.getAbsolutePath());
+
+                // set image to the ImageView
+                itemImage.setImageBitmap(myBitmap);
+                return;
+            }
+        }
+
+        // set default image if the system image doesn't exist anymore
+        setDefaultImage(itemImage);
+    }
+
+
+    private void setDefaultImage(ImageView itemImage) {
+        itemImage.setImageResource(R.drawable.item_placeholder);
     }
 }

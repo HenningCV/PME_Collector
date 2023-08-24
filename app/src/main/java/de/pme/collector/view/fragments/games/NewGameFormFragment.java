@@ -1,6 +1,5 @@
 package de.pme.collector.view.fragments.games;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,29 +30,29 @@ import de.pme.collector.model.Game;
 import de.pme.collector.view.fragments.core.BaseFragment;
 import de.pme.collector.viewModel.NewGameFormViewModel;
 
+
 public class NewGameFormFragment extends BaseFragment {
 
-    private static final int REQUEST_PERMISSION = 2;
-
-    private EditText editTextTitle;
-    private EditText editTextPublisher;
+    private EditText  editTextTitle;
+    private EditText  editTextPublisher;
     private ImageView imagePreview;
-    private Bitmap selectedBitmap;
 
     private NewGameFormViewModel newGameFormViewModel;
 
-    public NewGameFormFragment() {
-    }
+
+    // required empty constructor
+    public NewGameFormFragment() {}
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_new_game_form, container, false);
         newGameFormViewModel = this.getViewModel(NewGameFormViewModel.class);
 
-        editTextTitle = view.findViewById(R.id.editTextTitle);
+        editTextTitle     = view.findViewById(R.id.editTextTitle);
         editTextPublisher = view.findViewById(R.id.editTextPublisher);
-        imagePreview = view.findViewById(R.id.imagePreview);
+        imagePreview      = view.findViewById(R.id.imagePreview);
 
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
         buttonSelectImage.setOnClickListener(v -> selectImage());
@@ -62,24 +63,29 @@ public class NewGameFormFragment extends BaseFragment {
         return view;
     }
 
+
     private void selectImage() {
         ImagePicker.with(this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                .crop()                     // crop image
+                .compress(1024)             // final image size will be less than 1 MB
+                .maxResultSize(1080, 1080)  // final image resolution will be less than 1080 x 1080
                 .start();
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        assert data != null;
         Uri uri = data.getData();
         imagePreview.setImageURI(uri);
         imagePreview.setVisibility(View.VISIBLE);
     }
 
+
     private void saveNewEntry() {
-        String title = editTextTitle.getText().toString();
+        String title     = editTextTitle.getText().toString();
         String publisher = editTextPublisher.getText().toString();
         String imagePath = saveImageToInternalStorage(imagePreview, title);
 
@@ -88,7 +94,12 @@ public class NewGameFormFragment extends BaseFragment {
         Game game = new Game(title, publisher, imagePath);
 
         newGameFormViewModel.insertGame(game);
-        }
+
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_new_game_form_to_game_list);
+
+        hideKeyboard(requireContext(), requireView());
+    }
 
 
     private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
@@ -97,6 +108,7 @@ public class NewGameFormFragment extends BaseFragment {
 
         File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
         String filename = imageTitle + ".jpg";
+
         File file = new File(directory, filename);
 
         try {
@@ -104,13 +116,11 @@ public class NewGameFormFragment extends BaseFragment {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
-        String imagePath = file.getAbsolutePath();
-        return imagePath;
+        return file.getAbsolutePath();
     }
-
-
 }

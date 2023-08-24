@@ -46,14 +46,12 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
                     android:contentDescription="@string/item_image_content"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/recycler_view_placeholder_item"
-                    app:tint="#FFFFFF" />
+                    app:srcCompat="@drawable/item_placeholder" />
 
                 <TextView
                     android:id="@+id/fragment_item_details_name"
