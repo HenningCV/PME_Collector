@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,6 +90,9 @@ public class NewGameFormFragment extends BaseFragment {
         Game game = new Game(title, publisher, imagePath);
 
         newGameFormViewModel.insertGame(game);
+
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_new_game_form_to_game_list);
         }
 
 
@@ -96,7 +101,7 @@ public class NewGameFormFragment extends BaseFragment {
         Bitmap bitmap = drawable.getBitmap();
 
         File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
-        String filename = imageTitle;
+        String filename = imageTitle + ".jpg";
         File file = new File(directory, filename);
 
         try {

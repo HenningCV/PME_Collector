@@ -71,7 +71,13 @@
         android:name="de.pme.collector.view.fragments.games.NewGameFormFragment"
         android:label="@string/fragment_game_list_title"
         tools:layout="@layout/fragment_new_game_form" >
-
+        <action
+            android:id="@+id/action_new_game_form_to_game_list"
+            app:destination="@id/navigation_home"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
 
     </fragment>
 
@@ -84,7 +90,13 @@
         <argument
             android:name="gameId"
             app:argType="integer"/>
-
+        <action
+            android:id="@+id/action_new_item_form_to_item_list"
+            app:destination="@id/navigation_item_list"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
 
     </fragment>
 
