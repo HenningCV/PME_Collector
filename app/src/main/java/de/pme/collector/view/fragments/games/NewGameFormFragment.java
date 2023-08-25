@@ -31,6 +31,7 @@ import de.pme.collector.view.fragments.core.BaseFragment;
 import de.pme.collector.viewModel.NewGameFormViewModel;
 
 
+// class to add a new game
 public class NewGameFormFragment extends BaseFragment {
 
     private EditText  editTextTitle;
@@ -39,7 +40,6 @@ public class NewGameFormFragment extends BaseFragment {
 
     private NewGameFormViewModel newGameFormViewModel;
 
-
     // required empty constructor
     public NewGameFormFragment() {}
 
@@ -47,6 +47,7 @@ public class NewGameFormFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        // inflating layout
         View view = inflater.inflate(R.layout.fragment_new_game_form, container, false);
         newGameFormViewModel = this.getViewModel(NewGameFormViewModel.class);
 
@@ -54,9 +55,11 @@ public class NewGameFormFragment extends BaseFragment {
         editTextPublisher = view.findViewById(R.id.editTextPublisher);
         imagePreview      = view.findViewById(R.id.imagePreview);
 
+        // button for adding an image
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
         buttonSelectImage.setOnClickListener(v -> selectImage());
 
+        // button for saving the form
         Button buttonSave = view.findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(v -> saveNewEntry());
 
@@ -64,15 +67,17 @@ public class NewGameFormFragment extends BaseFragment {
     }
 
 
+    // selecting an image from gallery or camera
     private void selectImage() {
         ImagePicker.with(this)
-                .crop()                     // crop image
-                .compress(1024)             // final image size will be less than 1 MB
-                .maxResultSize(1080, 1080)  // final image resolution will be less than 1080 x 1080
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
                 .start();
     }
 
 
+    // getting the an image and previewing it
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -84,6 +89,7 @@ public class NewGameFormFragment extends BaseFragment {
     }
 
 
+    // saving the new game and switching to games
     private void saveNewEntry() {
         String title     = editTextTitle.getText().toString();
         String publisher = editTextPublisher.getText().toString();
@@ -102,6 +108,7 @@ public class NewGameFormFragment extends BaseFragment {
     }
 
 
+    // saving the image to the internal storage
     private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();

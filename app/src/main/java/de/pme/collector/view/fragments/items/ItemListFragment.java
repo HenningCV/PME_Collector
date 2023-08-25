@@ -66,6 +66,7 @@ public class ItemListFragment extends BaseFragment {
 
         setItemListLiveData();
 
+        // button to adding a new item
         Button addButton = root.findViewById(R.id.add_button);
         addButton.setOnClickListener(v -> {
             int gameId = getArguments().getInt("gameId");
@@ -75,6 +76,7 @@ public class ItemListFragment extends BaseFragment {
             navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
         });
 
+        // button for an options menu
         Button optionButton = root.findViewById(R.id.option_button);
         optionButton.setOnClickListener(v -> {
             showOptionMenu(v);
@@ -99,6 +101,7 @@ public class ItemListFragment extends BaseFragment {
         setItemListLiveData();
     }
 
+    //displaying options
     private void showOptionMenu(View view){
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
         MenuInflater inflater = popupMenu.getMenuInflater();
@@ -134,10 +137,12 @@ public class ItemListFragment extends BaseFragment {
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 
+    // only display not acquired items
     private void filterNotAcquired(){
         Log.d("OptionsMenu", "selected not acquired filter");
     }
 
+    // sorting item list alphabetical
     private void sortAlphabetical(){
         Log.d("OptionsMenu", "selected not acquired filter");
     }
