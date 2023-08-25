@@ -8,10 +8,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 
 import java.util.List;
 
@@ -70,9 +75,14 @@ public class ItemListFragment extends BaseFragment {
             navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
         });
 
+        Button optionButton = root.findViewById(R.id.option_button);
+        optionButton.setOnClickListener(v -> {
+            showOptionMenu(v);
+        });
+
+
         return root;
     }
-
 
     @Override
     public void onPause() {
@@ -89,6 +99,29 @@ public class ItemListFragment extends BaseFragment {
         setItemListLiveData();
     }
 
+    private void showOptionMenu(View view){
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.item_filter_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_filter_not_acquired:
+                        filterNotAcquired();
+                        return true;
+                    case R.id.action_sort_alphabetical:
+                        sortAlphabetical();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.show();
+    }
 
     private void setItemListLiveData() {
 
@@ -99,5 +132,13 @@ public class ItemListFragment extends BaseFragment {
 
         // observe live-data & update the adapter item-list when it changes
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+    private void filterNotAcquired(){
+        Log.d("OptionsMenu", "selected not acquired filter");
+    }
+
+    private void sortAlphabetical(){
+        Log.d("OptionsMenu", "selected not acquired filter");
     }
 }
