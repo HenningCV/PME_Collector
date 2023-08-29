@@ -3,11 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="de.pme.collector">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
-
 
     <application
         android:allowBackup="true"
@@ -33,8 +29,10 @@
         <!-- Main -->
         <activity
             android:name=".view.MainActivity"
-            android:exported="false">
+            android:exported="false"
+            android:configChanges="uiMode">
         </activity>
+
     </application>
 
 </manifest>

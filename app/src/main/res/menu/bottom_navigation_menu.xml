@@ -4,7 +4,7 @@
     <!-- Home -->
     <item
         android:id="@+id/navigation_home"
-        android:title="@string/navigation_home"
+        android:title="@string/navigation_games"
         android:icon="@drawable/navigation_home" />
 
     <!-- Settings -->
@@ -12,4 +12,5 @@
         android:id="@+id/navigation_settings"
         android:title="@string/navigation_settings"
         android:icon="@drawable/navigation_settings" />
+
 </menu>
