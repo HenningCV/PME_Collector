@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_black"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -22,6 +21,7 @@
         android:id="@+id/form_game_button_select_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Theme.Collector.Button"
         android:text="@string/form_choose_picture" />
 
     <!-- game title -->
@@ -31,12 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
-        android:autofillHints="game title"
-        android:backgroundTint="@color/main_yellow"
-        android:hint="@string/form_game_title"
         android:inputType="text"
-        android:textColor="@color/secondary_yellow"
-        android:textColorHint="@color/form_item_placeholder" />
+        style="@style/Theme.Collector.Text.EditField"
+        android:autofillHints="game title"
+        android:hint="@string/form_game_title" />
 
     <!-- game publisher -->
     <EditText
@@ -44,12 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:autofillHints="game publisher"
-        android:backgroundTint="@color/main_yellow"
-        android:hint="@string/form_game_publisher"
         android:inputType="text"
-        android:textColor="@color/secondary_yellow"
-        android:textColorHint="@color/form_item_placeholder" />
+        style="@style/Theme.Collector.Text.EditField"
+        android:autofillHints="game publisher"
+        android:hint="@string/form_game_publisher" />
 
     <!-- save button -->
     <Button
@@ -57,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        style="@style/Theme.Collector.Button"
         android:text="@string/form_button_save" />
 
 </LinearLayout>

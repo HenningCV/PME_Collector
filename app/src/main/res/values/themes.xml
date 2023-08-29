@@ -1,19 +1,75 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+
+    <!-- LIGHT THEME -->
+
+    <!-- base application theme -->
     <style name="Theme.Collector" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- primary color -->
-        <item name="colorPrimary">@color/main_yellow</item>
-        <item name="colorPrimaryVariant">@color/secondary_yellow</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:background">@color/white</item>
 
-        <!-- secondary color -->
-        <item name="colorSecondary">@color/background_item_brown</item>
-        <item name="colorSecondaryVariant">@color/background_black</item>
-        <item name="colorOnSecondary">@color/black</item>
-
-        <!-- status bar color -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/white</item>
     </style>
+
+
+    <!-- header -->
+    <style name="Theme.Collector.Text.Header" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+
+    <!-- recycler view -->
+    <style name="Theme.Collector.RecyclerView.Text.Primary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.Collector.RecyclerView.Text.Secondary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+    <!-- item details -->
+    <style name="Theme.Collector.Details.Text.Title" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.Collector.Details.Text.Primary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.Collector.Details.Text.Secondary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <!-- form new game/item -->
+    <style name="Theme.Collector.Text.EditField" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColor">@color/main_yellow</item>
+        <item name="android:textSize">18sp</item>
+        <item name="backgroundTint">@color/form_text_line_light</item>
+        <item name="android:textColorHint">@color/form_text_placeholder_light</item>
+    </style>
+
+
+    <!-- buttons -->
+    <style name="Theme.Collector.Button" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="backgroundTint">@color/main_yellow</item>
+        <item name="background">@color/main_yellow</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:letterSpacing">0.09</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
 </resources>

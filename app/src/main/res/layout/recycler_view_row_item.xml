@@ -22,13 +22,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/recycler_view_item_constraint_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent">
 
             <!-- item image -->
             <ImageView
                 android:id="@+id/recycler_view_item_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/item_image_content"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -56,6 +58,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:background="@android:color/transparent"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -69,8 +72,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:gravity="center"
+                    android:background="@android:color/transparent"
                     android:ellipsize="end"
+                    android:gravity="center"
                     android:maxLines="1"
                     android:scrollHorizontally="false"
                     android:text="@string/item_name_placeholder"
@@ -88,6 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
+                    android:background="@android:color/transparent"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
@@ -105,6 +110,7 @@
                     android:id="@+id/recycler_view_item_obtained"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:gravity="center"
                     android:text="@string/item_not_obtained"
                     android:textColor="@color/white"

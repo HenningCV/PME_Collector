@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.pme.collector.view.fragments.items.ItemListFragment"
     android:orientation="vertical"
-    android:background="@color/background_black">
+    tools:context="de.pme.collector.view.fragments.items.ItemListFragment">
 
     <!-- item list header -->
     <TextView
@@ -16,9 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:text="@string/item_list_title"
-        android:textAlignment="center"
-        android:textColor="@color/main_yellow"
-        android:textSize="34sp" />
+        style="@style/Theme.Collector.Text.Header" />
 
     <!-- item list options button -->
     <Button
@@ -53,6 +50,7 @@
         android:layout_gravity="end"
         android:layout_marginBottom="75dp"
         android:background="@drawable/add_icon"
+        style="@style/Theme.Collector.Button"
         android:contentDescription="@string/item_list_add_new_item_button_content" />
 
 </RelativeLayout>
