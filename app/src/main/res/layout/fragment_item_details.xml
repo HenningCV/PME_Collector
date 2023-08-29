@@ -18,6 +18,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- item details options button -->
+
+    <Button
+        android:id="@+id/item_details_options_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/item_list_item_options_button_content"
+        android:drawableEnd="@drawable/options_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_item_details_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_item_details_title"
+        tools:ignore="RelativeOverlap" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

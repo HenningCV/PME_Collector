@@ -7,10 +7,14 @@ import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.io.File;
@@ -42,6 +46,10 @@ public class ItemDetailsFragment extends BaseFragment {
 
         setItemDetailsLiveData();
 
+        // button for an options menu
+        Button optionButton = root.findViewById(R.id.item_details_options_button);
+        optionButton.setOnClickListener(this::showOptionMenu);
+
         return root;
     }
 
@@ -66,6 +74,33 @@ public class ItemDetailsFragment extends BaseFragment {
         super.onDestroyView();
 
         itemDetailsLiveData.removeObservers(this.requireActivity());
+    }
+
+    // display item list options
+    private void showOptionMenu(View view) {
+
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.item_edit_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+
+            if (item.getItemId() == R.id.action_edit_item) {
+                editItem();
+                return true;
+            }
+
+            // only display not obtained items
+            if (item.getItemId() == R.id.action_delete_item) {
+                deleteItem();
+                return true;
+            }
+
+            return false;
+        });
+
+        popupMenu.show();
     }
 
 
@@ -154,5 +189,15 @@ public class ItemDetailsFragment extends BaseFragment {
 
     private void setDefaultImage(ImageView itemImage) {
         itemImage.setImageResource(R.drawable.item_placeholder);
+    }
+
+    // editing the item
+    private void editItem() {
+        Log.d("ItemDetails", "Editing item...");
+    }
+
+    // editing the item
+    private void deleteItem() {
+        Log.d("ItemDetails", "Deleting item...");
     }
 }
