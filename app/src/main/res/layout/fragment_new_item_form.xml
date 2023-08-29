@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_black"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -14,14 +13,15 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:contentDescription="@string/item_image_content"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@string/item_image_content" />
 
     <!-- select item image button -->
     <Button
         android:id="@+id/form_game_button_select_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Theme.Collector.Button"
         android:text="@string/form_choose_picture" />
 
     <!-- item name -->
@@ -31,12 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
-        android:autofillHints="item name"
-        android:backgroundTint="@color/main_yellow"
-        android:hint="@string/form_item_name"
         android:inputType="text"
-        android:textColor="@color/secondary_yellow"
-        android:textColorHint="@color/form_item_placeholder" />
+        style="@style/Theme.Collector.Text.EditField"
+        android:autofillHints="item name"
+        android:hint="@string/form_item_name" />
 
     <!-- item description -->
     <EditText
@@ -44,12 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:autofillHints="item description"
-        android:backgroundTint="@color/main_yellow"
-        android:hint="@string/form_item_description"
         android:inputType="text"
-        android:textColor="@color/secondary_yellow"
-        android:textColorHint="@color/form_item_placeholder" />
+        style="@style/Theme.Collector.Text.EditField"
+        android:autofillHints="item description"
+        android:hint="@string/form_item_description" />
 
     <!-- item prerequisites -->
     <EditText
@@ -57,12 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:autofillHints="item prerequisites"
-        android:backgroundTint="@color/main_yellow"
-        android:hint="@string/form_item_prerequisites"
         android:inputType="text"
-        android:textColor="@color/secondary_yellow"
-        android:textColorHint="@color/form_item_placeholder" />
+        style="@style/Theme.Collector.Text.EditField"
+        android:autofillHints="item prerequisites"
+        android:hint="@string/form_item_prerequisites" />
 
     <!-- item location -->
     <EditText
@@ -70,12 +64,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:autofillHints="item location"
-        android:backgroundTint="@color/main_yellow"
-        android:hint="@string/form_item_location"
         android:inputType="text"
-        android:textColor="@color/secondary_yellow"
-        android:textColorHint="@color/form_item_placeholder" />
+        style="@style/Theme.Collector.Text.EditField"
+        android:autofillHints="item location"
+        android:hint="@string/form_item_location" />
 
     <!-- save button -->
     <Button
@@ -83,6 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        style="@style/Theme.Collector.Button"
         android:text="@string/form_button_save" />
 
 </LinearLayout>

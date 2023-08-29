@@ -21,6 +21,9 @@
     <color name="item_not_found">#4E0505</color>
     <color name="item_found">#004000</color>
 
-    <color name="form_item_placeholder">#646464</color>
+    <color name="form_text_placeholder_light">#B0B0B0</color>
+    <color name="form_text_placeholder_dark">#646464</color>
+    <color name="form_text_line_light">#7F7F7F</color>
+    <color name="form_text_line_dark">@color/main_yellow</color>
 
 </resources>
