@@ -33,6 +33,8 @@ public class ItemListFragment extends BaseFragment {
 
     private ItemRecyclerViewAdapter itemAdapter;
 
+    private int gameId;
+
 
     // required empty constructor
     public ItemListFragment() {}
@@ -100,22 +102,36 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
-    //displaying options
+    // display item list options
     private void showOptionMenu(View view) {
+
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.item_filter_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(item -> {
+
+            if (item.getItemId() == R.id.action_filter_show_all_items) {
+                setItemListLiveData();
+                return true;
+            }
+
             // only display not obtained items
-            if (item.getItemId() == R.id.action_filter_not_obtained) {
+            if (item.getItemId() == R.id.action_filter_show_not_obtained) {
                 filterNotObtained();
                 return true;
             }
 
-            // sort item list alphabetical
+            // only display obtained items
+            if (item.getItemId() == R.id.action_filter_show_obtained) {
+                filterObtained();
+                return true;
+            }
+
+            // sort item list alphabetically
             if (item.getItemId() == R.id.action_sort_alphabetically) {
-                sortAlphabetical();
+                sortAlphabetically();
                 return true;
             }
 
@@ -126,10 +142,14 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
-    private void setItemListLiveData() {
-
+    private void getGameId() {
         assert getArguments() != null;
-        int gameId = getArguments().getInt("gameId");
+        gameId = getArguments().getInt("gameId");
+    }
+
+
+    private void setItemListLiveData() {
+        getGameId();
 
         itemLiveData = itemListViewModel.getItemsForGame(gameId);
 
@@ -139,13 +159,31 @@ public class ItemListFragment extends BaseFragment {
 
 
     // only display not obtained items
-    private void filterNotObtained(){
-        Log.d("OptionsMenu", "selected not acquired filter");
+    private void filterNotObtained() {
+        getGameId();
+
+        itemLiveData = itemListViewModel.getNotObtainedItemsSortedByName(gameId);
+
+        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 
 
-    // sort item list alphabetical
-    private void sortAlphabetical(){
-        Log.d("OptionsMenu", "selected not acquired filter");
+    // only display obtained items
+    private void filterObtained() {
+        getGameId();
+
+        itemLiveData = itemListViewModel.getObtainedItemsSortedByName(gameId);
+
+        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    // sort item list alphabetically
+    private void sortAlphabetically() {
+        getGameId();
+
+        itemLiveData = itemListViewModel.getItemsSortedAlphabetically(gameId);
+
+        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 }

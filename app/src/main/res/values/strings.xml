@@ -22,9 +22,11 @@
     <string name="item_list_add_new_item_button_content">Add new item</string>
 
     <!-- item list options -->
-    <string name="item_list_options_only_show_not_obtained_items">Show only not obtained</string>
-    <string name="item_list_options_sort_alphabetically">sort alphabetical</string>
     <string name="item_list_item_options_button_content">Item options</string>
+    <string name="item_list_options_show_all_items">Show all items</string>
+    <string name="item_list_options_only_show_not_obtained_items">Show only not obtained</string>
+    <string name="item_list_options_only_show_obtained_items">Show only obtained</string>
+    <string name="item_list_options_sort_alphabetically">Sort alphabetical</string>
 
     <!-- item details -->
     <string name="item_details_title">Details</string>
