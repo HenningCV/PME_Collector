@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+
+// class to hold item information
 @Entity(foreignKeys = @ForeignKey(
         entity = Game.class,
         parentColumns = "id",

@@ -33,8 +33,8 @@ public interface ItemDAO {
     @Query("SELECT * from Item")
     LiveData<List<Item>> getItems();
 
-    @Query("SELECT * from Item ORDER BY name ASC")
-    LiveData<List<Item>> getItemsSortedByName();
+    @Query("SELECT * from Item WHERE gameId = :gameId ORDER BY name ASC")
+    LiveData<List<Item>> getItemsSortedByName(int gameId);
 
     @Query("SELECT * from Item ORDER BY id DESC LIMIT 1")
     Item getLastEntry();
@@ -51,4 +51,10 @@ public interface ItemDAO {
 
     @Query("UPDATE Item SET acquired = :obtained WHERE id = :itemId")
     void setObtainedStatus(boolean obtained, int itemId);
+
+    @Query("SELECT * from Item WHERE gameId = :gameId AND acquired = 0 ORDER BY name ASC")
+    LiveData<List<Item>> getNotObtainedItemsSortedByName(int gameId);
+
+    @Query("SELECT * from Item WHERE gameId = :gameId AND acquired = 1 ORDER BY name ASC")
+    LiveData<List<Item>> getObtainedItemsSortedByName(int gameId);
 }

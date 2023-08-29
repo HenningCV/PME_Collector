@@ -54,16 +54,16 @@ public class NewItemFormFragment extends BaseFragment {
 
         newItemFormViewModel = this.getViewModel(NewItemFormViewModel.class);
 
-        editTextName          = view.findViewById(R.id.editTextName);
-        editTextDescription   = view.findViewById(R.id.editTextDescription);
-        editTextPrerequisites = view.findViewById(R.id.editTextPrerequisites);
-        editTextLocation      = view.findViewById(R.id.editTextLocation);
-        imagePreview          = view.findViewById(R.id.imagePreview);
+        editTextName          = view.findViewById(R.id.form_item_edit_text_name);
+        editTextDescription   = view.findViewById(R.id.form_item_edit_text_description);
+        editTextPrerequisites = view.findViewById(R.id.form_item_edit_text_prerequisites);
+        editTextLocation      = view.findViewById(R.id.form_item_edit_text_location);
+        imagePreview          = view.findViewById(R.id.form_game_image_preview);
 
-        Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
+        Button buttonSelectImage = view.findViewById(R.id.form_game_button_select_image);
         buttonSelectImage.setOnClickListener(v -> selectImage());
 
-        Button buttonSave = view.findViewById(R.id.buttonSave);
+        Button buttonSave = view.findViewById(R.id.form_item_button_save);
         buttonSave.setOnClickListener(v -> saveNewEntry());
 
         return view;

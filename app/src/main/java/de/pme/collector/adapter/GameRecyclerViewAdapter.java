@@ -72,7 +72,7 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
         }
         else {
             // if data is not ready yet
-            holder.gameTitle.setText(R.string.fragment_game_list_empty);
+            holder.gameTitle.setText(R.string.game_list_empty_list);
         }
     }
 

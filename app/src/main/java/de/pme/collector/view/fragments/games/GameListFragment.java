@@ -32,7 +32,7 @@ public class GameListFragment extends BaseFragment {
 
         GameListViewModel gameListViewModel = this.getViewModel(GameListViewModel.class);
 
-        RecyclerView gameRecyclerView = root.findViewById(R.id.recycler_view_games);
+        RecyclerView gameRecyclerView = root.findViewById(R.id.game_list_recycler_view);
 
         GameRecyclerViewAdapter gameAdapter = new GameRecyclerViewAdapter(
                 getContext(),
@@ -50,7 +50,7 @@ public class GameListFragment extends BaseFragment {
         // observe live-data & update the adapter game-list when it changes
         gameListViewModel.getGames().observe(this.requireActivity(), gameAdapter::setGames);
 
-        Button addButton = root.findViewById(R.id.add_button);
+        Button addButton = root.findViewById(R.id.game_list_add_new_game_button);
         addButton.setOnClickListener(v -> {
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_game_list_to_new_game_form);

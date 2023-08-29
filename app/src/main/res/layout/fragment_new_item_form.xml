@@ -3,64 +3,86 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_black"
     android:orientation="vertical"
     android:padding="16dp">
 
-
+    <!-- item image preview -->
     <ImageView
-        android:id="@+id/imagePreview"
+        android:id="@+id/form_game_image_preview"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:visibility="gone"/>
+        android:contentDescription="@string/item_image_content"
+        android:visibility="gone" />
 
+    <!-- select item image button -->
     <Button
-        android:id="@+id/buttonSelectImage"
+        android:id="@+id/form_game_button_select_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose Picture"/>
+        android:text="@string/form_choose_picture" />
 
-
+    <!-- item name -->
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/form_item_edit_text_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:autofillHints="item name"
+        android:backgroundTint="@color/main_yellow"
+        android:hint="@string/form_item_name"
         android:inputType="text"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_yellow"
+        android:textColorHint="@color/form_item_placeholder" />
 
+    <!-- item description -->
     <EditText
-        android:id="@+id/editTextDescription"
+        android:id="@+id/form_item_edit_text_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Description"
+        android:layout_marginBottom="8dp"
+        android:autofillHints="item description"
+        android:backgroundTint="@color/main_yellow"
+        android:hint="@string/form_item_description"
         android:inputType="text"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_yellow"
+        android:textColorHint="@color/form_item_placeholder" />
 
+    <!-- item prerequisites -->
     <EditText
-        android:id="@+id/editTextPrerequisites"
+        android:id="@+id/form_item_edit_text_prerequisites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Prerequisites"
+        android:layout_marginBottom="8dp"
+        android:autofillHints="item prerequisites"
+        android:backgroundTint="@color/main_yellow"
+        android:hint="@string/form_item_prerequisites"
         android:inputType="text"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_yellow"
+        android:textColorHint="@color/form_item_placeholder" />
 
+    <!-- item location -->
     <EditText
-        android:id="@+id/editTextLocation"
+        android:id="@+id/form_item_edit_text_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Location"
+        android:layout_marginBottom="16dp"
+        android:autofillHints="item location"
+        android:backgroundTint="@color/main_yellow"
+        android:hint="@string/form_item_location"
         android:inputType="text"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="@color/secondary_yellow"
+        android:textColorHint="@color/form_item_placeholder" />
+
+    <!-- save button -->
     <Button
-        android:id="@+id/buttonSave"
+        android:id="@+id/form_item_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_gravity="end"/>
+        android:layout_gravity="end"
+        android:text="@string/form_button_save" />
 
 </LinearLayout>
-
-
-

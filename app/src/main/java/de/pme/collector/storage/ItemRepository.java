@@ -60,8 +60,18 @@ public class ItemRepository {
     }
 
 
-    public LiveData<List<Item>> getItemsSortedByName() {
-        return this.queryLiveData(this.itemDAO::getItemsSortedByName);
+    public LiveData<List<Item>> getItemsSortedByName(int gameId) {
+        return this.queryLiveData(() -> this.itemDAO.getItemsSortedByName(gameId));
+    }
+
+
+    public LiveData<List<Item>> getNotObtainedItemsSortedByName(int gameId) {
+        return this.queryLiveData(() -> this.itemDAO.getNotObtainedItemsSortedByName(gameId));
+    }
+
+
+    public LiveData<List<Item>> getObtainedItemsSortedByName(int gameId) {
+        return this.queryLiveData(() -> this.itemDAO.getObtainedItemsSortedByName(gameId));
     }
 
 

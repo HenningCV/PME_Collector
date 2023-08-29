@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="de.pme.collector.view.fragments.games.GameListFragment"
-        android:label="@string/fragment_game_list_title"
+        android:label="@string/game_list_title"
         tools:layout="@layout/fragment_game_list" >
         <!-- transition from game-list to item-list-->
         <action
@@ -69,7 +69,7 @@
     <fragment
         android:id="@+id/navigation_new_game_form"
         android:name="de.pme.collector.view.fragments.games.NewGameFormFragment"
-        android:label="@string/fragment_game_list_title"
+        android:label="@string/game_list_title"
         tools:layout="@layout/fragment_new_game_form" >
         <action
             android:id="@+id/action_new_game_form_to_game_list"
@@ -85,7 +85,7 @@
     <fragment
         android:id="@+id/navigation_new_item_form"
         android:name="de.pme.collector.view.fragments.items.NewItemFormFragment"
-        android:label="@string/fragment_game_list_title"
+        android:label="@string/game_list_title"
         tools:layout="@layout/fragment_new_item_form" >
         <argument
             android:name="gameId"

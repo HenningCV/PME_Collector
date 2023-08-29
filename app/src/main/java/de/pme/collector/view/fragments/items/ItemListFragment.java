@@ -8,10 +8,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 
 import java.util.List;
 
@@ -30,6 +33,8 @@ public class ItemListFragment extends BaseFragment {
 
     private ItemRecyclerViewAdapter itemAdapter;
 
+    private int gameId;
+
 
     // required empty constructor
     public ItemListFragment() {}
@@ -43,7 +48,7 @@ public class ItemListFragment extends BaseFragment {
 
         itemListViewModel = this.getViewModel(ItemListViewModel.class);
 
-        RecyclerView itemRecyclerView = root.findViewById(R.id.recycler_view_items);
+        RecyclerView itemRecyclerView = root.findViewById(R.id.item_list_recycler_view);
 
         itemAdapter = new ItemRecyclerViewAdapter(
                 getContext(),
@@ -61,14 +66,21 @@ public class ItemListFragment extends BaseFragment {
 
         setItemListLiveData();
 
-        Button addButton = root.findViewById(R.id.add_button);
-        addButton.setOnClickListener(v -> {
+        // button to add a new item
+        Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
+
+        addItemButton.setOnClickListener(v -> {
+            assert getArguments() != null;
             int gameId = getArguments().getInt("gameId");
             Bundle arguments = new Bundle();
             arguments.putInt("gameId", gameId);
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
         });
+
+        // button for an options menu
+        Button optionButton = root.findViewById(R.id.item_list_options_button);
+        optionButton.setOnClickListener(this::showOptionMenu);
 
         return root;
     }
@@ -90,14 +102,88 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
-    private void setItemListLiveData() {
+    // display item list options
+    private void showOptionMenu(View view) {
 
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.item_filter_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+
+            if (item.getItemId() == R.id.action_filter_show_all_items) {
+                setItemListLiveData();
+                return true;
+            }
+
+            // only display not obtained items
+            if (item.getItemId() == R.id.action_filter_show_not_obtained) {
+                filterNotObtained();
+                return true;
+            }
+
+            // only display obtained items
+            if (item.getItemId() == R.id.action_filter_show_obtained) {
+                filterObtained();
+                return true;
+            }
+
+            // sort item list alphabetically
+            if (item.getItemId() == R.id.action_sort_alphabetically) {
+                sortAlphabetically();
+                return true;
+            }
+
+            return false;
+        });
+
+        popupMenu.show();
+    }
+
+
+    private void getGameId() {
         assert getArguments() != null;
-        int gameId = getArguments().getInt("gameId");
+        gameId = getArguments().getInt("gameId");
+    }
+
+
+    private void setItemListLiveData() {
+        getGameId();
 
         itemLiveData = itemListViewModel.getItemsForGame(gameId);
 
         // observe live-data & update the adapter item-list when it changes
+        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    // only display not obtained items
+    private void filterNotObtained() {
+        getGameId();
+
+        itemLiveData = itemListViewModel.getNotObtainedItemsSortedByName(gameId);
+
+        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    // only display obtained items
+    private void filterObtained() {
+        getGameId();
+
+        itemLiveData = itemListViewModel.getObtainedItemsSortedByName(gameId);
+
+        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    // sort item list alphabetically
+    private void sortAlphabetically() {
+        getGameId();
+
+        itemLiveData = itemListViewModel.getItemsSortedAlphabetically(gameId);
+
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 }

@@ -36,6 +36,21 @@ public class ItemListViewModel extends AndroidViewModel {
     }
 
 
+    public LiveData<List<Item>> getItemsSortedAlphabetically(int gameId) {
+        return this.itemRepository.getItemsSortedByName(gameId);
+    }
+
+
+    public LiveData<List<Item>> getNotObtainedItemsSortedByName(int gameId) {
+        return this.itemRepository.getNotObtainedItemsSortedByName(gameId);
+    }
+
+
+    public LiveData<List<Item>> getObtainedItemsSortedByName(int gameId) {
+        return this.itemRepository.getObtainedItemsSortedByName(gameId);
+    }
+
+
     public void setObtainedStatus(boolean obtained, int itemId) {
         executorService.submit(() -> this.itemRepository.setObtainedStatus(obtained, itemId));
     }

@@ -3,47 +3,60 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_black"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- game image preview -->
     <ImageView
-        android:id="@+id/imagePreview"
+        android:id="@+id/form_game_image_preview"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/form_game_image_content" />
 
+    <!-- select game image button -->
     <Button
-        android:id="@+id/buttonSelectImage"
+        android:id="@+id/form_game_button_select_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose Picture"/>
+        android:text="@string/form_choose_picture" />
 
+    <!-- game title -->
     <EditText
-        android:id="@+id/editTextTitle"
+        android:id="@+id/form_game_edit_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Title"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:autofillHints="game title"
+        android:backgroundTint="@color/main_yellow"
+        android:hint="@string/form_game_title"
         android:inputType="text"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_yellow"
+        android:textColorHint="@color/form_item_placeholder" />
 
+    <!-- game publisher -->
     <EditText
-        android:id="@+id/editTextPublisher"
+        android:id="@+id/form_game_edit_text_publisher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Publisher"
+        android:layout_marginBottom="16dp"
+        android:autofillHints="game publisher"
+        android:backgroundTint="@color/main_yellow"
+        android:hint="@string/form_game_publisher"
         android:inputType="text"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="@color/secondary_yellow"
+        android:textColorHint="@color/form_item_placeholder" />
 
+    <!-- save button -->
     <Button
-        android:id="@+id/buttonSave"
+        android:id="@+id/form_game_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_gravity="end"/>
+        android:layout_gravity="end"
+        android:text="@string/form_button_save" />
 
 </LinearLayout>
-
-
-

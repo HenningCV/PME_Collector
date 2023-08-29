@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 
+// class to hold game information
 @Entity
 public class Game {
 
