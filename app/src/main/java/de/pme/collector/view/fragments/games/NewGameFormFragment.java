@@ -51,16 +51,16 @@ public class NewGameFormFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_new_game_form, container, false);
         newGameFormViewModel = this.getViewModel(NewGameFormViewModel.class);
 
-        editTextTitle     = view.findViewById(R.id.editTextTitle);
-        editTextPublisher = view.findViewById(R.id.editTextPublisher);
-        imagePreview      = view.findViewById(R.id.imagePreview);
+        editTextTitle     = view.findViewById(R.id.form_game_edit_text_title);
+        editTextPublisher = view.findViewById(R.id.form_game_edit_text_publisher);
+        imagePreview      = view.findViewById(R.id.form_game_image_preview);
 
         // button for adding an image
-        Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
+        Button buttonSelectImage = view.findViewById(R.id.form_game_button_select_image);
         buttonSelectImage.setOnClickListener(v -> selectImage());
 
         // button for saving the form
-        Button buttonSave = view.findViewById(R.id.buttonSave);
+        Button buttonSave = view.findViewById(R.id.form_game_button_save);
         buttonSave.setOnClickListener(v -> saveNewEntry());
 
         return view;

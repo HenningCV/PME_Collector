@@ -21,4 +21,6 @@
     <color name="item_not_found">#4E0505</color>
     <color name="item_found">#004000</color>
 
+    <color name="form_item_placeholder">#646464</color>
+
 </resources>

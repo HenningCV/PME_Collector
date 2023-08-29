@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -48,7 +46,7 @@ public class ItemListFragment extends BaseFragment {
 
         itemListViewModel = this.getViewModel(ItemListViewModel.class);
 
-        RecyclerView itemRecyclerView = root.findViewById(R.id.recycler_view_items);
+        RecyclerView itemRecyclerView = root.findViewById(R.id.item_list_recycler_view);
 
         itemAdapter = new ItemRecyclerViewAdapter(
                 getContext(),
@@ -66,9 +64,11 @@ public class ItemListFragment extends BaseFragment {
 
         setItemListLiveData();
 
-        // button to adding a new item
-        Button addButton = root.findViewById(R.id.add_button);
-        addButton.setOnClickListener(v -> {
+        // button to add a new item
+        Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
+
+        addItemButton.setOnClickListener(v -> {
+            assert getArguments() != null;
             int gameId = getArguments().getInt("gameId");
             Bundle arguments = new Bundle();
             arguments.putInt("gameId", gameId);
@@ -77,14 +77,12 @@ public class ItemListFragment extends BaseFragment {
         });
 
         // button for an options menu
-        Button optionButton = root.findViewById(R.id.option_button);
-        optionButton.setOnClickListener(v -> {
-            showOptionMenu(v);
-        });
-
+        Button optionButton = root.findViewById(R.id.item_list_options_button);
+        optionButton.setOnClickListener(this::showOptionMenu);
 
         return root;
     }
+
 
     @Override
     public void onPause() {
@@ -101,30 +99,32 @@ public class ItemListFragment extends BaseFragment {
         setItemListLiveData();
     }
 
+
     //displaying options
-    private void showOptionMenu(View view){
+    private void showOptionMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.item_filter_menu, popupMenu.getMenu());
 
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_filter_not_acquired:
-                        filterNotAcquired();
-                        return true;
-                    case R.id.action_sort_alphabetical:
-                        sortAlphabetical();
-                        return true;
-                    default:
-                        return false;
-                }
+        popupMenu.setOnMenuItemClickListener(item -> {
+            // only display not obtained items
+            if (item.getItemId() == R.id.action_filter_not_obtained) {
+                filterNotObtained();
+                return true;
             }
+
+            // sort item list alphabetical
+            if (item.getItemId() == R.id.action_sort_alphabetically) {
+                sortAlphabetical();
+                return true;
+            }
+
+            return false;
         });
 
         popupMenu.show();
     }
+
 
     private void setItemListLiveData() {
 
@@ -137,12 +137,14 @@ public class ItemListFragment extends BaseFragment {
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 
-    // only display not acquired items
-    private void filterNotAcquired(){
+
+    // only display not obtained items
+    private void filterNotObtained(){
         Log.d("OptionsMenu", "selected not acquired filter");
     }
 
-    // sorting item list alphabetical
+
+    // sort item list alphabetical
     private void sortAlphabetical(){
         Log.d("OptionsMenu", "selected not acquired filter");
     }

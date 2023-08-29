@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_filter_not_acquired"
-        android:title="show only not acquired"/>
+        android:id="@+id/action_filter_not_obtained"
+        android:title="@string/item_list_options_only_show_not_obtained_items"/>
     <item
-        android:id="@+id/action_sort_alphabetical"
-        android:title="sort alphabetical"/>
+        android:id="@+id/action_sort_alphabetically"
+        android:title="@string/item_list_options_sort_alphabetically"/>
 </menu>

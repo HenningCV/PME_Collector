@@ -92,7 +92,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         }
         else {
             // if data is not ready yet
-            holder.itemName.setText(R.string.item_list_empty);
+            holder.itemName.setText(R.string.item_list_empty_list);
         }
     }
 
