@@ -18,7 +18,6 @@ public class ItemRepository {
 
     private final ItemDAO itemDAO;
 
-    private LiveData<List<Item>> allItems;
 
     // singleton
     private static volatile ItemRepository instance;
@@ -72,6 +71,11 @@ public class ItemRepository {
 
     public LiveData<List<Item>> getObtainedItemsSortedByName(int gameId) {
         return this.queryLiveData(() -> this.itemDAO.getObtainedItemsSortedByName(gameId));
+    }
+
+
+    public void deleteItemById(int itemId) {
+        AppDatabase.execute(() -> itemDAO.deleteItemById(itemId));
     }
 
 

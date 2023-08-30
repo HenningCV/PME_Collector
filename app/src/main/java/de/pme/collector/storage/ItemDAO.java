@@ -57,4 +57,7 @@ public interface ItemDAO {
 
     @Query("SELECT * from Item WHERE gameId = :gameId AND acquired = 1 ORDER BY name ASC")
     LiveData<List<Item>> getObtainedItemsSortedByName(int gameId);
+
+    @Query("DELETE FROM Item WHERE id = :itemId")
+    void deleteItemById(int itemId);
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
+
 
     <!-- game list -->
     <fragment
@@ -27,6 +29,7 @@
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
     </fragment>
+
 
     <!-- item list -->
     <fragment
@@ -54,18 +57,30 @@
             app:popUpToInclusive="false" />
     </fragment>
 
-    <!-- item detail -->
+
+    <!-- item details -->
     <fragment
         android:id="@+id/navigation_item_details"
         android:name="de.pme.collector.view.fragments.items.ItemDetailsFragment"
         android:label="@string/item_details_title"
         tools:layout="@layout/fragment_item_details" >
+        <action
+            android:id="@+id/action_item_details_to_item_list"
+            app:destination="@id/navigation_item_list"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
         <argument
             android:name="itemId"
             app:argType="integer" />
+        <argument
+            android:name="gameId"
+            app:argType="integer"/>
     </fragment>
 
-    <!-- new game form -->
+
+    <!-- form new game -->
     <fragment
         android:id="@+id/navigation_new_game_form"
         android:name="de.pme.collector.view.fragments.games.NewGameFormFragment"
@@ -78,10 +93,10 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
-
     </fragment>
 
-    <!-- new item form -->
+
+    <!-- form new item -->
     <fragment
         android:id="@+id/navigation_new_item_form"
         android:name="de.pme.collector.view.fragments.items.NewItemFormFragment"
@@ -97,8 +112,8 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
-
     </fragment>
+
 
     <!-- settings -->
     <fragment

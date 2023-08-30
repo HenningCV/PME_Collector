@@ -55,6 +55,8 @@ public class ItemListFragment extends BaseFragment {
                 itemId -> {
                     Bundle arguments = new Bundle();
                     arguments.putInt("itemId", itemId);
+                    arguments.putInt("gameId", gameId);
+
                     NavController navController = NavHostFragment.findNavController(this);
                     navController.navigate(R.id.action_item_list_to_item_details, arguments);
                 },
@@ -70,10 +72,10 @@ public class ItemListFragment extends BaseFragment {
         Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
 
         addItemButton.setOnClickListener(v -> {
-            assert getArguments() != null;
-            int gameId = getArguments().getInt("gameId");
+            getGameId();
             Bundle arguments = new Bundle();
             arguments.putInt("gameId", gameId);
+
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
         });

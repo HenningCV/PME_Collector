@@ -26,4 +26,9 @@ public class ItemDetailsViewModel extends AndroidViewModel {
     public LiveData<Item> getItemsForGame(int itemId) {
         return this.itemRepository.getItemByIdLiveData(itemId);
     }
+
+
+    public void deleteItemById(int itemId) {
+        this.itemRepository.deleteItemById(itemId);
+    }
 }
