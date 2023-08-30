@@ -6,11 +6,17 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.io.File;
@@ -27,6 +33,8 @@ public class ItemDetailsFragment extends BaseFragment {
 
     private LiveData<Item> itemDetailsLiveData;
 
+    private int itemId;
+
 
     // required empty constructor
     public ItemDetailsFragment() {}
@@ -41,6 +49,10 @@ public class ItemDetailsFragment extends BaseFragment {
         itemDetailsViewModel = this.getViewModel(ItemDetailsViewModel.class);
 
         setItemDetailsLiveData();
+
+        // button for an options menu
+        Button optionButton = root.findViewById(R.id.item_details_options_button);
+        optionButton.setOnClickListener(this::showOptionMenu);
 
         return root;
     }
@@ -69,11 +81,39 @@ public class ItemDetailsFragment extends BaseFragment {
     }
 
 
+    // display item details options
+    private void showOptionMenu(View view) {
+
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.item_edit_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+
+            if (item.getItemId() == R.id.action_edit_item) {
+                editItem();
+                return true;
+            }
+
+            // only display not obtained items
+            if (item.getItemId() == R.id.action_delete_item) {
+                deleteItem();
+                return true;
+            }
+
+            return false;
+        });
+
+        popupMenu.show();
+    }
+
+
     private void setItemDetailsLiveData() {
 
         assert getArguments() != null;
         // get the gameId that is passed in by the ItemListRecyclerView that the item belongs to
-        int itemId = getArguments().getInt("itemId");
+        itemId = getArguments().getInt("itemId");
 
         // get the database-data for that item
         itemDetailsLiveData = itemDetailsViewModel.getItemsForGame(itemId);
@@ -85,7 +125,7 @@ public class ItemDetailsFragment extends BaseFragment {
 
     private void updateItemDetailsView(Item item) {
 
-        if (getView() == null) {
+        if (getView() == null || item == null) {
             return;
         }
 
@@ -154,5 +194,27 @@ public class ItemDetailsFragment extends BaseFragment {
 
     private void setDefaultImage(ImageView itemImage) {
         itemImage.setImageResource(R.drawable.item_placeholder);
+    }
+
+
+    // editing the item
+    private void editItem() {
+        Log.d("ItemDetails", "Editing item...");
+    }
+
+
+    // deleting the item
+    private void deleteItem() {
+        itemDetailsViewModel.deleteItemById(itemId);
+
+        // pass the game-id back into the item-list
+        assert getArguments() != null;
+        int gameId = getArguments().getInt("gameId");
+        Bundle arguments = new Bundle();
+        arguments.putInt("gameId", gameId);
+
+        // navigate back to item-list
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_details_to_item_list, arguments);
     }
 }

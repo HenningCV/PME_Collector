@@ -55,6 +55,8 @@ public class ItemListFragment extends BaseFragment {
                 itemId -> {
                     Bundle arguments = new Bundle();
                     arguments.putInt("itemId", itemId);
+                    arguments.putInt("gameId", gameId);
+
                     NavController navController = NavHostFragment.findNavController(this);
                     navController.navigate(R.id.action_item_list_to_item_details, arguments);
                 },
@@ -70,10 +72,10 @@ public class ItemListFragment extends BaseFragment {
         Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
 
         addItemButton.setOnClickListener(v -> {
-            assert getArguments() != null;
-            int gameId = getArguments().getInt("gameId");
+            getGameId();
             Bundle arguments = new Bundle();
             arguments.putInt("gameId", gameId);
+
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
         });
@@ -135,6 +137,12 @@ public class ItemListFragment extends BaseFragment {
                 return true;
             }
 
+            // delete game
+            if (item.getItemId() == R.id.action_delete_game) {
+                deleteGame();
+                return true;
+            }
+
             return false;
         });
 
@@ -185,5 +193,17 @@ public class ItemListFragment extends BaseFragment {
         itemLiveData = itemListViewModel.getItemsSortedAlphabetically(gameId);
 
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    // only display obtained items
+    private void deleteGame() {
+        getGameId();
+
+        itemListViewModel.deleteGameById(gameId);
+
+        // navigate back to game-list
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_list_to_game_list);
     }
 }

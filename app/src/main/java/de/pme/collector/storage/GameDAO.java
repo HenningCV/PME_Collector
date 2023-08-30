@@ -40,4 +40,8 @@ public interface GameDAO {
 
     @Query("SELECT * FROM Game WHERE title LIKE :search")
     LiveData<List<Game>> getGamesForTitle(String search);
+
+
+    @Query("DELETE FROM Game WHERE id = :gameId")
+    void deleteGameById(int gameId);
 }

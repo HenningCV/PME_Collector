@@ -88,6 +88,10 @@ public class GameRepository {
     }
 
 
+    public void deleteGameById(int gameId) {
+        AppDatabase.execute(() -> gameDAO.deleteGameById(gameId));
+    }
+
     public void update(Game game) {
         AppDatabase.execute(() -> gameDAO.update(game));
     }

@@ -7,16 +7,43 @@
     android:layout_height="match_parent"
     tools:context="de.pme.collector.view.StartScreenActivity">
 
+    <Space
+        android:id="@+id/item_details_header_space"
+        android:layout_width="56dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/item_details_header"
+        app:layout_constraintEnd_toStartOf="@+id/item_details_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_details_header" />
+
+    <!-- item details header -->
     <TextView
-        android:id="@+id/fragment_item_details_title"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:id="@+id/item_details_header"
+        style="@style/Theme.Collector.Text.Header"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:text="@string/item_details_title"
-        style="@style/Theme.Collector.Text.Header"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_details_options_button"
+        app:layout_constraintStart_toEndOf="@id/item_details_header_space"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- item details options button -->
+    <Button
+        android:id="@+id/item_details_options_button"
+        android:layout_width="56dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/item_list_item_options_button_content"
+        android:drawableEnd="@drawable/options_icon"
+        app:layout_constraintBottom_toBottomOf="@id/item_details_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/item_details_header"
+        app:layout_constraintTop_toTopOf="@id/item_details_header" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,12 +52,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_item_details_title">
+        app:layout_constraintTop_toBottomOf="@+id/item_details_header"
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <!-- Image & Name -->

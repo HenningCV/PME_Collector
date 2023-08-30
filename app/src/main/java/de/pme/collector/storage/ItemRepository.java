@@ -18,7 +18,6 @@ public class ItemRepository {
 
     private final ItemDAO itemDAO;
 
-    private LiveData<List<Item>> allItems;
 
     // singleton
     private static volatile ItemRepository instance;
@@ -102,6 +101,11 @@ public class ItemRepository {
         }
 
         return new MutableLiveData<>();
+    }
+
+
+    public void deleteItemById(int itemId) {
+        AppDatabase.execute(() -> itemDAO.deleteItemById(itemId));
     }
 
 

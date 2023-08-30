@@ -14,6 +14,7 @@
 
     <PreferenceCategory app:title="Theme">
         <SwitchPreferenceCompat
+            app:defaultValue="false"
             app:key="dark_mode"
             app:title="Dark Mode" />
     </PreferenceCategory>

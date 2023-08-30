@@ -17,4 +17,8 @@
         android:id="@+id/action_sort_alphabetically"
         android:title="@string/item_list_options_sort_alphabetically"/>
 
+    <item
+        android:id="@+id/action_delete_game"
+        android:title="@string/item_list_option_delete_game"/>
+
 </menu>
