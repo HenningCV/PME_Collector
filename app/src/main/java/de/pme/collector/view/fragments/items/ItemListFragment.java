@@ -137,6 +137,12 @@ public class ItemListFragment extends BaseFragment {
                 return true;
             }
 
+            // delete game
+            if (item.getItemId() == R.id.action_delete_game) {
+                deleteGame();
+                return true;
+            }
+
             return false;
         });
 
@@ -187,5 +193,17 @@ public class ItemListFragment extends BaseFragment {
         itemLiveData = itemListViewModel.getItemsSortedAlphabetically(gameId);
 
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    // only display obtained items
+    private void deleteGame() {
+        getGameId();
+
+        itemListViewModel.deleteGameById(gameId);
+
+        // navigate back to game-list
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_list_to_game_list);
     }
 }

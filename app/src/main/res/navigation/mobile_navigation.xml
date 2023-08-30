@@ -21,6 +21,7 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <!-- transition from game-list to new-game-form -->
         <action
             android:id="@+id/action_game_list_to_new_game_form"
             app:destination="@id/navigation_new_game_form"
@@ -48,9 +49,18 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <!-- transition from item-list to new-item-form -->
         <action
             android:id="@+id/action_item_list_to_new_item_form"
             app:destination="@id/navigation_new_item_form"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
+        <!-- transition from item-list to game-list -->
+        <action
+            android:id="@+id/action_item_list_to_game_list"
+            app:destination="@id/navigation_home"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
@@ -64,6 +74,13 @@
         android:name="de.pme.collector.view.fragments.items.ItemDetailsFragment"
         android:label="@string/item_details_title"
         tools:layout="@layout/fragment_item_details" >
+        <argument
+            android:name="itemId"
+            app:argType="integer" />
+        <argument
+            android:name="gameId"
+            app:argType="integer"/>
+        <!-- transition from item-details to item-list -->
         <action
             android:id="@+id/action_item_details_to_item_list"
             app:destination="@id/navigation_item_list"
@@ -71,12 +88,6 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
-        <argument
-            android:name="itemId"
-            app:argType="integer" />
-        <argument
-            android:name="gameId"
-            app:argType="integer"/>
     </fragment>
 
 

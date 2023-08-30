@@ -1,24 +1,25 @@
 package de.pme.collector.viewModel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.pme.collector.model.Item;
+import de.pme.collector.storage.GameRepository;
 import de.pme.collector.storage.ItemRepository;
 
 
 public class ItemListViewModel extends AndroidViewModel {
 
     private final ItemRepository itemRepository;
+
+    private final GameRepository gameRepository;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -28,6 +29,7 @@ public class ItemListViewModel extends AndroidViewModel {
         super(application);
 
         this.itemRepository = ItemRepository.getRepository(application);
+        this.gameRepository = GameRepository.getRepository(application);
     }
 
 
@@ -53,6 +55,11 @@ public class ItemListViewModel extends AndroidViewModel {
 
     public void setObtainedStatus(boolean obtained, int itemId) {
         executorService.submit(() -> this.itemRepository.setObtainedStatus(obtained, itemId));
+    }
+
+
+    public void deleteGameById(int gameId) {
+        gameRepository.deleteGameById(gameId);
     }
 
 

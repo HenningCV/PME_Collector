@@ -74,11 +74,6 @@ public class ItemRepository {
     }
 
 
-    public void deleteItemById(int itemId) {
-        AppDatabase.execute(() -> itemDAO.deleteItemById(itemId));
-    }
-
-
     public Item getLastItem() {
         try {
             return AppDatabase.query(this.itemDAO::getLastEntry);
@@ -106,6 +101,11 @@ public class ItemRepository {
         }
 
         return new MutableLiveData<>();
+    }
+
+
+    public void deleteItemById(int itemId) {
+        AppDatabase.execute(() -> itemDAO.deleteItemById(itemId));
     }
 
 

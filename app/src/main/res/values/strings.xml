@@ -27,6 +27,7 @@
     <string name="item_list_options_only_show_not_obtained_items">Show only not obtained</string>
     <string name="item_list_options_only_show_obtained_items">Show only obtained</string>
     <string name="item_list_options_sort_alphabetically">Sort alphabetical</string>
+    <string name="item_list_option_delete_game"><font fgcolor='#CC0000'>Delete Game</font></string>
 
     <!-- item details -->
     <string name="item_details_title">Details</string>
