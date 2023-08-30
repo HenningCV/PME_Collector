@@ -28,20 +28,20 @@ import java.io.IOException;
 import de.pme.collector.R;
 import de.pme.collector.model.Game;
 import de.pme.collector.view.fragments.core.BaseFragment;
-import de.pme.collector.viewModel.NewGameFormViewModel;
+import de.pme.collector.viewModel.GameFormViewModel;
 
 
 // class to add a new game
-public class NewGameFormFragment extends BaseFragment {
+public class GameFormFragment extends BaseFragment {
 
     private EditText  editTextTitle;
     private EditText  editTextPublisher;
     private ImageView imagePreview;
 
-    private NewGameFormViewModel newGameFormViewModel;
+    private GameFormViewModel newGameFormViewModel;
 
     // required empty constructor
-    public NewGameFormFragment() {}
+    public GameFormFragment() {}
 
 
     @Override
@@ -49,7 +49,7 @@ public class NewGameFormFragment extends BaseFragment {
 
         // inflating layout
         View view = inflater.inflate(R.layout.fragment_new_game_form, container, false);
-        newGameFormViewModel = this.getViewModel(NewGameFormViewModel.class);
+        newGameFormViewModel = this.getViewModel(GameFormViewModel.class);
 
         editTextTitle     = view.findViewById(R.id.form_game_edit_text_title);
         editTextPublisher = view.findViewById(R.id.form_game_edit_text_publisher);

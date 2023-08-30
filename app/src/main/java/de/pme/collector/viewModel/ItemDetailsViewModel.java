@@ -23,7 +23,7 @@ public class ItemDetailsViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<Item> getItemsForGame(int itemId) {
+    public LiveData<Item> getItemByIdLiveData(int itemId) {
         return this.itemRepository.getItemByIdLiveData(itemId);
     }
 

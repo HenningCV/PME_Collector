@@ -50,6 +50,9 @@ public class ItemListFragment extends BaseFragment {
 
         RecyclerView itemRecyclerView = root.findViewById(R.id.item_list_recycler_view);
 
+        assert getArguments() != null;
+        gameId = getArguments().getInt("gameId");
+
         itemAdapter = new ItemRecyclerViewAdapter(
                 getContext(),
                 itemId -> {
@@ -63,16 +66,16 @@ public class ItemListFragment extends BaseFragment {
                 itemListViewModel
         );
 
+        itemLiveData = itemListViewModel.getItemsForGame(gameId);
+        observeItemLiveData();
+
         itemRecyclerView.setAdapter(itemAdapter);
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireActivity()));
-
-        setItemListLiveData();
 
         // button to add a new item
         Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
 
         addItemButton.setOnClickListener(v -> {
-            getGameId();
             Bundle arguments = new Bundle();
             arguments.putInt("gameId", gameId);
 
@@ -100,7 +103,15 @@ public class ItemListFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        setItemListLiveData();
+        observeItemLiveData();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        itemLiveData.removeObservers(this.requireActivity());
     }
 
 
@@ -150,56 +161,46 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
-    private void getGameId() {
-        assert getArguments() != null;
-        gameId = getArguments().getInt("gameId");
+    // display all items for a game
+    private void setItemListLiveData() {
+        itemLiveData.removeObservers(this.requireActivity());
+        itemLiveData = itemListViewModel.getItemsForGame(gameId);
+        observeItemLiveData();
     }
 
 
-    private void setItemListLiveData() {
-        getGameId();
+    // option: only display not obtained items
+    private void filterNotObtained() {
+        itemLiveData.removeObservers(this.requireActivity());
+        itemLiveData = itemListViewModel.getNotObtainedItemsSortedByName(gameId);
+        observeItemLiveData();
+    }
 
-        itemLiveData = itemListViewModel.getItemsForGame(gameId);
 
+    // option: only display obtained items
+    private void filterObtained() {
+        itemLiveData.removeObservers(this.requireActivity());
+        itemLiveData = itemListViewModel.getObtainedItemsSortedByName(gameId);
+        observeItemLiveData();
+    }
+
+
+    // option: sort item list alphabetically
+    private void sortAlphabetically() {
+        itemLiveData.removeObservers(this.requireActivity());
+        itemLiveData = itemListViewModel.getItemsSortedAlphabetically(gameId);
+        observeItemLiveData();
+    }
+
+
+    private void observeItemLiveData() {
         // observe live-data & update the adapter item-list when it changes
         itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
     }
 
 
-    // only display not obtained items
-    private void filterNotObtained() {
-        getGameId();
-
-        itemLiveData = itemListViewModel.getNotObtainedItemsSortedByName(gameId);
-
-        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
-    }
-
-
-    // only display obtained items
-    private void filterObtained() {
-        getGameId();
-
-        itemLiveData = itemListViewModel.getObtainedItemsSortedByName(gameId);
-
-        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
-    }
-
-
-    // sort item list alphabetically
-    private void sortAlphabetically() {
-        getGameId();
-
-        itemLiveData = itemListViewModel.getItemsSortedAlphabetically(gameId);
-
-        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
-    }
-
-
-    // only display obtained items
+    // option: only display obtained items
     private void deleteGame() {
-        getGameId();
-
         itemListViewModel.deleteGameById(gameId);
 
         // navigate back to game-list
