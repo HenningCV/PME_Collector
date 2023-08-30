@@ -73,6 +73,7 @@ public class ItemDetailsFragment extends BaseFragment {
         setItemDetailsLiveData();
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -116,7 +117,7 @@ public class ItemDetailsFragment extends BaseFragment {
         itemId = getArguments().getInt("itemId");
 
         // get the database-data for that item
-        itemDetailsLiveData = itemDetailsViewModel.getItemsForGame(itemId);
+        itemDetailsLiveData = itemDetailsViewModel.getItemByIdLiveData(itemId);
 
         // observe live-data & update the adapter item-list when it changes
         itemDetailsLiveData.observe(this.requireActivity(), this::updateItemDetailsView);
@@ -125,7 +126,11 @@ public class ItemDetailsFragment extends BaseFragment {
 
     private void updateItemDetailsView(Item item) {
 
-        if (getView() == null || item == null) {
+        if (getView() == null) {
+            return;
+        }
+
+        if (item == null) {
             return;
         }
 
@@ -163,6 +168,8 @@ public class ItemDetailsFragment extends BaseFragment {
             // get the id for the corresponding image
             int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
 
+            Log.d("setItemImage", "imageResourceId: " + imageResourceId + " | splitImagePath[1]: " + splitImagePath[1]);
+
             // if the resource was not found use the default image
             if (imageResourceId == 0) {
                 setDefaultImage(itemImage);
@@ -197,20 +204,33 @@ public class ItemDetailsFragment extends BaseFragment {
     }
 
 
-    // editing the item
+    // option: edit the item
     private void editItem() {
-        Log.d("ItemDetails", "Editing item...");
+        assert getArguments() != null;
+        int gameId = getArguments().getInt("gameId");
+
+        Bundle arguments = new Bundle();
+
+        // pass the item-id & game-id into the item-form
+        arguments.putInt("itemId", itemId);
+        arguments.putInt("gameId", gameId);
+
+        // navigate to item-form
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_details_to_item_form, arguments);
     }
 
 
-    // deleting the item
+    // option: delete the item
     private void deleteItem() {
         itemDetailsViewModel.deleteItemById(itemId);
 
-        // pass the game-id back into the item-list
         assert getArguments() != null;
         int gameId = getArguments().getInt("gameId");
+
         Bundle arguments = new Bundle();
+
+        // pass the game-id back into the item-list
         arguments.putInt("gameId", gameId);
 
         // navigate back to item-list

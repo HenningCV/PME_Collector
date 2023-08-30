@@ -6,29 +6,30 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.pme.collector.model.Game;
 import de.pme.collector.model.Item;
-import de.pme.collector.storage.GameRepository;
 import de.pme.collector.storage.ItemRepository;
 
 
-public class NewItemFormViewModel extends AndroidViewModel {
+public class ItemFormViewModel extends AndroidViewModel {
 
     private final ItemRepository itemRepository;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
-
     // constructor
-    public NewItemFormViewModel(@NonNull Application application) {
+    public ItemFormViewModel(@NonNull Application application) {
         super(application);
 
         this.itemRepository = ItemRepository.getRepository(application);
+    }
+
+
+    public LiveData<Item> getItemByIdLiveData(int itemId) {
+        return this.itemRepository.getItemByIdLiveData(itemId);
     }
 
 
@@ -36,11 +37,17 @@ public class NewItemFormViewModel extends AndroidViewModel {
         executorService.submit(() -> this.itemRepository.insert(item));
     }
 
+
+    public void updateItem(Item item) {
+        executorService.submit(() -> this.itemRepository.update(item));
+    }
+
+
     @Override
     protected void onCleared() {
         super.onCleared();
 
-        // shut down executor when ItemListViewModel is no longer needed
+        // shut down executor when ItemFormViewModel is no longer needed
         executorService.shutdown();
     }
 }

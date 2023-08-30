@@ -4,9 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,7 +12,7 @@ import de.pme.collector.model.Game;
 import de.pme.collector.storage.GameRepository;
 
 
-public class NewGameFormViewModel extends AndroidViewModel {
+public class GameFormViewModel extends AndroidViewModel {
 
     private final GameRepository gameRepository;
 
@@ -23,7 +21,7 @@ public class NewGameFormViewModel extends AndroidViewModel {
 
 
     // constructor
-    public NewGameFormViewModel(@NonNull Application application) {
+    public GameFormViewModel(@NonNull Application application) {
         super(application);
 
         this.gameRepository = GameRepository.getRepository(application);
