@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class BaseFragment extends Fragment {
 
+    protected final static String ITEM_ID_KEY = "itemId";
+    protected final static String GAME_ID_KEY = "gameId";
+
     // get ViewModel & AndroidViewModel with access to context
     protected <T extends ViewModel> T getViewModel(Class<T> tClass) {
         return new ViewModelProvider(

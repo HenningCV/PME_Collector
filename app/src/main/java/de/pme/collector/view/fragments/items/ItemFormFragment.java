@@ -36,9 +36,6 @@ import de.pme.collector.viewModel.ItemFormViewModel;
 
 public class ItemFormFragment extends BaseFragment {
 
-    private final static String ITEM_ID_KEY = "itemId";
-    private final static String GAME_ID_KEY = "gameId";
-
     private EditText  editTextName;
     private EditText  editTextDescription;
     private EditText  editTextPrerequisites;

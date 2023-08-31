@@ -37,8 +37,6 @@ import de.pme.collector.viewModel.GameFormViewModel;
 // class to add a new game
 public class GameFormFragment extends BaseFragment {
 
-    private final static String GAME_ID_KEY = "gameId";
-
     private EditText  editTextTitle;
     private EditText  editTextPublisher;
     private ImageView imagePreview;

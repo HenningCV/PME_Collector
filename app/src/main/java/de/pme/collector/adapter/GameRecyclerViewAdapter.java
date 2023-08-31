@@ -24,9 +24,6 @@ import de.pme.collector.model.Game;
 
 public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerViewAdapter.GameViewHolder> {
 
-    private static final short numberOfInitialGames = 7;
-
-
     private final RecyclerViewClickInterface recyclerViewClickInterface;
 
     private final Context context;

@@ -20,9 +20,10 @@
     <string name="item_list_title">Items</string>
     <string name="item_list_empty_list">No Items</string>
     <string name="item_list_add_new_item_button_content">Add new item</string>
+    <string name="item_list_back_button_content">Back to game-list</string>
 
     <!-- item list options -->
-    <string name="item_list_item_options_button_content">Item options</string>
+    <string name="item_list_item_options_button_content">Options for the item-list</string>
     <string name="item_list_options_show_all_items">Show all items</string>
     <string name="item_list_options_only_show_not_obtained_items">Show only not obtained</string>
     <string name="item_list_options_only_show_obtained_items">Show only obtained</string>
@@ -32,11 +33,13 @@
 
     <!-- item details -->
     <string name="item_details_title">Details</string>
-    <string name="item_details_scrollview_content">Item Details</string>
+    <string name="item_details_scrollview_content">Item details</string>
+    <string name="item_details_back_button_content">Back to item-list</string>
 
     <!-- item details options -->
-    <string name="item_details_option_edit">Edit</string>
-    <string name="item_details_option_delete"><font fgcolor='#CC0000'>Delete</font></string>
+    <string name="item_details_options_button_content">Options for the item</string>
+    <string name="item_details_options_edit"><font fgcolor='#009000'>Edit</font></string>
+    <string name="item_details_options_delete"><font fgcolor='#CC0000'>Delete</font></string>
 
     <!-- item -->
     <string name="item_image_content">Item Image</string>
