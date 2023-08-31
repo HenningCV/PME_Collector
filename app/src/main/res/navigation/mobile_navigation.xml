@@ -21,9 +21,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
-        <!-- transition from game-list to new-game-form -->
+        <!-- transition from game-list to game-form -->
         <action
-            android:id="@+id/action_game_list_to_new_game_form"
+            android:id="@+id/action_game_list_to_game_form"
             app:destination="@id/navigation_game_form"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -49,9 +49,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
-        <!-- transition from item-list to new-item-form -->
+        <!-- transition from item-list to item-form -->
         <action
-            android:id="@+id/action_item_list_to_new_item_form"
+            android:id="@+id/action_item_list_to_item_form"
             app:destination="@id/navigation_item_form"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -61,6 +61,14 @@
         <action
             android:id="@+id/action_item_list_to_game_list"
             app:destination="@id/navigation_home"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
+        <!-- transition from item-list to game-form -->
+        <action
+            android:id="@+id/action_item_list_to_game_form"
+            app:destination="@id/navigation_game_form"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
@@ -99,15 +107,18 @@
     </fragment>
 
 
-    <!-- form new game -->
+    <!-- game form -->
     <fragment
         android:id="@+id/navigation_game_form"
         android:name="de.pme.collector.view.fragments.games.GameFormFragment"
         android:label="@string/game_list_title"
-        tools:layout="@layout/fragment_new_game_form" >
-        <!-- transition from new-game-form to game-list -->
+        tools:layout="@layout/fragment_game_form" >
+        <argument
+            android:name="gameId"
+            app:argType="integer" />
+        <!-- transition from game-form to game-list -->
         <action
-            android:id="@+id/action_new_game_form_to_game_list"
+            android:id="@+id/action_game_form_to_game_list"
             app:destination="@id/navigation_home"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -116,21 +127,21 @@
     </fragment>
 
 
-    <!-- form new item -->
+    <!-- item form -->
     <fragment
         android:id="@+id/navigation_item_form"
         android:name="de.pme.collector.view.fragments.items.ItemFormFragment"
         android:label="@string/game_list_title"
-        tools:layout="@layout/fragment_new_item_form" >
+        tools:layout="@layout/fragment_item_form" >
         <argument
             android:name="gameId"
             app:argType="integer"/>
         <argument
             android:name="itemId"
             app:argType="integer"/>
-        <!-- transition from new-item-form to item-list -->
+        <!-- transition from item-form to item-list -->
         <action
-            android:id="@+id/action_new_item_form_to_item_list"
+            android:id="@+id/action_item_form_to_item_list"
             app:destination="@id/navigation_item_list"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"

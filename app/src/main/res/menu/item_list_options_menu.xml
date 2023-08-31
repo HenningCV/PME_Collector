@@ -18,6 +18,10 @@
         android:title="@string/item_list_options_sort_alphabetically"/>
 
     <item
+        android:id="@+id/action_edit_game"
+        android:title="@string/item_list_option_edit_game"/>
+
+    <item
         android:id="@+id/action_delete_game"
         android:title="@string/item_list_option_delete_game"/>
 

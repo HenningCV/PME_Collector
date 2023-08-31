@@ -29,6 +29,7 @@ public interface GameDAO {
     @Query("SELECT count(*) FROM Game")
     int count();
 
+
     @Query("SELECT * from Game")
     LiveData<List<Game>> getGames();
 
@@ -40,6 +41,9 @@ public interface GameDAO {
 
     @Query("SELECT * FROM Game WHERE title LIKE :search")
     LiveData<List<Game>> getGamesForTitle(String search);
+
+    @Query("SELECT * FROM Game WHERE id = :gameId")
+    LiveData<Game> getGameById(int gameId);
 
 
     @Query("DELETE FROM Game WHERE id = :gameId")

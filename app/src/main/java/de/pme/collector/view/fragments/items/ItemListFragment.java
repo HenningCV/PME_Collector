@@ -83,7 +83,7 @@ public class ItemListFragment extends BaseFragment {
             arguments.putInt("gameId", gameId);
 
             NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_item_list_to_new_item_form, arguments);
+            navController.navigate(R.id.action_item_list_to_item_form, arguments);
         });
 
         // options-menu button
@@ -124,7 +124,7 @@ public class ItemListFragment extends BaseFragment {
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
 
         MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.item_filter_menu, popupMenu.getMenu());
+        inflater.inflate(R.menu.item_list_options_menu, popupMenu.getMenu());
 
         // set up onClickListener for the menu-button
         popupMenu.setOnMenuItemClickListener(item -> {
@@ -150,6 +150,12 @@ public class ItemListFragment extends BaseFragment {
             // sort item list alphabetically
             if (item.getItemId() == R.id.action_sort_alphabetically) {
                 sortAlphabetically();
+                return true;
+            }
+
+            // edit game
+            if (item.getItemId() == R.id.action_edit_game) {
+                editGame();
                 return true;
             }
 
@@ -190,6 +196,22 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
+    // option: edit game
+    private void editGame() {
+        assert getArguments() != null;
+        int gameId = getArguments().getInt("gameId");
+
+        Bundle arguments = new Bundle();
+
+        // pass the game-id into the game-form
+        arguments.putInt("gameId", gameId);
+
+        // navigate to the game-form
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_list_to_game_form, arguments);
+    }
+
+
     // option: delete game for the associated items
     private void deleteGame() {
         itemListViewModel.deleteGameById(gameId);
@@ -201,8 +223,11 @@ public class ItemListFragment extends BaseFragment {
 
 
     private void setNewLiveDataAndUpdateObserver(LiveData<List<Item>> liveData) {
+        // remove observers from the old liveData-instance
         itemLiveData.removeObservers(this.requireActivity());
+        // set itemLiveData to a new liveData-instance
         itemLiveData = liveData;
+        // observe that new liveData-instance
         observeItemLiveData();
     }
 
