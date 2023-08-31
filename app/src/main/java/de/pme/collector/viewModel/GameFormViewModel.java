@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,7 +20,6 @@ public class GameFormViewModel extends AndroidViewModel {
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
-
     // constructor
     public GameFormViewModel(@NonNull Application application) {
         super(application);
@@ -28,15 +28,26 @@ public class GameFormViewModel extends AndroidViewModel {
     }
 
 
+    public LiveData<Game> getGameByIdLiveData(int gameId) {
+        return this.gameRepository.getGameByIdLiveData(gameId);
+    }
+
+
     public void insertGame(Game game) {
         executorService.submit(() -> this.gameRepository.insert(game));
     }
+
+
+    public void updateGame(Game game) {
+        executorService.submit(() -> this.gameRepository.update(game));
+    }
+
 
     @Override
     protected void onCleared() {
         super.onCleared();
 
-        // shut down executor when ItemListViewModel is no longer needed
+        // shut down executor when GameFormViewModel is no longer needed
         executorService.shutdown();
     }
 }

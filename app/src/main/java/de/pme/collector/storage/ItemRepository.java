@@ -49,7 +49,7 @@ public class ItemRepository {
     }
 
 
-    public  LiveData<Item> getItemByIdLiveData(int itemId) {
+    public LiveData<Item> getItemByIdLiveData(int itemId) {
         return this.queryLiveData(() -> this.itemDAO.getItemById(itemId));
     }
 
@@ -112,6 +112,7 @@ public class ItemRepository {
     public void update(Item item) {
         AppDatabase.execute(() -> itemDAO.update(item));
     }
+
 
     public void insert(Item item) {
         AppDatabase.execute(() -> itemDAO.insert(item));

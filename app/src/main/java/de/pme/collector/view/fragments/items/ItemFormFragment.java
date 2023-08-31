@@ -36,6 +36,9 @@ import de.pme.collector.viewModel.ItemFormViewModel;
 
 public class ItemFormFragment extends BaseFragment {
 
+    private final static String ITEM_ID_KEY = "itemId";
+    private final static String GAME_ID_KEY = "gameId";
+
     private EditText  editTextName;
     private EditText  editTextDescription;
     private EditText  editTextPrerequisites;
@@ -55,7 +58,7 @@ public class ItemFormFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_item_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_item_form, container, false);
 
         itemFormViewModel = this.getViewModel(ItemFormViewModel.class);
 
@@ -75,7 +78,7 @@ public class ItemFormFragment extends BaseFragment {
         buttonSave.setOnClickListener(v -> saveNewEntry());
 
         // fill form fields if it is used to edit an item entry
-        if (getArguments() != null && getArguments().containsKey("itemId")) {
+        if (getArguments() != null && getArguments().containsKey(ITEM_ID_KEY)) {
             setupFormFields();
         }
 
@@ -93,6 +96,7 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
+    // selecting an image from gallery or camera
     private void selectImage() {
         ImagePicker.with(this)
                 .crop()	                    // crop image
@@ -102,6 +106,7 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
+    // getting the an image and previewing it
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -117,7 +122,7 @@ public class ItemFormFragment extends BaseFragment {
     private void saveNewEntry() {
 
         assert getArguments() != null;
-        int gameId = getArguments().getInt("gameId");
+        int gameId = getArguments().getInt(GAME_ID_KEY);
 
         // set a default "-" value if the text field is left empty, otherwise use the content inside
         String name          = editTextName         .getText().toString().trim().isEmpty() ? "-" : editTextName         .getText().toString();
@@ -130,7 +135,7 @@ public class ItemFormFragment extends BaseFragment {
             imagePath = "@drawable/10";
         }
         else {
-            imagePath = saveImageToInternalStorage(imagePreview, name + gameId + ".png");
+            imagePath = saveImageToInternalStorage(imagePreview, name + gameId);
         }
 
         // if a new item is created -> insert a new item into the database
@@ -155,14 +160,16 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
+    // saving the image to the internal storage
     private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
 
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
         File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
+        String filename = imageTitle + ".png";
 
-        File file = new File(directory, imageTitle);
+        File file = new File(directory, filename);
 
         try {
             FileOutputStream out = new FileOutputStream(file);
@@ -181,7 +188,7 @@ public class ItemFormFragment extends BaseFragment {
     private void setupFormFields() {
         // get the data for the item to edit
         assert getArguments() != null;
-        itemLiveData = itemFormViewModel.getItemByIdLiveData(getArguments().getInt("itemId"));
+        itemLiveData = itemFormViewModel.getItemByIdLiveData(getArguments().getInt(ITEM_ID_KEY));
 
         itemLiveData.observe(getViewLifecycleOwner(), item -> {
             editTextName         .setText(item.getName());
@@ -204,10 +211,13 @@ public class ItemFormFragment extends BaseFragment {
     private void setDrawableAsImage(Item item, ImageView imagePreview) {
         // split the image-path after the '@drawable/' to get the index of the image
         String[] splitImagePath = item.getImagePath().split("@drawable/");
+
         // load images for initial items from the drawable-folder via the values-array of those images
         TypedArray itemImagesArray = getResources().obtainTypedArray(R.array.initial_item_images);
+
         // get the id for the corresponding image
         int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
+
         // if the resource was not found use the default image
         if (imageResourceId == 0) {
             setDefaultImage(imagePreview);
@@ -216,7 +226,9 @@ public class ItemFormFragment extends BaseFragment {
             // set image to the ImageView
             imagePreview.setImageResource(imageResourceId);
         }
+
         imagePreview.setVisibility(View.VISIBLE);
+
         // recycle itemImagesArray to avoid memory leaks
         itemImagesArray.recycle();
     }
@@ -230,15 +242,14 @@ public class ItemFormFragment extends BaseFragment {
     private void insertNewItemAndReturnToItemList(Item item, int gameId) {
         Log.d("SaveItem", "saved item:");
 
-
         itemFormViewModel.insertItem(item);
 
         Bundle arguments = new Bundle();
-        arguments.putInt("gameId", gameId);
+        arguments.putInt(GAME_ID_KEY, gameId);
 
         // navigate back to the item-list
         NavController navController = NavHostFragment.findNavController(this);
-        navController.navigate(R.id.action_new_item_form_to_item_list, arguments);
+        navController.navigate(R.id.action_item_form_to_item_list, arguments);
     }
 
 
@@ -257,10 +268,10 @@ public class ItemFormFragment extends BaseFragment {
 
         // pass the item-id back into the item-details
         assert getArguments() != null;
-        int itemId = getArguments().getInt("itemId");
+        int itemId = getArguments().getInt(ITEM_ID_KEY);
 
         Bundle arguments = new Bundle();
-        arguments.putInt("itemId", itemId);
+        arguments.putInt(ITEM_ID_KEY, itemId);
 
         // navigate back to the item-details
         NavController navController = NavHostFragment.findNavController(this);

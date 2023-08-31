@@ -88,7 +88,7 @@ public class ItemDetailsFragment extends BaseFragment {
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
 
         MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.item_edit_menu, popupMenu.getMenu());
+        inflater.inflate(R.menu.item_details_options_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(item -> {
 

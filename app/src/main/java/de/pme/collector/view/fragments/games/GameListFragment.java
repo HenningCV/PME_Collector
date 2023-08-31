@@ -53,7 +53,7 @@ public class GameListFragment extends BaseFragment {
         Button addButton = root.findViewById(R.id.game_list_add_new_game_button);
         addButton.setOnClickListener(v -> {
             NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_game_list_to_new_game_form);
+            navController.navigate(R.id.action_game_list_to_game_form);
         });
 
         return root;
