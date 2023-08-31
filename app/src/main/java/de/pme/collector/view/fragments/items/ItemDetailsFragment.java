@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -50,6 +49,10 @@ public class ItemDetailsFragment extends BaseFragment {
 
         setItemDetailsLiveData();
 
+        // back button
+        Button backButton = root.findViewById(R.id.item_details_back_button);
+        backButton.setOnClickListener(b -> backToItemList());
+
         // button for an options menu
         Button optionButton = root.findViewById(R.id.item_details_options_button);
         optionButton.setOnClickListener(this::showOptionMenu);
@@ -79,6 +82,23 @@ public class ItemDetailsFragment extends BaseFragment {
         super.onDestroyView();
 
         itemDetailsLiveData.removeObservers(this.requireActivity());
+    }
+
+
+    // navigate back to the item-list
+    private void backToItemList() {
+
+        assert getArguments() != null;
+        int gameId = getArguments().getInt(GAME_ID_KEY);
+
+        Bundle arguments = new Bundle();
+
+        // pass the item-id back into the item-list
+        arguments.putInt(GAME_ID_KEY, gameId);
+
+        // navigate to item-list
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_details_to_item_list, arguments);
     }
 
 
@@ -114,7 +134,7 @@ public class ItemDetailsFragment extends BaseFragment {
 
         assert getArguments() != null;
         // get the gameId that is passed in by the ItemListRecyclerView that the item belongs to
-        itemId = getArguments().getInt("itemId");
+        itemId = getArguments().getInt(ITEM_ID_KEY);
 
         // get the database-data for that item
         itemDetailsLiveData = itemDetailsViewModel.getItemByIdLiveData(itemId);
@@ -168,8 +188,6 @@ public class ItemDetailsFragment extends BaseFragment {
             // get the id for the corresponding image
             int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
 
-            Log.d("setItemImage", "imageResourceId: " + imageResourceId + " | splitImagePath[1]: " + splitImagePath[1]);
-
             // if the resource was not found use the default image
             if (imageResourceId == 0) {
                 setDefaultImage(itemImage);
@@ -207,13 +225,13 @@ public class ItemDetailsFragment extends BaseFragment {
     // option: edit the item
     private void editItem() {
         assert getArguments() != null;
-        int gameId = getArguments().getInt("gameId");
+        int gameId = getArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 
         // pass the item-id & game-id into the item-form
-        arguments.putInt("itemId", itemId);
-        arguments.putInt("gameId", gameId);
+        arguments.putInt(ITEM_ID_KEY, itemId);
+        arguments.putInt(GAME_ID_KEY, gameId);
 
         // navigate to item-form
         NavController navController = NavHostFragment.findNavController(this);
@@ -226,12 +244,12 @@ public class ItemDetailsFragment extends BaseFragment {
         itemDetailsViewModel.deleteItemById(itemId);
 
         assert getArguments() != null;
-        int gameId = getArguments().getInt("gameId");
+        int gameId = getArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 
         // pass the game-id back into the item-list
-        arguments.putInt("gameId", gameId);
+        arguments.putInt(GAME_ID_KEY, gameId);
 
         // navigate back to item-list
         NavController navController = NavHostFragment.findNavController(this);

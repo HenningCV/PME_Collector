@@ -38,7 +38,7 @@ public class GameListFragment extends BaseFragment {
                 getContext(),
                 gameId -> {
                     Bundle args = new Bundle();
-                    args.putInt("gameId", gameId);
+                    args.putInt(GAME_ID_KEY, gameId);
                     NavController navController = NavHostFragment.findNavController(this);
                     navController.navigate(R.id.action_game_list_to_item_list, args);
                 }

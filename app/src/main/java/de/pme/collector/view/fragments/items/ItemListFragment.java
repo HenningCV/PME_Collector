@@ -51,15 +51,15 @@ public class ItemListFragment extends BaseFragment {
 
         // get the passed in gameId that the items belong to
         assert getArguments() != null;
-        gameId = getArguments().getInt("gameId");
+        gameId = getArguments().getInt(GAME_ID_KEY);
 
         // create recycler-view adapter and setup onClickListener for each item
         itemAdapter = new ItemRecyclerViewAdapter(
                 getContext(),
                 itemId -> {
                     Bundle arguments = new Bundle();
-                    arguments.putInt("itemId", itemId);
-                    arguments.putInt("gameId", gameId);
+                    arguments.putInt(ITEM_ID_KEY, itemId);
+                    arguments.putInt(GAME_ID_KEY, gameId);
 
                     NavController navController = NavHostFragment.findNavController(this);
                     navController.navigate(R.id.action_item_list_to_item_details, arguments);
@@ -75,20 +75,24 @@ public class ItemListFragment extends BaseFragment {
         itemLiveData = itemListViewModel.getItemsForGame(gameId);
         observeItemLiveData();
 
+        // back button
+        Button backButton = root.findViewById(R.id.item_list_back_button);
+        backButton.setOnClickListener(b -> backToGameList());
+
+        // options-menu button
+        Button optionButton = root.findViewById(R.id.item_list_options_button);
+        optionButton.setOnClickListener(this::showOptionMenu);
+
         // add-new-item button
         Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
 
         addItemButton.setOnClickListener(v -> {
             Bundle arguments = new Bundle();
-            arguments.putInt("gameId", gameId);
+            arguments.putInt(GAME_ID_KEY, gameId);
 
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_item_list_to_item_form, arguments);
         });
-
-        // options-menu button
-        Button optionButton = root.findViewById(R.id.item_list_options_button);
-        optionButton.setOnClickListener(this::showOptionMenu);
 
         return root;
     }
@@ -115,6 +119,13 @@ public class ItemListFragment extends BaseFragment {
         super.onDestroy();
 
         itemLiveData.removeObservers(this.requireActivity());
+    }
+
+
+    // navigate back to the game-list
+    private void backToGameList() {
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_list_to_game_list);
     }
 
 
@@ -199,12 +210,12 @@ public class ItemListFragment extends BaseFragment {
     // option: edit game
     private void editGame() {
         assert getArguments() != null;
-        int gameId = getArguments().getInt("gameId");
+        int gameId = getArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 
         // pass the game-id into the game-form
-        arguments.putInt("gameId", gameId);
+        arguments.putInt(GAME_ID_KEY, gameId);
 
         // navigate to the game-form
         NavController navController = NavHostFragment.findNavController(this);

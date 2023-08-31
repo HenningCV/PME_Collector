@@ -9,11 +9,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- custom colors -->
-    <color name="main_yellow">#bea966</color>
+    <color name="main_yellow">#BEA966</color>
     <color name="secondary_yellow">#FFC107</color>
 
-    <color name="background_item_brown">#18161b</color>
-    <color name="background_black">#05040e</color>
+    <color name="background_item_brown">#18161B</color>
+    <color name="background_black">#05040E</color>
 
     <color name="navigation_active">@color/main_yellow</color>
     <color name="navigation_inactive">@color/background_item_brown</color>

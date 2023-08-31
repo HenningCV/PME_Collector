@@ -7,12 +7,17 @@
     android:orientation="vertical"
     tools:context="de.pme.collector.view.fragments.items.ItemListFragment">
 
-    <Space
-        android:id="@+id/item_list_header_space"
+    <Button
+        android:id="@+id/item_list_back_button"
         android:layout_width="56dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignTop="@id/item_list_header"
         android:layout_alignBottom="@id/item_list_header"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/item_list_back_button_content"
+        android:drawableEnd="@drawable/back_arrow"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp" />
 
@@ -25,7 +30,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:layout_toStartOf="@id/item_list_options_button"
-        android:layout_toEndOf="@id/item_list_header_space"
+        android:layout_toEndOf="@id/item_list_back_button"
         android:text="@string/item_list_title"
         style="@style/Theme.Collector.Text.Header" />
 
