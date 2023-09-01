@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -48,6 +49,7 @@ public class ItemDetailsFragment extends BaseFragment {
         itemDetailsViewModel = this.getViewModel(ItemDetailsViewModel.class);
 
         setItemDetailsLiveData();
+        observeItemDetailsLiveData();
 
         // back button
         Button backButton = root.findViewById(R.id.item_details_back_button);
@@ -65,7 +67,7 @@ public class ItemDetailsFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
 
-        itemDetailsLiveData.removeObservers(this.requireActivity());
+        removeItemDetailsLiveDataObserver();
     }
 
 
@@ -73,23 +75,22 @@ public class ItemDetailsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        setItemDetailsLiveData();
+        observeItemDetailsLiveData();
     }
 
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
 
-        itemDetailsLiveData.removeObservers(this.requireActivity());
+        removeItemDetailsLiveDataObserver();
     }
 
 
     // navigate back to the item-list
     private void backToItemList() {
 
-        assert getArguments() != null;
-        int gameId = getArguments().getInt(GAME_ID_KEY);
+        int gameId = requireArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 
@@ -112,6 +113,8 @@ public class ItemDetailsFragment extends BaseFragment {
 
         popupMenu.setOnMenuItemClickListener(item -> {
 
+            removeItemDetailsLiveDataObserver();
+
             if (item.getItemId() == R.id.action_edit_item) {
                 editItem();
                 return true;
@@ -131,34 +134,35 @@ public class ItemDetailsFragment extends BaseFragment {
 
 
     private void setItemDetailsLiveData() {
-
-        assert getArguments() != null;
         // get the gameId that is passed in by the ItemListRecyclerView that the item belongs to
-        itemId = getArguments().getInt(ITEM_ID_KEY);
+        itemId = requireArguments().getInt(ITEM_ID_KEY);
 
         // get the database-data for that item
         itemDetailsLiveData = itemDetailsViewModel.getItemByIdLiveData(itemId);
-
-        // observe live-data & update the adapter item-list when it changes
-        itemDetailsLiveData.observe(this.requireActivity(), this::updateItemDetailsView);
     }
 
 
-    private void updateItemDetailsView(Item item) {
+    private void observeItemDetailsLiveData() {
+        // observe live-data & update the adapter item-list when it changes
+        itemDetailsLiveData.observe(this.requireActivity(), this::setItemDetailsFields);
+    }
 
-        if (getView() == null) {
-            return;
-        }
 
-        if (item == null) {
-            return;
-        }
+    private void removeItemDetailsLiveDataObserver() {
+        itemDetailsLiveData.removeObservers(this.requireActivity());
+    }
 
-        ImageView itemImage         = getView().findViewById(R.id.fragment_item_details_image);
-        TextView  itemName          = getView().findViewById(R.id.fragment_item_details_name);
-        TextView  itemDescription   = getView().findViewById(R.id.fragment_item_details_description);
-        TextView  itemLocation      = getView().findViewById(R.id.fragment_item_details_location);
-        TextView  itemPrerequisites = getView().findViewById(R.id.fragment_item_details_prerequisites);
+
+    private void setItemDetailsFields(Item item) {
+
+        TextView  itemObtainedStatus = requireView().findViewById(R.id.fragment_item_details_obtained_status);
+        ImageView itemImage          = requireView().findViewById(R.id.fragment_item_details_image);
+        TextView  itemName           = requireView().findViewById(R.id.fragment_item_details_name);
+        TextView  itemDescription    = requireView().findViewById(R.id.fragment_item_details_description);
+        TextView  itemLocation       = requireView().findViewById(R.id.fragment_item_details_location);
+        TextView  itemPrerequisites  = requireView().findViewById(R.id.fragment_item_details_prerequisites);
+
+        setObtainedStatus(item, itemObtainedStatus);
 
         setItemImage(item, itemImage);
 
@@ -166,6 +170,20 @@ public class ItemDetailsFragment extends BaseFragment {
         itemDescription.setText(item.getDescription());
         itemLocation.setText(item.getLocation());
         itemPrerequisites.setText(item.getPrerequisites());
+    }
+
+
+    private void setObtainedStatus(Item item, TextView itemObtainedStatus) {
+        // green background
+        if (item.isObtained()) {
+            itemObtainedStatus.setText(requireContext().getString(R.string.item_obtained));
+            itemObtainedStatus.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.item_obtained));
+        }
+        // red background
+        else {
+            itemObtainedStatus.setText(requireContext().getString(R.string.item_not_obtained));
+            itemObtainedStatus.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.item_not_obtained));
+        }
     }
 
 
@@ -224,8 +242,8 @@ public class ItemDetailsFragment extends BaseFragment {
 
     // option: edit the item
     private void editItem() {
-        assert getArguments() != null;
-        int gameId = getArguments().getInt(GAME_ID_KEY);
+
+        int gameId = requireArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 
@@ -243,8 +261,7 @@ public class ItemDetailsFragment extends BaseFragment {
     private void deleteItem() {
         itemDetailsViewModel.deleteItemById(itemId);
 
-        assert getArguments() != null;
-        int gameId = getArguments().getInt(GAME_ID_KEY);
+        int gameId = requireArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 

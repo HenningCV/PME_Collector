@@ -78,16 +78,16 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             setItemImage(currentItem, holder);
 
             // turn the item card green & check the checkbox when the item is obtained
-            if (currentItem.isAcquired()) {
+            if (currentItem.isObtained()) {
                 holder.itemObtainedText.setText(R.string.item_obtained);
                 holder.itemObtainedCheckbox.setChecked(true);
-                holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_found));
+                holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_obtained));
             }
             // turn the item card red & uncheck the checkbox when the item is not obtained
             else {
                 holder.itemObtainedText.setText(R.string.item_not_obtained);
                 holder.itemObtainedCheckbox.setChecked(false);
-                holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_not_found));
+                holder.itemCardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.item_not_obtained));
             }
         }
         else {
