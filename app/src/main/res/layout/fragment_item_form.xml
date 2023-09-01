@@ -1,81 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
-    <!-- item image preview -->
-    <ImageView
-        android:id="@+id/form_item_image_preview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible"
-        android:contentDescription="@string/item_image_content" />
+    <Space
+        android:id="@+id/form_item_header_space"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/form_item_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- select item image button -->
+    <!-- item form header -->
+    <TextView
+        android:id="@+id/form_item_header"
+        style="@style/Theme.Collector.Text.Header"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/form_item_header_new_item"
+        app:layout_constraintEnd_toStartOf="@id/form_item_close_button"
+        app:layout_constraintStart_toEndOf="@id/form_item_header_space"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- close button -->
     <Button
-        android:id="@+id/form_item_button_select_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Theme.Collector.Button"
-        android:text="@string/form_choose_picture" />
+        android:id="@+id/form_item_close_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/form_close_button_content"
+        android:drawableEnd="@drawable/close_x"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/form_item_header"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_item_header">
+
+        <!-- select item image button -->
+        <Button
+            android:id="@+id/form_item_button_select_image"
+            style="@style/Theme.Collector.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/form_choose_picture"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- item image preview -->
+        <ImageView
+            android:id="@+id/form_item_image_preview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="32dp"
+            android:contentDescription="@string/item_image_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- item name -->
     <EditText
         android:id="@+id/form_item_edit_text_name"
+        style="@style/Theme.Collector.Text.EditField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
-        android:inputType="text"
-        style="@style/Theme.Collector.Text.EditField"
         android:autofillHints="item name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:ignore="TextContrastCheck"
         android:hint="@string/form_item_name" />
 
     <!-- item description -->
     <EditText
         android:id="@+id/form_item_edit_text_description"
+        style="@style/Theme.Collector.Text.EditField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:inputType="text"
-        style="@style/Theme.Collector.Text.EditField"
+        android:layout_marginTop="10dp"
         android:autofillHints="item description"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_item_edit_text_name"
+        tools:ignore="TextContrastCheck"
         android:hint="@string/form_item_description" />
 
     <!-- item prerequisites -->
     <EditText
         android:id="@+id/form_item_edit_text_prerequisites"
+        style="@style/Theme.Collector.Text.EditField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:inputType="text"
-        style="@style/Theme.Collector.Text.EditField"
+        android:layout_marginTop="10dp"
         android:autofillHints="item prerequisites"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_item_edit_text_description"
+        tools:ignore="TextContrastCheck"
         android:hint="@string/form_item_prerequisites" />
 
     <!-- item location -->
     <EditText
         android:id="@+id/form_item_edit_text_location"
+        style="@style/Theme.Collector.Text.EditField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:inputType="text"
-        style="@style/Theme.Collector.Text.EditField"
+        android:layout_marginTop="10dp"
         android:autofillHints="item location"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_item_edit_text_prerequisites"
+        tools:ignore="TextContrastCheck"
         android:hint="@string/form_item_location" />
 
     <!-- save button -->
     <Button
         android:id="@+id/form_item_button_save"
+        style="@style/Theme.Collector.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        style="@style/Theme.Collector.Button"
-        android:text="@string/form_button_save" />
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/form_button_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_item_edit_text_location"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
