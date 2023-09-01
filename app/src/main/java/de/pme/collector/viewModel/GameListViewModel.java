@@ -10,11 +10,14 @@ import java.util.List;
 
 import de.pme.collector.model.Game;
 import de.pme.collector.storage.GameRepository;
+import de.pme.collector.storage.ItemRepository;
 
 
 public class GameListViewModel extends AndroidViewModel {
 
     private final GameRepository gameRepository;
+
+    private final ItemRepository itemRepository;
 
 
     // constructor
@@ -22,10 +25,21 @@ public class GameListViewModel extends AndroidViewModel {
         super(application);
 
         this.gameRepository = GameRepository.getRepository(application);
+        this.itemRepository = ItemRepository.getRepository(application);
     }
 
 
     public LiveData<List<Game>> getGames() {
         return this.gameRepository.getGamesLiveData();
+    }
+
+
+    public LiveData<Integer> getItemsCountForGame(int gameId) {
+        return this.itemRepository.getItemsCountForGame(gameId);
+    }
+
+
+    public LiveData<Integer> getObtainedItemsCountForGame(int gameId) {
+        return this.itemRepository.getObtainedItemsCountForGame(gameId);
     }
 }

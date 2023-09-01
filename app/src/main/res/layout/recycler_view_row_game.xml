@@ -31,13 +31,13 @@
                 android:contentDescription="@string/game_list_game_image_content"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/recycler_view_item_constraint_layout_text"
+                app:layout_constraintEnd_toStartOf="@+id/recycler_view_game_constraint_layout_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/game_placeholder" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/recycler_view_item_constraint_layout_text"
+                android:id="@+id/recycler_view_game_constraint_layout_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -48,17 +48,17 @@
                 <!-- game title -->
                 <TextView
                     android:id="@+id/recycler_view_game_title"
+                    style="@style/Theme.Collector.RecyclerView.Text.Primary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="5dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:scrollHorizontally="false"
                     android:text="@string/game_list_title_placeholder"
-                    style="@style/Theme.Collector.RecyclerView.Text.Primary"
                     app:layout_constraintBottom_toTopOf="@+id/recycler_view_game_publisher"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +80,38 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recycler_view_game_title" />
+
+                <ProgressBar
+                    android:id="@+id/recycler_view_game_progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:max="100"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:progress="50"
+                    android:progressTint="@color/progress_bar"
+                    app:layout_constraintBottom_toBottomOf="@+id/recycler_view_game_progress_text"
+                    app:layout_constraintEnd_toStartOf="@+id/recycler_view_game_progress_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recycler_view_game_publisher" />
+
+                <TextView
+                    android:id="@+id/recycler_view_game_progress_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="16dp"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="@string/game_list_progress_text_placeholder"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/recycler_view_game_progress_bar"
+                    app:layout_constraintTop_toBottomOf="@+id/recycler_view_game_publisher" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

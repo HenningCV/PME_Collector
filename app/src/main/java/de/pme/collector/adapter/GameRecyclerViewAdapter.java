@@ -5,13 +5,18 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -20,6 +25,7 @@ import java.util.List;
 import de.pme.collector.R;
 import de.pme.collector.interfaces.RecyclerViewClickInterface;
 import de.pme.collector.model.Game;
+import de.pme.collector.viewModel.GameListViewModel;
 
 
 public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerViewAdapter.GameViewHolder> {
@@ -31,11 +37,18 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     // cached copy of games
     private List<Game> gameList;
 
+    private static GameListViewModel gameListViewModel;
+
+    private final LifecycleOwner lifecycleOwner;
+
 
     // constructor
-    public GameRecyclerViewAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public GameRecyclerViewAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface,
+                                   GameListViewModel gameListViewModel, LifecycleOwner lifecycleOwner) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
+        GameRecyclerViewAdapter.gameListViewModel = gameListViewModel;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
 
@@ -71,6 +84,8 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
             // if data is not ready yet
             holder.gameTitle.setText(R.string.game_list_empty_list);
         }
+
+        setGameProgress(holder, position);
     }
 
 
@@ -88,18 +103,22 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     // get views from "recycler_view_row_game.xml"-layout & assign them to variables
     public static class GameViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView gameImage;
-        TextView  gameTitle;
-        TextView  gamePublisher;
+        ImageView   gameImage;
+        TextView    gameTitle;
+        TextView    gamePublisher;
+        ProgressBar gameProgressBar;
+        TextView    gameProgressBarText;
 
         int currentGameId = -1;
 
         public GameViewHolder(@NonNull View gameView, RecyclerViewClickInterface recyclerViewClickInterface) {
             super(gameView);
 
-            gameImage     = gameView.findViewById(R.id.recycler_view_game_image);
-            gameTitle     = gameView.findViewById(R.id.recycler_view_game_title);
-            gamePublisher = gameView.findViewById(R.id.recycler_view_game_publisher);
+            gameImage           = gameView.findViewById(R.id.recycler_view_game_image);
+            gameTitle           = gameView.findViewById(R.id.recycler_view_game_title);
+            gamePublisher       = gameView.findViewById(R.id.recycler_view_game_publisher);
+            gameProgressBar     = gameView.findViewById(R.id.recycler_view_game_progress_bar);
+            gameProgressBarText = gameView.findViewById(R.id.recycler_view_game_progress_text);
 
             // handle click on a game-list element
             gameView.setOnClickListener(v ->
@@ -168,5 +187,62 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
     private void setDefaultImage(GameViewHolder holder) {
         holder.gameImage.setImageResource(R.drawable.game_placeholder);
+    }
+
+
+    private void setGameProgress(GameViewHolder holder, int position) {
+
+        int gameId = gameList.get(position).getId();
+
+        LiveData<Integer> totalItems    = gameListViewModel.getItemsCountForGame(gameId);
+        LiveData<Integer> obtainedItems = gameListViewModel.getObtainedItemsCountForGame(gameId);
+
+        totalItems.observe(lifecycleOwner, total -> {
+            obtainedItems.observe(lifecycleOwner, obtained -> {
+
+                setGameProgressBar(total, obtained, holder);
+
+                setGameProgressText(total, obtained, holder);
+            });
+        });
+    }
+
+
+    // set the progress-bar progress
+    private void setGameProgressBar(int total, int obtained, GameViewHolder holder) {
+
+        int progressPercentage;
+
+        if (total > 0) {
+            progressPercentage = (obtained * 100) / total;
+        }
+        else {
+            progressPercentage = 0;
+        }
+
+        holder.gameProgressBar.setProgress(progressPercentage);
+
+        // make progress-bar green if all items are collected
+        if (progressPercentage == 100) {
+            holder.gameProgressBar.getProgressDrawable().setColorFilter(ContextCompat.getColor(context, R.color.progress_bar_completed), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+    }
+
+
+    // set the progress text: "obtained / total"
+    private void setGameProgressText(int total, int obtained, GameViewHolder holder) {
+
+        String progressText;
+
+        if (total == obtained && total != 0) {
+            // get string-resource from strings.xml
+            progressText = context.getString(R.string.game_list_progress_completed_text);
+        }
+        else {
+            // get string-resource from strings.xml and replace the placeholders with the total & obtained values
+            progressText = context.getString(R.string.game_list_progress_text, obtained, total);
+        }
+
+        holder.gameProgressBarText.setText(progressText);
     }
 }
