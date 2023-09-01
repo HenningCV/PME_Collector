@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
@@ -12,7 +13,8 @@ import androidx.room.PrimaryKey;
         entity = Game.class,
         parentColumns = "id",
         childColumns = "gameId",
-        onDelete = ForeignKey.CASCADE)
+        onDelete = ForeignKey.CASCADE),
+        indices = { @Index("gameId") }
 )
 public class Item {
 
@@ -20,7 +22,6 @@ public class Item {
     @ColumnInfo(name = "id")
     private int id;
 
-    @NonNull
     @ColumnInfo(name = "gameId")
     private int gameId;
 
@@ -44,7 +45,6 @@ public class Item {
     @ColumnInfo(name = "location")
     private String location;
 
-    @NonNull
     @ColumnInfo(name = "acquired")
     private boolean obtained;
 
