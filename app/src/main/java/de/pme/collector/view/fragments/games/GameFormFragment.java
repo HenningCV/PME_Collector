@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
@@ -58,6 +59,9 @@ public class GameFormFragment extends BaseFragment {
 
         gameFormViewModel = this.getViewModel(GameFormViewModel.class);
 
+        // get form header
+        TextView gameFormHeader = view.findViewById(R.id.form_game_header);
+
         // get form fields
         editTextTitle     = view.findViewById(R.id.form_game_edit_text_title);
         editTextPublisher = view.findViewById(R.id.form_game_edit_text_publisher);
@@ -71,9 +75,17 @@ public class GameFormFragment extends BaseFragment {
         Button buttonSave = view.findViewById(R.id.form_game_button_save);
         buttonSave.setOnClickListener(v -> saveNewEntry());
 
+        // close button
+        Button buttonClose = view.findViewById(R.id.form_game_close_button);
+        buttonClose.setOnClickListener(v -> navigateBackToGameList());
+
         // fill form fields if it is used to edit a game entry
         if (getArguments() != null && getArguments().containsKey(GAME_ID_KEY)) {
+            gameFormHeader.setText(requireContext().getString(R.string.form_game_header_edit_game));
             setupFormFields();
+        }
+        else {
+            gameFormHeader.setText(requireContext().getString(R.string.form_game_header_new_game));
         }
 
         return view;
@@ -120,8 +132,9 @@ public class GameFormFragment extends BaseFragment {
         String title     = editTextTitle    .getText().toString().trim().isEmpty() ? "-" : editTextTitle    .getText().toString();
         String publisher = editTextPublisher.getText().toString().trim().isEmpty() ? "-" : editTextPublisher.getText().toString();
         String imagePath;
-        // set placeholder drawable if no image was selected, otherwise use the custom picture
-        if (imagePreview.getVisibility() == View.GONE || imagePreview.getDrawable() instanceof VectorDrawable) {
+
+        // set placeholder drawable if no image was selected or if the image is the placeholder-drawable, otherwise use the custom picture
+        if (imagePreview.getVisibility() == View.INVISIBLE || imagePreview.getDrawable() instanceof VectorDrawable) {
             imagePath = "@drawable/10";
         }
         else {
@@ -143,11 +156,7 @@ public class GameFormFragment extends BaseFragment {
                 + "\n    publisher: " + publisher
                 + "\n    imagePath: " + imagePath);
 
-        // navigate back to the game-list
-        NavController navController = NavHostFragment.findNavController(this);
-        navController.navigate(R.id.action_game_form_to_game_list);
-
-        hideKeyboard(requireContext(), requireView());
+        navigateBackToGameList();
     }
 
 
@@ -245,5 +254,13 @@ public class GameFormFragment extends BaseFragment {
 
             gameFormViewModel.updateGame(game);
         });
+    }
+
+
+    private void navigateBackToGameList() {
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_game_form_to_game_list);
+
+        hideKeyboard(requireContext(), requireView());
     }
 }

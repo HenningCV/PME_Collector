@@ -28,4 +28,6 @@
 
     <color name="progress_bar">@color/main_yellow</color>
     <color name="progress_bar_completed">#008000</color>
+
+    <color name="button_x">#8E0505</color>
 </resources>

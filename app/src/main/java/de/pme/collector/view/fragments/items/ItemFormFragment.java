@@ -64,10 +64,10 @@ public class ItemFormFragment extends BaseFragment {
         editTextDescription   = view.findViewById(R.id.form_item_edit_text_description);
         editTextPrerequisites = view.findViewById(R.id.form_item_edit_text_prerequisites);
         editTextLocation      = view.findViewById(R.id.form_item_edit_text_location);
-        imagePreview          = view.findViewById(R.id.form_game_image_preview);
+        imagePreview          = view.findViewById(R.id.form_item_image_preview);
 
         // select image button
-        Button buttonSelectImage = view.findViewById(R.id.form_game_button_select_image);
+        Button buttonSelectImage = view.findViewById(R.id.form_item_button_select_image);
         buttonSelectImage.setOnClickListener(v -> selectImage());
 
         // save button
@@ -127,8 +127,9 @@ public class ItemFormFragment extends BaseFragment {
         String prerequisites = editTextPrerequisites.getText().toString().trim().isEmpty() ? "-" : editTextPrerequisites.getText().toString();
         String location      = editTextLocation     .getText().toString().trim().isEmpty() ? "-" : editTextLocation     .getText().toString();
         String imagePath;
-        // set placeholder drawable if no image was selected, otherwise use the custom picture
-        if (imagePreview.getVisibility() == View.GONE || imagePreview.getDrawable() instanceof VectorDrawable) {
+
+        // set placeholder drawable if no image was selected or if the image is the placeholder-drawable, otherwise use the custom picture
+        if (imagePreview.getVisibility() == View.INVISIBLE || imagePreview.getDrawable() instanceof VectorDrawable) {
             imagePath = "@drawable/10";
         }
         else {
