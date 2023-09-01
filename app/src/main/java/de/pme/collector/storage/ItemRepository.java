@@ -74,6 +74,16 @@ public class ItemRepository {
     }
 
 
+    public LiveData<Integer> getItemsCountForGame(int gameId) {
+        return this.queryLiveData(() -> this.itemDAO.getItemsCountForGame(gameId));
+    }
+
+
+    public LiveData<Integer> getObtainedItemsCountForGame(int gameId) {
+        return this.queryLiveData(() -> this.itemDAO.getObtainedItemsCountForGame(gameId));
+    }
+
+
     public Item getLastItem() {
         try {
             return AppDatabase.query(this.itemDAO::getLastEntry);

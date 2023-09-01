@@ -26,4 +26,6 @@
     <color name="form_text_line_light">#7F7F7F</color>
     <color name="form_text_line_dark">@color/main_yellow</color>
 
+    <color name="progress_bar">@color/main_yellow</color>
+    <color name="progress_bar_completed">#008000</color>
 </resources>
