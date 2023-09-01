@@ -59,12 +59,16 @@
     <string name="item_obtained">obtained</string>
 
 
-    <!-- form new game -->
+    <!-- form game -->
+    <string name="form_game_header_new_game">New Game</string>
+    <string name="form_game_header_edit_game">Edit Game</string>
     <string name="form_game_title">Title</string>
     <string name="form_game_publisher">Publisher</string>
     <string name="form_game_image_content">Game Image</string>
 
-    <!-- form new item -->
+    <!-- form item -->
+    <string name="form_item_header_new_item">New Item</string>
+    <string name="form_item_header_edit_item">Edit Item</string>
     <string name="form_item_name">Name</string>
     <string name="form_item_description">Description</string>
     <string name="form_item_prerequisites">Prerequisites</string>
@@ -73,6 +77,7 @@
     <!-- form -->
     <string name="form_choose_picture">Choose Picture</string>
     <string name="form_button_save">Save</string>
+    <string name="form_close_button_content">Close</string>
 
 
     <!-- settings -->

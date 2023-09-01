@@ -201,7 +201,6 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
             obtainedItems.observe(lifecycleOwner, obtained -> {
 
                 setGameProgressBar(total, obtained, holder);
-
                 setGameProgressText(total, obtained, holder);
             });
         });
@@ -224,7 +223,10 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
         // make progress-bar green if all items are collected
         if (progressPercentage == 100) {
-            holder.gameProgressBar.getProgressDrawable().setColorFilter(ContextCompat.getColor(context, R.color.progress_bar_completed), android.graphics.PorterDuff.Mode.SRC_IN);
+            holder.gameProgressBar.getProgressDrawable().setColorFilter(
+                    ContextCompat.getColor(context, R.color.progress_bar_completed),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+            );
         }
     }
 

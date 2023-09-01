@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
@@ -12,7 +13,8 @@ import androidx.room.PrimaryKey;
         entity = Game.class,
         parentColumns = "id",
         childColumns = "gameId",
-        onDelete = ForeignKey.CASCADE)
+        onDelete = ForeignKey.CASCADE),
+        indices = { @Index("gameId") }
 )
 public class Item {
 
@@ -20,7 +22,6 @@ public class Item {
     @ColumnInfo(name = "id")
     private int id;
 
-    @NonNull
     @ColumnInfo(name = "gameId")
     private int gameId;
 
@@ -44,9 +45,8 @@ public class Item {
     @ColumnInfo(name = "location")
     private String location;
 
-    @NonNull
     @ColumnInfo(name = "acquired")
-    private boolean acquired;
+    private boolean obtained;
 
 
     public Item(int gameId, @NonNull String imagePath, @NonNull String name, @NonNull String description, @NonNull String prerequisites, @NonNull String location) {
@@ -56,7 +56,7 @@ public class Item {
         this.description = description;
         this.prerequisites = prerequisites;
         this.location = location;
-        this.acquired = false;
+        this.obtained = false;
     }
 
 
@@ -128,11 +128,11 @@ public class Item {
     }
 
 
-    public boolean isAcquired() {
-        return acquired;
+    public boolean isObtained() {
+        return obtained;
     }
 
-    public void setAcquired(boolean acquired) {
-        this.acquired = acquired;
+    public void setObtained(boolean obtained) {
+        this.obtained = obtained;
     }
 }

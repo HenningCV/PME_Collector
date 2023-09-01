@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context="de.pme.collector.view.StartScreenActivity">
 
+    <!-- back button -->
     <Button
         android:id="@+id/item_details_back_button"
         android:layout_width="56dp"
@@ -66,7 +67,21 @@
             android:orientation="vertical">
 
             <!-- Image & Name -->
+
+            <TextView
+                android:id="@+id/fragment_item_details_obtained_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/item_not_obtained"
+                android:padding="2dp"
+                android:text="@string/item_not_obtained"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout2" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -84,16 +99,16 @@
 
                 <TextView
                     android:id="@+id/fragment_item_details_name"
+                    style="@style/Theme.Collector.Details.Text.Title"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:gravity="center"
                     android:ellipsize="end"
+                    android:gravity="center"
                     android:maxLines="4"
                     android:scrollHorizontally="false"
                     android:text="@string/item_name_placeholder"
-                    style="@style/Theme.Collector.Details.Text.Title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fragment_item_details_image"

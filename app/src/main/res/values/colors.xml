@@ -18,8 +18,8 @@
     <color name="navigation_active">@color/main_yellow</color>
     <color name="navigation_inactive">@color/background_item_brown</color>
 
-    <color name="item_not_found">#4E0505</color>
-    <color name="item_found">#004000</color>
+    <color name="item_not_obtained">#4E0505</color>
+    <color name="item_obtained">#004000</color>
 
     <color name="form_text_placeholder_light">#B0B0B0</color>
     <color name="form_text_placeholder_dark">#646464</color>
@@ -28,4 +28,6 @@
 
     <color name="progress_bar">@color/main_yellow</color>
     <color name="progress_bar_completed">#008000</color>
+
+    <color name="button_x">#8E0505</color>
 </resources>

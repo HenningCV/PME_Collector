@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
@@ -46,6 +47,8 @@ public class ItemFormFragment extends BaseFragment {
 
     private LiveData<Item> itemLiveData;
 
+    private int gameId;
+
 
     // required empty constructor
     public ItemFormFragment() {}
@@ -59,24 +62,38 @@ public class ItemFormFragment extends BaseFragment {
 
         itemFormViewModel = this.getViewModel(ItemFormViewModel.class);
 
+        // get form header
+        TextView itemFormHeader = view.findViewById(R.id.form_item_header);
+
         // get form fields
         editTextName          = view.findViewById(R.id.form_item_edit_text_name);
         editTextDescription   = view.findViewById(R.id.form_item_edit_text_description);
         editTextPrerequisites = view.findViewById(R.id.form_item_edit_text_prerequisites);
         editTextLocation      = view.findViewById(R.id.form_item_edit_text_location);
-        imagePreview          = view.findViewById(R.id.form_game_image_preview);
+        imagePreview          = view.findViewById(R.id.form_item_image_preview);
 
         // select image button
-        Button buttonSelectImage = view.findViewById(R.id.form_game_button_select_image);
+        Button buttonSelectImage = view.findViewById(R.id.form_item_button_select_image);
         buttonSelectImage.setOnClickListener(v -> selectImage());
 
         // save button
         Button buttonSave = view.findViewById(R.id.form_item_button_save);
         buttonSave.setOnClickListener(v -> saveNewEntry());
 
+        // close button
+        Button buttonClose = view.findViewById(R.id.form_item_close_button);
+        buttonClose.setOnClickListener(v -> handleClose());
+
+        assert getArguments() != null;
+        gameId = getArguments().getInt(GAME_ID_KEY);
+
         // fill form fields if it is used to edit an item entry
         if (getArguments() != null && getArguments().containsKey(ITEM_ID_KEY)) {
+            itemFormHeader.setText(requireContext().getString(R.string.form_item_header_edit_item));
             setupFormFields();
+        }
+        else {
+            itemFormHeader.setText(requireContext().getString(R.string.form_item_header_new_item));
         }
 
         return view;
@@ -118,17 +135,15 @@ public class ItemFormFragment extends BaseFragment {
 
     private void saveNewEntry() {
 
-        assert getArguments() != null;
-        int gameId = getArguments().getInt(GAME_ID_KEY);
-
         // set a default "-" value if the text field is left empty, otherwise use the content inside
         String name          = editTextName         .getText().toString().trim().isEmpty() ? "-" : editTextName         .getText().toString();
         String description   = editTextDescription  .getText().toString().trim().isEmpty() ? "-" : editTextDescription  .getText().toString();
         String prerequisites = editTextPrerequisites.getText().toString().trim().isEmpty() ? "-" : editTextPrerequisites.getText().toString();
         String location      = editTextLocation     .getText().toString().trim().isEmpty() ? "-" : editTextLocation     .getText().toString();
         String imagePath;
-        // set placeholder drawable if no image was selected, otherwise use the custom picture
-        if (imagePreview.getVisibility() == View.GONE || imagePreview.getDrawable() instanceof VectorDrawable) {
+
+        // set placeholder drawable if no image was selected or if the image is the placeholder-drawable, otherwise use the custom picture
+        if (imagePreview.getVisibility() == View.INVISIBLE || imagePreview.getDrawable() instanceof VectorDrawable) {
             imagePath = "@drawable/10";
         }
         else {
@@ -138,7 +153,7 @@ public class ItemFormFragment extends BaseFragment {
         // if a new item is created -> insert a new item into the database
         if (itemLiveData == null) {
             Item item = new Item(gameId, imagePath, name, description, prerequisites, location);
-            insertNewItemAndReturnToItemList(item, gameId);
+            insertNewItemAndReturnToItemList(item);
         }
         // if an item was edited -> update the existing item in the database
         else {
@@ -236,17 +251,12 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
-    private void insertNewItemAndReturnToItemList(Item item, int gameId) {
+    private void insertNewItemAndReturnToItemList(Item item) {
         Log.d("SaveItem", "saved item:");
 
         itemFormViewModel.insertItem(item);
 
-        Bundle arguments = new Bundle();
-        arguments.putInt(GAME_ID_KEY, gameId);
-
-        // navigate back to the item-list
-        NavController navController = NavHostFragment.findNavController(this);
-        navController.navigate(R.id.action_item_form_to_item_list, arguments);
+        navigateToItemList();
     }
 
 
@@ -263,15 +273,43 @@ public class ItemFormFragment extends BaseFragment {
             itemFormViewModel.updateItem(item);
         });
 
+        navigateToItemDetails();
+    }
+
+
+    private void handleClose() {
+        // return to item-list if form was called to create a new item
+        if (itemLiveData == null) {
+            navigateToItemList();
+        }
+        // return to item-details if form was called to edit an item
+        else {
+            navigateToItemDetails();
+        }
+    }
+
+
+    private void navigateToItemDetails() {
         // pass the item-id back into the item-details
         assert getArguments() != null;
         int itemId = getArguments().getInt(ITEM_ID_KEY);
 
         Bundle arguments = new Bundle();
         arguments.putInt(ITEM_ID_KEY, itemId);
+        arguments.putInt(GAME_ID_KEY, gameId);
 
         // navigate back to the item-details
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(R.id.action_item_form_to_item_details, arguments);
+    }
+
+
+    private void navigateToItemList() {
+        Bundle arguments = new Bundle();
+        arguments.putInt(GAME_ID_KEY, gameId);
+
+        // navigate back to the item-list
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_item_form_to_item_list, arguments);
     }
 }

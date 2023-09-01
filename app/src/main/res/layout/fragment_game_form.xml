@@ -1,59 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
-    <!-- game image preview -->
-    <ImageView
-        android:id="@+id/form_game_image_preview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        android:contentDescription="@string/form_game_image_content" />
+    <Space
+        android:id="@+id/form_game_header_space"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/form_game_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- select game image button -->
+    <!-- game form header -->
+    <TextView
+        android:id="@+id/form_game_header"
+        style="@style/Theme.Collector.Text.Header"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/form_game_header_new_game"
+        app:layout_constraintEnd_toStartOf="@id/form_game_close_button"
+        app:layout_constraintStart_toEndOf="@id/form_game_header_space"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- close button -->
     <Button
-        android:id="@+id/form_game_button_select_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Theme.Collector.Button"
-        android:text="@string/form_choose_picture" />
+        android:id="@+id/form_game_close_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/form_close_button_content"
+        android:drawableEnd="@drawable/close_x"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/form_game_header"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_game_header">
+
+        <!-- select game image button -->
+        <Button
+            android:id="@+id/form_game_button_select_image"
+            style="@style/Theme.Collector.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/form_choose_picture"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- game image preview -->
+        <ImageView
+            android:id="@+id/form_game_image_preview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="32dp"
+            android:contentDescription="@string/form_game_image_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- game title -->
     <EditText
         android:id="@+id/form_game_edit_text_title"
+        style="@style/Theme.Collector.Text.EditField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
-        android:inputType="text"
-        style="@style/Theme.Collector.Text.EditField"
         android:autofillHints="game title"
-        android:hint="@string/form_game_title" />
+        android:hint="@string/form_game_title"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:ignore="TextContrastCheck" />
 
     <!-- game publisher -->
     <EditText
         android:id="@+id/form_game_edit_text_publisher"
+        style="@style/Theme.Collector.Text.EditField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:inputType="text"
-        style="@style/Theme.Collector.Text.EditField"
+        android:layout_marginTop="10dp"
         android:autofillHints="game publisher"
-        android:hint="@string/form_game_publisher" />
+        android:hint="@string/form_game_publisher"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_game_edit_text_title"
+        tools:ignore="TextContrastCheck" />
 
     <!-- save button -->
     <Button
         android:id="@+id/form_game_button_save"
+        style="@style/Theme.Collector.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        style="@style/Theme.Collector.Button"
-        android:text="@string/form_button_save" />
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/form_button_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/form_game_edit_text_publisher" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
