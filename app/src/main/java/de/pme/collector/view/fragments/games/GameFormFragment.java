@@ -9,6 +9,7 @@ import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
@@ -38,6 +39,7 @@ import de.pme.collector.viewModel.GameFormViewModel;
 // class to add a new game
 public class GameFormFragment extends BaseFragment {
 
+    private TextView  gameFormHeader;
     private EditText  editTextTitle;
     private EditText  editTextPublisher;
     private ImageView imagePreview;
@@ -51,44 +53,32 @@ public class GameFormFragment extends BaseFragment {
     public GameFormFragment() {}
 
 
+    // =================================
+    // LiveCycle
+    // =================================
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_game_form, container, false);
+        View gameFormView = inflater.inflate(R.layout.fragment_game_form, container, false);
 
         gameFormViewModel = this.getViewModel(GameFormViewModel.class);
 
-        // get form header
-        TextView gameFormHeader = view.findViewById(R.id.form_game_header);
+        setGameFormFields(gameFormView);
 
-        // get form fields
-        editTextTitle     = view.findViewById(R.id.form_game_edit_text_title);
-        editTextPublisher = view.findViewById(R.id.form_game_edit_text_publisher);
-        imagePreview      = view.findViewById(R.id.form_game_image_preview);
-
-        // select image button
-        Button buttonSelectImage = view.findViewById(R.id.form_game_button_select_image);
-        buttonSelectImage.setOnClickListener(v -> selectImage());
-
-        // save button
-        Button buttonSave = view.findViewById(R.id.form_game_button_save);
-        buttonSave.setOnClickListener(v -> saveNewEntry());
-
-        // close button
-        Button buttonClose = view.findViewById(R.id.form_game_close_button);
-        buttonClose.setOnClickListener(v -> navigateBackToGameList());
+        setUpButtons(gameFormView);
 
         // fill form fields if it is used to edit a game entry
-        if (getArguments() != null && getArguments().containsKey(GAME_ID_KEY)) {
+        if (requireArguments().containsKey(GAME_ID_KEY)) {
             gameFormHeader.setText(requireContext().getString(R.string.form_game_header_edit_game));
-            setupFormFields();
+            setUpGameFormFields();
         }
         else {
             gameFormHeader.setText(requireContext().getString(R.string.form_game_header_new_game));
         }
 
-        return view;
+        return gameFormView;
     }
 
 
@@ -102,6 +92,62 @@ public class GameFormFragment extends BaseFragment {
     }
 
 
+    // =================================
+    // Setups
+    // =================================
+
+    private void setGameFormFields(@NonNull View gameFormView) {
+
+        // get form header
+        gameFormHeader = gameFormView.findViewById(R.id.form_game_header);
+
+        // get form fields
+        editTextTitle     = gameFormView.findViewById(R.id.form_game_edit_text_title);
+        editTextPublisher = gameFormView.findViewById(R.id.form_game_edit_text_publisher);
+        imagePreview      = gameFormView.findViewById(R.id.form_game_image_preview);
+    }
+
+
+    private void setUpGameFormFields() {
+        // get the data for the game to edit
+        gameLiveData = gameFormViewModel.getGameByIdLiveData(requireArguments().getInt(GAME_ID_KEY));
+
+        gameLiveData.observe(getViewLifecycleOwner(), game -> {
+            editTextTitle    .setText(game.getTitle());
+            editTextPublisher.setText(game.getPublisher());
+
+            // the if() is used to handle the initial games that have drawables as their images
+            if (game.getImagePath().contains("@drawable/")) {
+                setDrawableAsImage(game, imagePreview);
+            }
+            else {
+                imagePreview.setImageURI(Uri.parse(game.getImagePath()));
+                imagePreview.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
+    private void setUpButtons(@NonNull View gameFormView) {
+
+        // select image button
+        Button buttonSelectImage = gameFormView.findViewById(R.id.form_game_button_select_image);
+        buttonSelectImage.setOnClickListener(v -> selectImage());
+
+        // save button
+        Button buttonSave = gameFormView.findViewById(R.id.form_game_button_save);
+        buttonSave.setOnClickListener(v -> saveNewEntry());
+
+        // close button
+        Button buttonClose = gameFormView.findViewById(R.id.form_game_close_button);
+        buttonClose.setOnClickListener(v -> navigateBackToGameList());
+    }
+
+
+    // =================================
+    // Image
+    // =================================
+
     // selecting an image from gallery or camera
     private void selectImage() {
         ImagePicker.with(this)
@@ -112,7 +158,7 @@ public class GameFormFragment extends BaseFragment {
     }
 
 
-    // getting the an image and previewing it
+    // getting the image and previewing it
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -125,7 +171,69 @@ public class GameFormFragment extends BaseFragment {
     }
 
 
-    // saving the new game and switching to games
+    private void setDefaultImage(@NonNull ImageView imageView) {
+        imageView.setImageResource(R.drawable.game_placeholder);
+    }
+
+
+    // saving the image to the internal storage
+    @NonNull
+    private String saveImageToInternalStorage(@NonNull ImageView imageView, String imageTitle) {
+
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+
+        File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
+        String filename = imageTitle + ".png";
+
+        File file = new File(directory, filename);
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file.getAbsolutePath();
+    }
+
+
+    // only used for the initial images and the placeholder-drawable
+    private void setDrawableAsImage(@NonNull Game game, ImageView imagePreview) {
+        // split the image-path after the '@drawable/' to get the index of the image
+        String[] splitImagePath = game.getImagePath().split("@drawable/");
+
+        // load images for initial games from the drawable-folder via the values-array of those images
+        TypedArray gameImagesArray = getResources().obtainTypedArray(R.array.initial_game_images);
+
+        // get the id for the corresponding image
+        int imageResourceId = gameImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
+
+        // if the resource was not found use the default image
+        if (imageResourceId == 0) {
+            setDefaultImage(imagePreview);
+        }
+        else {
+            // set image to the ImageView
+            imagePreview.setImageResource(imageResourceId);
+        }
+
+        imagePreview.setVisibility(View.VISIBLE);
+
+        // recycle gameImagesArray to avoid memory leaks
+        gameImagesArray.recycle();
+    }
+
+
+    // =================================
+    // Save Form
+    // =================================
+
+    // saving the new game and switching to game-list
     private void saveNewEntry() {
 
         // set a default "-" value if the text field is left empty, otherwise use the content inside
@@ -160,83 +268,6 @@ public class GameFormFragment extends BaseFragment {
     }
 
 
-    // saving the image to the internal storage
-    private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
-
-        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
-        File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
-        String filename = imageTitle + ".png";
-
-        File file = new File(directory, filename);
-
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return file.getAbsolutePath();
-    }
-
-
-    private void setupFormFields() {
-        // get the data for the game to edit
-        assert getArguments() != null;
-        gameLiveData = gameFormViewModel.getGameByIdLiveData(getArguments().getInt(GAME_ID_KEY));
-
-        gameLiveData.observe(getViewLifecycleOwner(), game -> {
-            editTextTitle    .setText(game.getTitle());
-            editTextPublisher.setText(game.getPublisher());
-
-            // the if() is used to handle the initial games that have drawables as their images
-            if (game.getImagePath().contains("@drawable/")) {
-                setDrawableAsImage(game, imagePreview);
-            }
-            else {
-                imagePreview.setImageURI(Uri.parse(game.getImagePath()));
-                imagePreview.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-
-    private void setDrawableAsImage(Game game, ImageView imagePreview) {
-        // split the image-path after the '@drawable/' to get the index of the image
-        String[] splitImagePath = game.getImagePath().split("@drawable/");
-
-        // load images for initial games from the drawable-folder via the values-array of those images
-        TypedArray gameImagesArray = getResources().obtainTypedArray(R.array.initial_game_images);
-
-        // get the id for the corresponding image
-        int imageResourceId = gameImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
-
-        // if the resource was not found use the default image
-        if (imageResourceId == 0) {
-            setDefaultImage(imagePreview);
-        }
-        else {
-            // set image to the ImageView
-            imagePreview.setImageResource(imageResourceId);
-        }
-
-        imagePreview.setVisibility(View.VISIBLE);
-
-        // recycle gameImagesArray to avoid memory leaks
-        gameImagesArray.recycle();
-    }
-
-
-    private void setDefaultImage(ImageView imageView) {
-        imageView.setImageResource(R.drawable.game_placeholder);
-    }
-
-
     private void insertNewGame(Game game) {
         Log.d("SaveGame", "saved game:");
 
@@ -256,6 +287,10 @@ public class GameFormFragment extends BaseFragment {
         });
     }
 
+
+    // =================================
+    // Navigation
+    // =================================
 
     private void navigateBackToGameList() {
         NavController navController = NavHostFragment.findNavController(this);

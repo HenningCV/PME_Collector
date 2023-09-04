@@ -2,6 +2,7 @@ package de.pme.collector.view.fragments.items;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -28,7 +29,7 @@ public class ItemListFragment extends BaseFragment {
 
     private ItemListViewModel itemListViewModel;
 
-    private LiveData<List<Item>> itemLiveData;
+    private LiveData<List<Item>> itemListLiveData;
 
     private ItemRecyclerViewAdapter itemAdapter;
 
@@ -39,19 +40,64 @@ public class ItemListFragment extends BaseFragment {
     public ItemListFragment() {}
 
 
+    // =================================
+    // LiveCycle
+    // =================================
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View itemListView = inflater.inflate(R.layout.fragment_item_list, container, false);
+
+        // get the passed in gameId that the items belong to
+        gameId = requireArguments().getInt(GAME_ID_KEY);
 
         itemListViewModel = this.getViewModel(ItemListViewModel.class);
 
-        RecyclerView itemRecyclerView = root.findViewById(R.id.item_list_recycler_view);
+        setUpItemListRecyclerView(itemListView);
 
-        // get the passed in gameId that the items belong to
-        assert getArguments() != null;
-        gameId = getArguments().getInt(GAME_ID_KEY);
+        // set item-liveData & observe it
+        itemListLiveData = itemListViewModel.getItemsForGame(gameId);
+        observeItemLiveData();
+
+        setUpButtons(itemListView);
+
+        return itemListView;
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        removeItemListLiveDataObserver();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        observeItemLiveData();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        removeItemListLiveDataObserver();
+    }
+
+
+    // =================================
+    // Setups
+    // =================================
+
+    private void setUpItemListRecyclerView(@NonNull View itemListView) {
+
+        RecyclerView itemRecyclerView = itemListView.findViewById(R.id.item_list_recycler_view);
 
         // create recycler-view adapter and setup onClickListener for each item
         itemAdapter = new ItemRecyclerViewAdapter(
@@ -70,22 +116,21 @@ public class ItemListFragment extends BaseFragment {
         // set recycler-view adapter
         itemRecyclerView.setAdapter(itemAdapter);
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireActivity()));
+    }
 
-        // set item-liveData & observe it
-        itemLiveData = itemListViewModel.getItemsForGame(gameId);
-        observeItemLiveData();
+
+    private void setUpButtons(@NonNull View itemListView) {
 
         // back button
-        Button backButton = root.findViewById(R.id.item_list_back_button);
+        Button backButton = itemListView.findViewById(R.id.item_list_back_button);
         backButton.setOnClickListener(b -> backToGameList());
 
         // options-menu button
-        Button optionButton = root.findViewById(R.id.item_list_options_button);
+        Button optionButton = itemListView.findViewById(R.id.item_list_options_button);
         optionButton.setOnClickListener(this::showOptionMenu);
 
         // add-new-item button
-        Button addItemButton = root.findViewById(R.id.item_list_add_new_item_button);
-
+        Button addItemButton = itemListView.findViewById(R.id.item_list_add_new_item_button);
         addItemButton.setOnClickListener(v -> {
             Bundle arguments = new Bundle();
             arguments.putInt(GAME_ID_KEY, gameId);
@@ -93,34 +138,12 @@ public class ItemListFragment extends BaseFragment {
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_item_list_to_item_form, arguments);
         });
-
-        return root;
     }
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        itemLiveData.removeObservers(this.requireActivity());
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        observeItemLiveData();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        itemLiveData.removeObservers(this.requireActivity());
-    }
-
+    // =================================
+    // Buttons
+    // =================================
 
     // navigate back to the game-list
     private void backToGameList() {
@@ -183,7 +206,11 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
-    // display all items for a game
+    // =================================
+    // Options
+    // =================================
+
+    // option: display all items for a game
     private void showAllItems() {
         setNewLiveDataAndUpdateObserver(itemListViewModel.getItemsForGame(gameId));
     }
@@ -209,8 +236,7 @@ public class ItemListFragment extends BaseFragment {
 
     // option: edit game
     private void editGame() {
-        assert getArguments() != null;
-        int gameId = getArguments().getInt(GAME_ID_KEY);
+        int gameId = requireArguments().getInt(GAME_ID_KEY);
 
         Bundle arguments = new Bundle();
 
@@ -233,11 +259,15 @@ public class ItemListFragment extends BaseFragment {
     }
 
 
+    // =================================
+    // LiveData
+    // =================================
+
     private void setNewLiveDataAndUpdateObserver(LiveData<List<Item>> liveData) {
         // remove observers from the old liveData-instance
-        itemLiveData.removeObservers(this.requireActivity());
+        removeItemListLiveDataObserver();
         // set itemLiveData to a new liveData-instance
-        itemLiveData = liveData;
+        itemListLiveData = liveData;
         // observe that new liveData-instance
         observeItemLiveData();
     }
@@ -245,6 +275,13 @@ public class ItemListFragment extends BaseFragment {
 
     private void observeItemLiveData() {
         // observe live-data & update the adapter item-list when it changes
-        itemLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+        itemListLiveData.observe(this.requireActivity(), itemAdapter::setItems);
+    }
+
+
+    private void removeItemListLiveDataObserver() {
+        if (itemListLiveData != null) {
+            itemListLiveData.removeObservers(this.requireActivity());
+        }
     }
 }

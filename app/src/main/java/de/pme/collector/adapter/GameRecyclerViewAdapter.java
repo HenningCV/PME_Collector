@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +51,10 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     }
 
 
+    // =================================
+    // ViewHolder
+    // =================================
+
     // inflate layout -> "give a look to the rows"
     @NonNull
     @Override
@@ -59,6 +62,7 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
 
         // create a LayoutInflater-instance from the context
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+
         // inflate layout for a single item-view using the layoutInflater
         View gameView = layoutInflater.inflate(R.layout.recycler_view_row_game, parent, false);
 
@@ -128,6 +132,10 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     }
 
 
+    // =================================
+    // Data
+    // =================================
+
     @SuppressLint("NotifyDataSetChanged")
     public void setGames(List<Game> gameList){
         this.gameList = gameList;
@@ -137,7 +145,11 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     }
 
 
-    private void setGameImage(Game currentGame, GameViewHolder holder) {
+    // =================================
+    // Image
+    // =================================
+
+    private void setGameImage(@NonNull Game currentGame, GameViewHolder holder) {
 
         String imagePath = currentGame.getImagePath();
 
@@ -185,10 +197,14 @@ public class GameRecyclerViewAdapter extends RecyclerView.Adapter<GameRecyclerVi
     }
 
 
-    private void setDefaultImage(GameViewHolder holder) {
+    private void setDefaultImage(@NonNull GameViewHolder holder) {
         holder.gameImage.setImageResource(R.drawable.game_placeholder);
     }
 
+
+    // =================================
+    // Progress
+    // =================================
 
     private void setGameProgress(GameViewHolder holder, int position) {
 
