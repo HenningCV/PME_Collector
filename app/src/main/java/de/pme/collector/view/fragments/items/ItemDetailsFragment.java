@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
@@ -40,26 +41,28 @@ public class ItemDetailsFragment extends BaseFragment {
     public ItemDetailsFragment() {}
 
 
+    // =================================
+    // LiveCycle
+    // =================================
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_item_details, container, false);
+        View itemDetailsView = inflater.inflate(R.layout.fragment_item_details, container, false);
+
+        // get the gameId that is passed in by the ItemListRecyclerView that the item belongs to
+        itemId = requireArguments().getInt(ITEM_ID_KEY);
 
         itemDetailsViewModel = this.getViewModel(ItemDetailsViewModel.class);
 
-        setItemDetailsLiveData();
+        // set item-liveData & observe it
+        itemDetailsLiveData = itemDetailsViewModel.getItemByIdLiveData(itemId);
         observeItemDetailsLiveData();
 
-        // back button
-        Button backButton = root.findViewById(R.id.item_details_back_button);
-        backButton.setOnClickListener(b -> backToItemList());
+        setUpButtons(itemDetailsView);
 
-        // button for an options menu
-        Button optionButton = root.findViewById(R.id.item_details_options_button);
-        optionButton.setOnClickListener(this::showOptionMenu);
-
-        return root;
+        return itemDetailsView;
     }
 
 
@@ -86,6 +89,46 @@ public class ItemDetailsFragment extends BaseFragment {
         removeItemDetailsLiveDataObserver();
     }
 
+
+    // =================================
+    // Setups
+    // =================================
+
+    private void setItemDetailsFields(Item item) {
+
+        TextView  itemObtainedStatus = requireView().findViewById(R.id.fragment_item_details_obtained_status);
+        ImageView itemImage          = requireView().findViewById(R.id.fragment_item_details_image);
+        TextView  itemName           = requireView().findViewById(R.id.fragment_item_details_name);
+        TextView  itemDescription    = requireView().findViewById(R.id.fragment_item_details_description);
+        TextView  itemLocation       = requireView().findViewById(R.id.fragment_item_details_location);
+        TextView  itemPrerequisites  = requireView().findViewById(R.id.fragment_item_details_prerequisites);
+
+        setObtainedStatus(item, itemObtainedStatus);
+
+        setItemImage(item, itemImage);
+
+        itemName.setText(item.getName());
+        itemDescription.setText(item.getDescription());
+        itemLocation.setText(item.getLocation());
+        itemPrerequisites.setText(item.getPrerequisites());
+    }
+
+
+    private void setUpButtons(@NonNull View itemDetailsView) {
+
+        // back button
+        Button backButton = itemDetailsView.findViewById(R.id.item_details_back_button);
+        backButton.setOnClickListener(b -> backToItemList());
+
+        // options-menu button
+        Button optionButton = itemDetailsView.findViewById(R.id.item_details_options_button);
+        optionButton.setOnClickListener(this::showOptionMenu);
+    }
+
+
+    // =================================
+    // Buttons
+    // =================================
 
     // navigate back to the item-list
     private void backToItemList() {
@@ -133,47 +176,7 @@ public class ItemDetailsFragment extends BaseFragment {
     }
 
 
-    private void setItemDetailsLiveData() {
-        // get the gameId that is passed in by the ItemListRecyclerView that the item belongs to
-        itemId = requireArguments().getInt(ITEM_ID_KEY);
-
-        // get the database-data for that item
-        itemDetailsLiveData = itemDetailsViewModel.getItemByIdLiveData(itemId);
-    }
-
-
-    private void observeItemDetailsLiveData() {
-        // observe live-data & update the adapter item-list when it changes
-        itemDetailsLiveData.observe(this.requireActivity(), this::setItemDetailsFields);
-    }
-
-
-    private void removeItemDetailsLiveDataObserver() {
-        itemDetailsLiveData.removeObservers(this.requireActivity());
-    }
-
-
-    private void setItemDetailsFields(Item item) {
-
-        TextView  itemObtainedStatus = requireView().findViewById(R.id.fragment_item_details_obtained_status);
-        ImageView itemImage          = requireView().findViewById(R.id.fragment_item_details_image);
-        TextView  itemName           = requireView().findViewById(R.id.fragment_item_details_name);
-        TextView  itemDescription    = requireView().findViewById(R.id.fragment_item_details_description);
-        TextView  itemLocation       = requireView().findViewById(R.id.fragment_item_details_location);
-        TextView  itemPrerequisites  = requireView().findViewById(R.id.fragment_item_details_prerequisites);
-
-        setObtainedStatus(item, itemObtainedStatus);
-
-        setItemImage(item, itemImage);
-
-        itemName.setText(item.getName());
-        itemDescription.setText(item.getDescription());
-        itemLocation.setText(item.getLocation());
-        itemPrerequisites.setText(item.getPrerequisites());
-    }
-
-
-    private void setObtainedStatus(Item item, TextView itemObtainedStatus) {
+    private void setObtainedStatus(@NonNull Item item, TextView itemObtainedStatus) {
         // green background
         if (item.isObtained()) {
             itemObtainedStatus.setText(requireContext().getString(R.string.item_obtained));
@@ -187,7 +190,11 @@ public class ItemDetailsFragment extends BaseFragment {
     }
 
 
-    private void setItemImage(Item item, ImageView itemImage) {
+    // =================================
+    // Image
+    // =================================
+
+    private void setItemImage(@NonNull Item item, ImageView itemImage) {
 
         String imagePath = item.getImagePath();
 
@@ -235,10 +242,14 @@ public class ItemDetailsFragment extends BaseFragment {
     }
 
 
-    private void setDefaultImage(ImageView itemImage) {
+    private void setDefaultImage(@NonNull ImageView itemImage) {
         itemImage.setImageResource(R.drawable.item_placeholder);
     }
 
+
+    // =================================
+    // Options
+    // =================================
 
     // option: edit the item
     private void editItem() {
@@ -271,5 +282,22 @@ public class ItemDetailsFragment extends BaseFragment {
         // navigate back to item-list
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(R.id.action_item_details_to_item_list, arguments);
+    }
+
+
+    // =================================
+    // LiveData
+    // =================================
+
+    private void observeItemDetailsLiveData() {
+        // observe live-data & update the adapter item-list when it changes
+        itemDetailsLiveData.observe(this.requireActivity(), this::setItemDetailsFields);
+    }
+
+
+    private void removeItemDetailsLiveDataObserver() {
+        if (itemDetailsLiveData != null) {
+            itemDetailsLiveData.removeObservers(this.requireActivity());
+        }
     }
 }

@@ -48,6 +48,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
 
+    // =================================
+    // ViewHolder
+    // =================================
+
     // inflate layout -> "give a look to the rows"
     @NonNull
     @Override
@@ -55,6 +59,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
         // create a LayoutInflater-instance from the context
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+
         // inflate layout for a single item-view using the layoutInflater
         View itemView = layoutInflater.inflate(R.layout.recycler_view_row_item, parent, false);
 
@@ -147,6 +152,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
 
+    // =================================
+    // Data
+    // =================================
+
     @SuppressLint("NotifyDataSetChanged")
     public void setItems(List<Item> itemList) {
         this.itemList = itemList;
@@ -160,6 +169,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         itemListViewModel.setObtainedStatus(obtained, itemId);
     }
 
+
+    // =================================
+    // Image
+    // =================================
 
     private void setItemImage(Item currentItem, ItemViewHolder holder) {
 

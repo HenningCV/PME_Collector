@@ -2,7 +2,6 @@ package de.pme.collector.storage;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -43,7 +42,10 @@ public class ItemRepository {
     }
 
 
-    // getter
+    // =================================
+    // Getter
+    // =================================
+
     public LiveData<List<Item>> getItemsForGameLiveData(int gameId) {
             return this.queryLiveData(() -> this.itemDAO.getItemsByGameId(gameId));
     }
@@ -96,12 +98,19 @@ public class ItemRepository {
     }
 
 
+    // =================================
+    // Setter
+    // =================================
+
     public void setObtainedStatus(boolean obtained, int itemId) {
         this.itemDAO.setObtainedStatus(obtained, itemId);
     }
 
 
-    // CRUD
+    // =================================
+    // Query
+    // =================================
+
     private <T> LiveData<T> queryLiveData(Callable<LiveData<T>> query) {
         try {
             return AppDatabase.query(query);
@@ -113,6 +122,10 @@ public class ItemRepository {
         return new MutableLiveData<>();
     }
 
+
+    // =================================
+    // CRUD
+    // =================================
 
     public void deleteItemById(int itemId) {
         AppDatabase.execute(() -> itemDAO.deleteItemById(itemId));

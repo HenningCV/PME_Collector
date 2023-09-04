@@ -8,7 +8,7 @@
     tools:context="de.pme.collector.view.MainActivity">
 
     <!-- Content above Navigation -->
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navigation_home"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"

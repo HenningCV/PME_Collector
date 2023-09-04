@@ -9,6 +9,7 @@ import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
@@ -37,6 +38,7 @@ import de.pme.collector.viewModel.ItemFormViewModel;
 
 public class ItemFormFragment extends BaseFragment {
 
+    private TextView  itemFormHeader;
     private EditText  editTextName;
     private EditText  editTextDescription;
     private EditText  editTextPrerequisites;
@@ -54,49 +56,34 @@ public class ItemFormFragment extends BaseFragment {
     public ItemFormFragment() {}
 
 
+    // =================================
+    // LiveCycle
+    // =================================
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_item_form, container, false);
+        View itemFormView = inflater.inflate(R.layout.fragment_item_form, container, false);
 
         itemFormViewModel = this.getViewModel(ItemFormViewModel.class);
 
-        // get form header
-        TextView itemFormHeader = view.findViewById(R.id.form_item_header);
+        setItemFormFields(itemFormView);
 
-        // get form fields
-        editTextName          = view.findViewById(R.id.form_item_edit_text_name);
-        editTextDescription   = view.findViewById(R.id.form_item_edit_text_description);
-        editTextPrerequisites = view.findViewById(R.id.form_item_edit_text_prerequisites);
-        editTextLocation      = view.findViewById(R.id.form_item_edit_text_location);
-        imagePreview          = view.findViewById(R.id.form_item_image_preview);
+        setUpButtons(itemFormView);
 
-        // select image button
-        Button buttonSelectImage = view.findViewById(R.id.form_item_button_select_image);
-        buttonSelectImage.setOnClickListener(v -> selectImage());
-
-        // save button
-        Button buttonSave = view.findViewById(R.id.form_item_button_save);
-        buttonSave.setOnClickListener(v -> saveNewEntry());
-
-        // close button
-        Button buttonClose = view.findViewById(R.id.form_item_close_button);
-        buttonClose.setOnClickListener(v -> handleClose());
-
-        assert getArguments() != null;
-        gameId = getArguments().getInt(GAME_ID_KEY);
+        gameId = requireArguments().getInt(GAME_ID_KEY);
 
         // fill form fields if it is used to edit an item entry
-        if (getArguments() != null && getArguments().containsKey(ITEM_ID_KEY)) {
+        if (requireArguments().containsKey(ITEM_ID_KEY)) {
             itemFormHeader.setText(requireContext().getString(R.string.form_item_header_edit_item));
-            setupFormFields();
+            setUpItemFormFields();
         }
         else {
             itemFormHeader.setText(requireContext().getString(R.string.form_item_header_new_item));
         }
 
-        return view;
+        return itemFormView;
     }
 
 
@@ -109,6 +96,82 @@ public class ItemFormFragment extends BaseFragment {
         }
     }
 
+
+    // =================================
+    // Setups
+    // ================================
+
+    private void setItemFormFields(@NonNull View itemFormView) {
+
+        // get form header
+        itemFormHeader = itemFormView.findViewById(R.id.form_item_header);
+
+        // get form fields
+        editTextName          = itemFormView.findViewById(R.id.form_item_edit_text_name);
+        editTextDescription   = itemFormView.findViewById(R.id.form_item_edit_text_description);
+        editTextPrerequisites = itemFormView.findViewById(R.id.form_item_edit_text_prerequisites);
+        editTextLocation      = itemFormView.findViewById(R.id.form_item_edit_text_location);
+        imagePreview          = itemFormView.findViewById(R.id.form_item_image_preview);
+    }
+
+
+    private void setUpItemFormFields() {
+        // get the data for the item to edit
+        itemLiveData = itemFormViewModel.getItemByIdLiveData(requireArguments().getInt(ITEM_ID_KEY));
+
+        itemLiveData.observe(getViewLifecycleOwner(), item -> {
+            editTextName         .setText(item.getName());
+            editTextDescription  .setText(item.getDescription());
+            editTextPrerequisites.setText(item.getPrerequisites());
+            editTextLocation     .setText(item.getLocation());
+
+            // the if() is used to handle the initial items that have drawables as their images
+            if (item.getImagePath().contains("@drawable/")) {
+                setDrawableAsImage(item, imagePreview);
+            }
+            else {
+                imagePreview.setImageURI(Uri.parse(item.getImagePath()));
+                imagePreview.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
+    private void setUpButtons(@NonNull View itemFormView) {
+
+        // select image button
+        Button buttonSelectImage = itemFormView.findViewById(R.id.form_item_button_select_image);
+        buttonSelectImage.setOnClickListener(v -> selectImage());
+
+        // save button
+        Button buttonSave = itemFormView.findViewById(R.id.form_item_button_save);
+        buttonSave.setOnClickListener(v -> saveNewEntry());
+
+        // close button
+        Button buttonClose = itemFormView.findViewById(R.id.form_item_close_button);
+        buttonClose.setOnClickListener(v -> handleClose());
+    }
+
+
+    // =================================
+    // Buttons
+    // =================================
+
+    private void handleClose() {
+        // return to item-list if form was called to create a new item
+        if (itemLiveData == null) {
+            navigateToItemList();
+        }
+        // return to item-details if form was called to edit an item
+        else {
+            navigateToItemDetails();
+        }
+    }
+
+
+    // =================================
+    // Image
+    // =================================
 
     // selecting an image from gallery or camera
     private void selectImage() {
@@ -133,6 +196,69 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
+    private void setDefaultImage(@NonNull ImageView imageView) {
+        imageView.setImageResource(R.drawable.item_placeholder);
+    }
+
+
+    // saving the image to the internal storage
+    @NonNull
+    private String saveImageToInternalStorage(@NonNull ImageView imageView, String imageTitle) {
+
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+
+        File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
+        String filename = imageTitle + ".png";
+
+        File file = new File(directory, filename);
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file.getAbsolutePath();
+    }
+
+
+    // only used for the initial images and the placeholder-drawable
+    private void setDrawableAsImage(@NonNull Item item, ImageView imagePreview) {
+        // split the image-path after the '@drawable/' to get the index of the image
+        String[] splitImagePath = item.getImagePath().split("@drawable/");
+
+        // load images for initial items from the drawable-folder via the values-array of those images
+        TypedArray itemImagesArray = getResources().obtainTypedArray(R.array.initial_item_images);
+
+        // get the id for the corresponding image
+        int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
+
+        // if the resource was not found use the default image
+        if (imageResourceId == 0) {
+            setDefaultImage(imagePreview);
+        }
+        else {
+            // set image to the ImageView
+            imagePreview.setImageResource(imageResourceId);
+        }
+
+        imagePreview.setVisibility(View.VISIBLE);
+
+        // recycle itemImagesArray to avoid memory leaks
+        itemImagesArray.recycle();
+    }
+
+
+    // =================================
+    // Save Form
+    // =================================
+
+    // saving the new item and switching to item-list
     private void saveNewEntry() {
 
         // set a default "-" value if the text field is left empty, otherwise use the content inside
@@ -172,85 +298,6 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
-    // saving the image to the internal storage
-    private String saveImageToInternalStorage(ImageView imageView, String imageTitle) {
-
-        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
-        File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
-        String filename = imageTitle + ".png";
-
-        File file = new File(directory, filename);
-
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return file.getAbsolutePath();
-    }
-
-
-    private void setupFormFields() {
-        // get the data for the item to edit
-        assert getArguments() != null;
-        itemLiveData = itemFormViewModel.getItemByIdLiveData(getArguments().getInt(ITEM_ID_KEY));
-
-        itemLiveData.observe(getViewLifecycleOwner(), item -> {
-            editTextName         .setText(item.getName());
-            editTextDescription  .setText(item.getDescription());
-            editTextPrerequisites.setText(item.getPrerequisites());
-            editTextLocation     .setText(item.getLocation());
-
-            // the if() is used to handle the initial items that have drawables as their images
-            if (item.getImagePath().contains("@drawable/")) {
-                setDrawableAsImage(item, imagePreview);
-            }
-            else {
-                imagePreview.setImageURI(Uri.parse(item.getImagePath()));
-                imagePreview.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-
-    private void setDrawableAsImage(Item item, ImageView imagePreview) {
-        // split the image-path after the '@drawable/' to get the index of the image
-        String[] splitImagePath = item.getImagePath().split("@drawable/");
-
-        // load images for initial items from the drawable-folder via the values-array of those images
-        TypedArray itemImagesArray = getResources().obtainTypedArray(R.array.initial_item_images);
-
-        // get the id for the corresponding image
-        int imageResourceId = itemImagesArray.getResourceId(Integer.parseInt(splitImagePath[1]), 0);
-
-        // if the resource was not found use the default image
-        if (imageResourceId == 0) {
-            setDefaultImage(imagePreview);
-        }
-        else {
-            // set image to the ImageView
-            imagePreview.setImageResource(imageResourceId);
-        }
-
-        imagePreview.setVisibility(View.VISIBLE);
-
-        // recycle itemImagesArray to avoid memory leaks
-        itemImagesArray.recycle();
-    }
-
-
-    private void setDefaultImage(ImageView imageView) {
-        imageView.setImageResource(R.drawable.item_placeholder);
-    }
-
-
     private void insertNewItemAndReturnToItemList(Item item) {
         Log.d("SaveItem", "saved item:");
 
@@ -277,22 +324,13 @@ public class ItemFormFragment extends BaseFragment {
     }
 
 
-    private void handleClose() {
-        // return to item-list if form was called to create a new item
-        if (itemLiveData == null) {
-            navigateToItemList();
-        }
-        // return to item-details if form was called to edit an item
-        else {
-            navigateToItemDetails();
-        }
-    }
-
+    // =================================
+    // Navigation
+    // =================================
 
     private void navigateToItemDetails() {
         // pass the item-id back into the item-details
-        assert getArguments() != null;
-        int itemId = getArguments().getInt(ITEM_ID_KEY);
+        int itemId = requireArguments().getInt(ITEM_ID_KEY);
 
         Bundle arguments = new Bundle();
         arguments.putInt(ITEM_ID_KEY, itemId);

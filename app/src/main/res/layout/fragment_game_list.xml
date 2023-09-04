@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_game_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,13 +10,13 @@
     <!-- game list header -->
     <TextView
         android:id="@+id/game_list_header"
+        style="@style/Theme.Collector.Text.Header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/game_list_title"
-        style="@style/Theme.Collector.Text.Header" />
+        android:text="@string/game_list_title" />
 
     <!-- games recycler view -->
     <androidx.recyclerview.widget.RecyclerView
@@ -28,14 +28,14 @@
     <!-- add new game button -->
     <Button
         android:id="@+id/game_list_add_new_game_button"
+        style="@style/Theme.Collector.Button"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="end"
         android:layout_marginBottom="75dp"
         android:background="@drawable/add_icon"
-        style="@style/Theme.Collector.Button"
         android:contentDescription="@string/game_list_add_new_game_button" />
 
 </RelativeLayout>

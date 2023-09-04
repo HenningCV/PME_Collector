@@ -43,7 +43,10 @@ public class GameRepository {
     }
 
 
-    // getter
+    // =================================
+    // Getter
+    // =================================
+
     public LiveData<List<Game>> getGamesLiveData() {
         if (this.allGames == null) {
             this.allGames = (this.queryLiveData(this.gameDAO::getGames));
@@ -80,7 +83,10 @@ public class GameRepository {
     }
 
 
-    // CRUD
+    // =================================
+    // Query
+    // =================================
+
     private <T> LiveData<T> queryLiveData(Callable<LiveData<T>> query) {
         try {
             return AppDatabase.query(query);
@@ -92,6 +98,10 @@ public class GameRepository {
         return new MutableLiveData<>();
     }
 
+
+    // =================================
+    // CRUD
+    // =================================
 
     public void deleteGameById(int gameId) {
         AppDatabase.execute(() -> gameDAO.deleteGameById(gameId));
