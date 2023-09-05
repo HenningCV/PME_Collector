@@ -1,5 +1,7 @@
 package de.pme.collector.view.fragments.items;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -195,7 +197,7 @@ public class ItemListFragment extends BaseFragment {
 
             // delete game
             if (item.getItemId() == R.id.action_delete_game) {
-                deleteGame();
+                showDeleteConfirmationDialog();
                 return true;
             }
 
@@ -256,6 +258,24 @@ public class ItemListFragment extends BaseFragment {
         // navigate back to game-list
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(R.id.action_item_list_to_game_list);
+    }
+
+
+    // =================================
+    // Confirm-Delete Dialog
+    // =================================
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete this game?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteGame())
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 
 
