@@ -1,5 +1,6 @@
 package de.pme.collector.view.fragments.items;
 
+import android.app.AlertDialog;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -165,7 +166,7 @@ public class ItemDetailsFragment extends BaseFragment {
 
             // only display not obtained items
             if (item.getItemId() == R.id.action_delete_item) {
-                deleteItem();
+                showDeleteConfirmationDialog();
                 return true;
             }
 
@@ -282,6 +283,24 @@ public class ItemDetailsFragment extends BaseFragment {
         // navigate back to item-list
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(R.id.action_item_details_to_item_list, arguments);
+    }
+
+
+    // =================================
+    // Confirm-Delete Dialog
+    // =================================
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle("Confirm Delete")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteItem())
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 
 
