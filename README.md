@@ -15,23 +15,25 @@ Zusätzlich sind sowohl die Informationen eines Spiels, als auch die Information
 ## Zu Beachten
 Es ist zu Berücksichtigen, dass das Design für den Darkmode ausgelegt ist und der Lightmode zum Proof of Concept dient.
 
+## Screenshots
+
 ### Liste mit Spielen
-![Game List](./docs/images/game_list.png)
+<img src="./docs/images/game_list.png" width="40%" alt="Game List"/>
 
 ### Liste der Items eines Spiels
-![Item List](./docs/images/item_list.png)
+<img src="./docs/images/item_list.png" width="40%" alt="Item List"/>
 
 ### Item Detailansicht
-![Item Details](./docs/images/item_details.png)
+<img src="./docs/images/item_details.png" width="40%" alt="Item Details"/>
 
 ### Erstellen eines Spiels
-![New Game](./docs/images/new_game_form.png)
+<img src="./docs/images/new_game_form.png" width="40%" alt="New Game"/>
 
 ### Erstellen eines Items
-![New Item](./docs/images/new_item_form.png)
-
-### Settings
-![Settings](./docs/images/settings.png)
+<img src="./docs/images/new_item_form.png" width="40%" alt="New Item"/>
 
 ### Ändern eines Elementes
-![Edit Item](./docs/images/edit_item.png)
+<img src="./docs/images/edit_item.png" width="40%" alt="Edit Item"/>
+
+### Settings
+<img src="./docs/images/settings.png" width="40%" alt="Settings"/>
