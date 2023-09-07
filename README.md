@@ -12,6 +12,9 @@ Dabei können verschiedene Filter, wie die Filterung nach noch nicht erhaltenen 
 Jedes Item besitzt zudem noch eine Detailansicht, in der verschiedene Informationen hinterlegt werden können. <br>
 Zusätzlich sind sowohl die Informationen eines Spiels, als auch die Informationen eines Items nachträglich änderbar.
 
+## Zu Beachten
+Es ist zu Berücksichtigen, dass das Design für den Darkmode ausgelegt ist und der Lightmode zum Proof of Concept dient.
+
 ### Liste mit Spielen
 ![Game List](./docs/images/game_list.png)
 
@@ -28,15 +31,7 @@ Zusätzlich sind sowohl die Informationen eines Spiels, als auch die Information
 ![New Item](./docs/images/new_item_form.png)
 
 ### Settings
-![Settings](./docs/images/new_game_form.png)
+![Settings](./docs/images/settings.png)
 
 ### Ändern eines Elementes
 ![Edit Item](./docs/images/edit_item.png)
-
-
-
-
-## Zu Beachten
-Es ist zu Berücksichtigen, dass das Design für den Darkmode ausgelegt ist und der Lightmode zum Proof of Concept dient.
-
-
